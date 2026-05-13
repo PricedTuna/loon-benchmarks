@@ -1,0 +1,30 @@
+S:@T1[20]=[id:i,pr:f,ca:s,rr:f,rc:i]
+A:id,price,category,rating_rate,rating_count
+DEC:rc
+Q:id=1,1
+FP:pr=2
+FP:rr=1
+D:ca=men's clothing,jewelery,electronics,women's clothing
+@T1:
+F:csv
+!,109.95,men's clothing,3.9,120
+1py,0,15,259
+4bj,0,1b,500
+18f,0,l,430
+1hmk,1,1a,400
+cyo,1,13,70
+rr,1,u,400
+uj,1,j,100
+4xs,2,x,203
+8es,2,t,470
+8es,2,1c,319
+8so,2,1c,400
+1a7w,2,t,250
+255r,2,m,140
+4eb,3,q,235
+2b7,3,t,340
+333,3,12,679
+rd,3,1b,130
+m3,3,19,146
+103,3,10,145
+END:@T1

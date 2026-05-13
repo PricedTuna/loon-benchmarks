@@ -1,0 +1,56 @@
+S:@T1[50]=[state:s,capital:s,population:i,founded:i,lat:f,lon:f]
+FP:lat=6
+FP:lon=6
+@T1:
+F:csv
+!,Alabama,Montgomery,198525,1819,32.377716,-86.300568
+Alaska,Juneau,ovz,1gy,ypm27,-2812xo
+Arizona,Phoenix,yguj,1h4,jwwzt,-1uq4qc
+Arkansas,Little Rock,488w,1el,koih5,-1iyz5e
+California,Sacramento,awdt,1fi,mydp1,-20bi0u
+Colorado,Denver,fc3m,1fv,nnqzo,-1qiazv
+Connecticut,Hartford,2ml7,1g3,ov533,-179w6d
+Delaware,Dover,tom,1dd,nbdj5,-18ystf
+Florida,Tallahassee,462s,1eo,i4eb4,-1e6ffh
+Georgia,Atlanta,aot7,1fw,k3cwz,-1e8qdh
+Hawaii,Honolulu,7it0,1f9,coojk,-2lzg9t
+Idaho,Boise,4wnz,1ft,pytnk,-1x6m9e
+Illinois,Springfield,2g52,1f1,nooya,-1hdio5
+Indiana,Indianapolis,is80,1ep,nodhv,-1fanzo
+Iowa,Des Moines,4lb1,1fl,orc1l,-1jqpfi
+Kansas,Topeka,2pob,1fk,n8xrz,-1kypol
+Kentucky,Frankfort,lcv,1ds,mqp7e,-1eiwws
+Louisiana,Baton Rouge,4twe,1fd,i4tm2,-1i9g91
+Maine,Augusta,erk,1ew,qdqan,-15jm76
+Maryland,Annapolis,u86,1b2,n7fyl,-19jhqs
+Massachusetts,Boston,euew,19a,p7x8y,-16b1ds
+Michigan,Lansing,2j7m,1fb,pfwmv,-1ecbgv
+Minnesota,Saint Paul,6lf3,1fd,qrihz,-1jf8o6
+Mississippi,Jackson,3fxw,1el,j89tu,-1hoz0o
+Missouri,Jefferson City,x1y,1el,myu4o,-1ivljg
+Montana,Helena,oxn,1g3,rqhrh,-1uoxyp
+Nebraska,Lincoln,672m,1fv,oarzk,-1lko7a
+Nevada,Carson City,1758,1fp,nbf2i,-1zb0gw
+New Hampshire,Concord,xxk,1e8,pq2nm,-16lb2i
+New Jersey,Trenton,1s77,1dq,nxzoc,-18iczc
+New Mexico,Santa Fe,1wrh,18q,l8w8v,-1r2m4n
+New York,Albany,23i8,1dx,pecj9,-17xe1n
+North Carolina,Raleigh,a242,1ds,lawcu,-1atibf
+North Dakota,Bismarck,1kqh,1gb,rv9jb,-1o058b
+Ohio,Columbus,j4ol,1eg,nsi8o,-1deya2
+Oklahoma,Oklahoma City,e1g1,1h2,l4ibp,-1m2ihe
+Oregon,Salem,3ptu,1ff,qra5u,-2192hk
+Pennsylvania,Harrisburg,127s,1ec,nz06y,-19rvri
+Rhode Island,Providence,43bq,19g,owflh,-16imhu
+South Carolina,Columbia,2xfc,1dm,k8r46,-1c8uv2
+South Dakota,Pierre,avf,1gh,qeyji,-1nqk1m
+Tennessee,Nashville,erzb,1eq,lj5s2,-1fo3az
+Texas,Austin,kzbw,1f3,i0qa9,-1m6z0x
+Utah,Salt Lake City,4arz,1fk,o9n7v,-1um7on
+Vermont,Montpelier,627,1e5,qcna3,-177jiy
+Virginia,Richmond,4xt0,1dg,mcmlx,-1a3q1c
+Washington,Olympia,16wl,1fh,s0a5u,-2160wl
+West Virginia,Charleston,12dk,1gd,mtyws,-1cloni
+Wisconsin,Madison,5kdc,1f2,pn8o2,-1h7th8
+Wyoming,Cheyenne,1dkb,1fx,ohs0z,-1qent8
+END:@T1

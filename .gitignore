@@ -1,0 +1,11 @@
+.env
+
+node_modules
+
+benchmarks/node_modules
+
+benchmarks/.env
+
+extra-formats/venv/
+venv/
+.venv/

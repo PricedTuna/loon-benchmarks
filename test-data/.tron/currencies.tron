@@ -1,0 +1,36 @@
+S:@T1[30]=[code:s,name:s,symbol:s,decimal_digits:i,countries:a]
+D:defaults=decimal_digits=2
+D:symbol=kr
+@T1:
+F:csv
+!,USD,US Dollar,\$,United States|Ecuador|El Salvador,2
+EUR,Euro,!€,Germany|France|Italy|Spain|Netherlands
+GBP,British Pound,!£,United Kingdom
+JPY,Japanese Yen,!¥,Japan,0
+CHF,Swiss Franc,!CHF,Switzerland|Liechtenstein
+AUD,Australian Dollar,!A$,Australia
+CAD,Canadian Dollar,!C$,Canada
+CNY,Chinese Yuan,!¥,China
+INR,Indian Rupee,!₹,India
+MXN,Mexican Peso,!\$,Mexico
+BRL,Brazilian Real,!R$,Brazil
+KRW,South Korean Won,!₩,South Korea,0
+SGD,Singapore Dollar,!S$,Singapore
+HKD,Hong Kong Dollar,!HK$,Hong Kong
+NOK,Norwegian Krone,0,Norway
+SEK,Swedish Krona,0,Sweden
+DKK,Danish Krone,0,Denmark
+NZD,New Zealand Dollar,!NZ$,New Zealand
+ZAR,South African Rand,!R,South Africa
+RUB,Russian Ruble,!₽,Russia
+TRY,Turkish Lira,!₺,Turkey
+PLN,Polish Zloty,!zł,Poland
+THB,Thai Baht,!฿,Thailand
+IDR,Indonesian Rupiah,!Rp,Indonesia,0
+MYR,Malaysian Ringgit,!RM,Malaysia
+PHP,Philippine Peso,!₱,Philippines
+CZK,Czech Koruna,!Kč,Czech Republic
+ILS,Israeli Shekel,!₪,Israel
+AED,UAE Dirham,!د.إ,United Arab Emirates
+SAR,Saudi Riyal,!﷼,Saudi Arabia
+END:@T1

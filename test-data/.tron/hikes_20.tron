@@ -1,0 +1,30 @@
+S:@T1[20]=[id:i,na:s,dk:f,eg:i,co:s,ws:b]
+A:id,name,distanceKm,elevationGain,companion,wasSunny
+DEC:eg
+Q:id=1,1
+FP:dk=1
+D:defaults=co=ana,ws=1
+D:co=ana,luis,sam
+@T1:
+F:csv
+!,Blue Lake Trail,7,100,ana,1
+Ridge Overlook,2w,137,1,0
+Wildflower Loop,2y,174,2
+Summit Pass,24,211
+Echo Canyon,14,248,1,0
+Bear Creek Path,w,285,2
+Aspen Meadows,1n,322
+Iron Peak Loop,2o,359,1,0
+Sunrise Ridge,32,396,2
+Hidden Falls,2e,433
+Granite Basin,1c,470,1,0
+Thunder Valley,u,507,2
+Crystal Lake,1d,544
+Wind Cave Trail,2f,581,1,0
+Prairie Hawk,32,618,2
+Sage Flat,2o,655
+Juniper Springs,1m,692,1,0
+Lost Mine Path,w,729,2
+Osprey Point,14,766
+Deer Creek,24,103,1,0
+END:@T1

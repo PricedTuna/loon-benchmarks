@@ -1,0 +1,55 @@
+S:@T1[50]=[name:s,abbreviation:s,capital:s,founded:s,borders:a]
+D:founded=1889-11-02
+@T1:
+F:csv
+!,Alabama,AL,Montgomery,1819-12-14,Florida|Georgia|Mississippi|Tennessee
+Alaska,AK,Juneau,!1959-01-03,
+Arizona,AZ,Phoenix,!1912-02-14,California|Colorado|Nevada|New Mexico|Utah
+Arkansas,AR,Little Rock,!1836-06-15,Louisiana|Mississippi|Missouri|Oklahoma|Tennessee|Texas
+California,CA,Sacramento,!1850-09-09,Arizona|Nevada|Oregon
+Colorado,CO,Denver,!1876-08-01,Arizona|Kansas|Nebraska|New Mexico|Oklahoma|Utah|Wyoming
+Connecticut,CT,Hartford,!1788-01-09,Massachusetts|New York|Rhode Island
+Delaware,DE,Dover,!1787-12-07,Maryland|New Jersey|Pennsylvania
+Florida,FL,Tallahassee,!1845-03-03,Alabama|Georgia
+Georgia,GA,Atlanta,!1788-01-02,Alabama|Florida|North Carolina|South Carolina|Tennessee
+Hawaii,HI,Honolulu,!1959-08-21,
+Idaho,ID,Boise,!1890-07-03,Montana|Nevada|Oregon|Utah|Washington|Wyoming
+Illinois,IL,Springfield,!1818-12-03,Indiana|Iowa|Kentucky|Missouri|Wisconsin
+Indiana,IN,Indianapolis,!1816-12-11,Illinois|Kentucky|Michigan|Ohio
+Iowa,IA,Des Moines,!1846-12-28,Illinois|Minnesota|Missouri|Nebraska|South Dakota|Wisconsin
+Kansas,KS,Topeka,!1861-01-29,Colorado|Missouri|Nebraska|Oklahoma
+Kentucky,KY,Frankfort,!1792-06-01,Illinois|Indiana|Missouri|Ohio|Tennessee|Virginia|West Virginia
+Louisiana,LA,Baton Rouge,!1812-04-30,Arkansas|Mississippi|Texas
+Maine,ME,Augusta,!1820-03-15,New Hampshire
+Maryland,MD,Annapolis,!1788-04-28,Delaware|Pennsylvania|Virginia|West Virginia
+Massachusetts,MA,Boston,!1788-02-06,Connecticut|New Hampshire|New York|Rhode Island|Vermont
+Michigan,MI,Lansing,!1837-01-26,Indiana|Ohio|Wisconsin
+Minnesota,MN,Saint Paul,!1858-05-11,Iowa|North Dakota|South Dakota|Wisconsin
+Mississippi,MS,Jackson,!1817-12-10,Alabama|Arkansas|Louisiana|Tennessee
+Missouri,MO,Jefferson City,!1821-08-10,Arkansas|Illinois|Iowa|Kansas|Kentucky|Nebraska|Oklahoma|Tennessee
+Montana,MT,Helena,!1889-11-08,Idaho|North Dakota|South Dakota|Wyoming
+Nebraska,NE,Lincoln,!1867-03-01,Colorado|Iowa|Kansas|Missouri|South Dakota|Wyoming
+Nevada,NV,Carson City,!1864-10-31,Arizona|California|Idaho|Oregon|Utah
+New Hampshire,NH,Concord,!1788-06-21,Maine|Massachusetts|Vermont
+New Jersey,NJ,Trenton,!1787-12-18,Delaware|New York|Pennsylvania
+New Mexico,NM,Santa Fe,!1912-01-06,Arizona|Colorado|Oklahoma|Texas|Utah
+New York,NY,Albany,!1788-07-26,Connecticut|Massachusetts|New Jersey|Pennsylvania|Vermont
+North Carolina,NC,Raleigh,!1789-11-21,Georgia|South Carolina|Tennessee|Virginia
+North Dakota,ND,Bismarck,0,Minnesota|Montana|South Dakota
+Ohio,OH,Columbus,!1803-03-01,Indiana|Kentucky|Michigan|Pennsylvania|West Virginia
+Oklahoma,OK,Oklahoma City,!1907-11-16,Arkansas|Colorado|Kansas|Missouri|New Mexico|Texas
+Oregon,OR,Salem,!1859-02-14,California|Idaho|Nevada|Washington
+Pennsylvania,PA,Harrisburg,!1787-12-12,Delaware|Maryland|New Jersey|New York|Ohio|West Virginia
+Rhode Island,RI,Providence,!1790-05-29,Connecticut|Massachusetts
+South Carolina,SC,Columbia,!1788-05-23,Georgia|North Carolina
+South Dakota,SD,Pierre,0,Iowa|Minnesota|Montana|Nebraska|North Dakota|Wyoming
+Tennessee,TN,Nashville,!1796-06-01,Alabama|Arkansas|Georgia|Kentucky|Mississippi|Missouri|North Carolina|Virginia
+Texas,TX,Austin,!1845-12-29,Arkansas|Louisiana|New Mexico|Oklahoma
+Utah,UT,Salt Lake City,!1896-01-04,Arizona|Colorado|Idaho|Nevada|New Mexico|Wyoming
+Vermont,VT,Montpelier,!1791-03-04,Massachusetts|New Hampshire|New York
+Virginia,VA,Richmond,!1788-06-25,Kentucky|Maryland|North Carolina|Tennessee|West Virginia
+Washington,WA,Olympia,!1889-11-11,Idaho|Oregon
+West Virginia,WV,Charleston,!1863-06-20,Kentucky|Maryland|Ohio|Pennsylvania|Virginia
+Wisconsin,WI,Madison,!1848-05-29,Illinois|Iowa|Michigan|Minnesota
+Wyoming,WY,Cheyenne,!1890-07-10,Colorado|Idaho|Montana|Nebraska|South Dakota|Utah
+END:@T1

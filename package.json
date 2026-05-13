@@ -1,0 +1,68 @@
+{
+  "name": "tron-core",
+  "version": "1.0.0",
+  "description": "TRON — Token-efficient serialization protocol for LLM pipelines. JSON/CSV/XML/YAML → TRON with 60-97% token reduction.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LLM_INSTRUCTIONS.md",
+    "PROTOCOL_ANATOMY.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "prepublishOnly": "npm run build",
+    "quickstart": "sucrase-node src/examples/quickstart.ts",
+    "test": "sucrase-node src/benchmarks/test_nested.ts && sucrase-node src/benchmarks/test_null.ts && sucrase-node src/benchmarks/realworld_test.ts && sucrase-node src/benchmarks/test_csv.ts && sucrase-node src/benchmarks/test_xml.ts && sucrase-node src/benchmarks/test_yaml.ts",
+    "test:json": "sucrase-node src/benchmarks/realworld_test.ts",
+    "test:csv": "sucrase-node src/benchmarks/test_csv.ts",
+    "test:xml": "sucrase-node src/benchmarks/test_xml.ts",
+    "test:yaml": "sucrase-node src/benchmarks/test_yaml.ts",
+    "test:nested": "sucrase-node src/benchmarks/test_nested.ts",
+    "test:null": "sucrase-node src/benchmarks/test_null.ts",
+    "bench": "sucrase-node src/benchmarks/compare_baselines.ts",
+    "bench:compare": "sucrase-node src/benchmarks/benchmark_compare.ts",
+    "bench:json": "sucrase-node src/benchmarks/benchmark_json.ts",
+    "bench:csv": "sucrase-node src/benchmarks/benchmark_csv.ts",
+    "bench:cfdi": "sucrase-node src/benchmarks/benchmark_cfdi.ts",
+    "bench:tokens": "sucrase-node src/benchmarks/token_benchmark.ts",
+    "bench:toon": "sucrase-node src/benchmarks/benchmark_toon.ts",
+    "bench:90pct": "sucrase-node src/benchmarks/90pct_benchmark.ts",
+    "bench:all": "sucrase-node src/benchmarks/bench_all.ts",
+    "bench:accuracy": "sucrase-node src/benchmarks/scripts/accuracy-benchmark.ts",
+    "bench:tokens:eff": "sucrase-node src/benchmarks/scripts/token-efficiency-benchmark.ts",
+    "bench:fetch-repos": "sucrase-node src/benchmarks/scripts/fetch-github-repos.ts",
+    "convert": "sucrase-node src/benchmarks/convert.ts"
+  },
+  "keywords": [
+    "tron",
+    "serialization",
+    "llm",
+    "tokens",
+    "compression",
+    "json-optimized"
+  ],
+  "author": "TRON Thesis Team",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
+    "@clack/prompts": "^1.3.0",
+    "@faker-js/faker": "^10.4.0",
+    "@google/genai": "^1.50.1",
+    "@google/generative-ai": "^0.24.1",
+    "@toon-format/toon": "^2.1.0",
+    "csv-stringify": "^6.7.0",
+    "fast-xml-parser": "^5.7.2",
+    "gpt-tokenizer": "^3.4.0",
+    "p-map": "^5.5.0",
+    "p-queue": "^7.4.1",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.2",
+    "yaml": "^2.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0"
+  }
+}

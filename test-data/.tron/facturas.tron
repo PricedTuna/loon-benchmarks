@@ -1,0 +1,30 @@
+S:@T1[1]=[sin:s,sir:i,pt:s,si:s,bpi:s,aib:s,ail:s,aibn:s,aibr:s,aii:i,aib2:i,aia:s,aii2:s,ai:s,ai2:s,ai3:s,ain:i,ai4:s,bhba:s,bh:i,ii:s,iid:s,ii2:s,ii3:s,ii4:s]
+A:seller_info.seller_name,seller_info.seller_rating,payment_types,shipping_info,buyer_protection_info,auction_info.current_bid,auction_info.time_left,auction_info.high_bidder.bidder_name,auction_info.high_bidder.bidder_rating,auction_info.num_items,auction_info.num_bids,auction_info.started_at,auction_info.bid_increment,auction_info.location,auction_info.opened,auction_info.closed,auction_info.id_num,auction_info.notes,bid_history.highest_bid_amount,bid_history.quantity,item_info.memory,item_info.hard_drive,item_info.cpu,item_info.brand,item_info.description
+C:sin=537_sb_3
+C:sir=0
+C:pt=Visa\, Mastercard\, \, \, \, 0\, Discover\, American Express
+C:si=siteonly\, Buyer Pays Shipping Costs
+C:bpi=^
+C:aib=$839.93
+C:ail=1 Day\, 6 Hrs
+C:aibn=^
+C:aibr=^
+C:aii=5
+C:aib2=0
+C:aia=$839.93
+C:aii2=^
+C:ai=Englewood \, Utah\, United States
+C:ai2=11/25/00 7:46:16 PM
+C:ai3=11/28/00 7:46:16 PM
+C:ain=6rre
+C:ai4=^
+C:bhba=839.93
+C:bh=0
+C:ii=^
+C:iid=^
+C:ii2=^
+C:ii3=^
+C:ii4=AMD Athlon 900 Mhz Processor. New K7 CPU comes with a year warranty. Rated gamers paradise in all reviews and high benchmark ratings.\nDays To Ship: 5
+@T1:
+F:csv
+.

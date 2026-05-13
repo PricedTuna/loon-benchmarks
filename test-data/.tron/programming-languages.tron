@@ -1,0 +1,23 @@
+S:@T1[15]=[name:s,year:i,creator:s,paradigm:a,typing:s]
+DEC:year
+D:defaults=typing=static
+D:creator=Microsoft
+D:typing=dynamic,static
+@T1:
+F:csv
+!,JavaScript,1995,Brendan Eich,event-driven|functional|imperative|object-oriented,dynamic
+Python,1991,!Guido van Rossum,functional|imperative|object-oriented|structured,0
+Java,1995,!James Gosling,class-based|object-oriented|generic
+C++,1985,!Bjarne Stroustrup,procedural|functional|object-oriented|generic
+C#,2000,0,structured|imperative|object-oriented|event-driven|functional|generic
+Ruby,1995,!Yukihiro Matsumoto,multi-paradigm|object-oriented|imperative|functional,0
+Go,2009,!Robert Griesemer\, Rob Pike\, Ken Thompson,concurrent|functional|imperative|object-oriented
+Rust,2010,!Graydon Hoare,concurrent|functional|generic|imperative|structured
+Swift,2014,!Apple Inc.,multi-paradigm|protocol-oriented|object-oriented|functional|imperative
+Kotlin,2011,!JetBrains,multi-paradigm|object-oriented|functional|imperative
+TypeScript,2012,0,multi-paradigm|object-oriented|imperative|functional
+PHP,1995,!Rasmus Lerdorf,imperative|functional|object-oriented|procedural,0
+Scala,2004,!Martin Odersky,multi-paradigm|concurrent|functional|object-oriented
+R,1993,!Ross Ihaka\, Robert Gentleman,multi-paradigm|array|object-oriented|imperative|functional,0
+Perl,1987,!Larry Wall,multi-paradigm|functional|imperative|object-oriented,0
+END:@T1

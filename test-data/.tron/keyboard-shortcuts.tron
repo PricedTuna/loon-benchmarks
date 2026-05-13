@@ -1,0 +1,31 @@
+S:@T1[25]=[action:s,windows:s,mac:s,category:s,universal:b]
+D:defaults=universal=1
+D:category=Clipboard,Search,File,Window,Format,View,Browser
+@T1:
+F:csv
+!,Copy,Ctrl+C,Cmd+C,Clipboard,1
+Cut,Ctrl+X,Cmd+X,0
+Paste,Ctrl+V,Cmd+V,0
+Undo,Ctrl+Z,Cmd+Z,!Edit
+Redo,Ctrl+Y,Cmd+Shift+Z,!Edit
+Select All,Ctrl+A,Cmd+A,!Selection
+Find,Ctrl+F,Cmd+F,1
+Find and Replace,Ctrl+H,Cmd+Option+F,1
+Save,Ctrl+S,Cmd+S,2
+Save As,Ctrl+Shift+S,Cmd+Shift+S,2
+New,Ctrl+N,Cmd+N,2
+Open,Ctrl+O,Cmd+O,2
+Print,Ctrl+P,Cmd+P,2
+Close Tab,Ctrl+W,Cmd+W,3
+Close Window,Alt+F4,Cmd+Q,3,0
+New Tab,Ctrl+T,Cmd+T,3
+Switch Tab,Ctrl+Tab,Cmd+Option+Right,3,0
+Bold,Ctrl+B,Cmd+B,4
+Italic,Ctrl+I,Cmd+I,4
+Underline,Ctrl+U,Cmd+U,4
+Zoom In,Ctrl++,Cmd++,5
+Zoom Out,Ctrl+-,Cmd+-,5
+Reset Zoom,Ctrl+0,Cmd+0,5
+Refresh,F5,Cmd+R,6,0
+Hard Refresh,Ctrl+F5,Cmd+Shift+R,6,0
+END:@T1

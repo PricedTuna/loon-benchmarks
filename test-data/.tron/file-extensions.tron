@@ -1,0 +1,41 @@
+S:@T1[35]=[extension:s,type:s,mime_type:s,description:s]
+D:defaults=type=Code
+D:type=Data,Code,Image,Archive
+@T1:
+F:csv
+!,.json,application/json,JavaScript Object Notation,Data
+.xml,application/xml,Extensible Markup Language,0
+.csv,text/csv,Comma-Separated Values,0
+.yaml,application/x-yaml,YAML Ain't Markup Language,0
+.html,text/html,HyperText Markup Language,!Web
+.css,text/css,Cascading Style Sheets,!Web
+.js,text/javascript,JavaScript
+.ts,text/typescript,TypeScript
+.jsx,text/jsx,JavaScript XML (React)
+.tsx,text/tsx,TypeScript XML (React)
+.py,text/x-python,Python
+.java,text/x-java-source,Java
+.go,text/x-go,Go
+.rs,text/x-rust,Rust
+.rb,text/x-ruby,Ruby
+.php,text/x-php,PHP
+.swift,text/x-swift,Swift
+.kt,text/x-kotlin,Kotlin
+.c,text/x-c,C
+.cpp,text/x-c++src,C++
+.cs,text/x-csharp,C#
+.sql,application/sql,Structured Query Language,!Database
+.md,text/markdown,Markdown,!Documentation
+.txt,text/plain,Plain Text,!Text
+.pdf,application/pdf,Portable Document Format,!Document
+.png,image/png,Portable Network Graphics,2
+.jpg,image/jpeg,JPEG Image,2
+.gif,image/gif,Graphics Interchange Format,2
+.svg,image/svg+xml,Scalable Vector Graphics,2
+.webp,image/webp,WebP Image,2
+.mp3,audio/mpeg,MPEG Audio Layer 3,!Audio
+.wav,audio/wav,Waveform Audio,!Audio
+.mp4,video/mp4,MPEG-4 Video,!Video
+.zip,application/zip,ZIP Archive,3
+.tar,application/x-tar,Tape Archive,3
+END:@T1

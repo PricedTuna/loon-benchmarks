@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "name": "Blue Lake Trail",
+    "distanceKm": 7,
+    "elevationGain": 100,
+    "companion": "ana",
+    "wasSunny": true
+  },
+  {
+    "id": 2,
+    "name": "Ridge Overlook",
+    "distanceKm": 10.4,
+    "elevationGain": 137,
+    "companion": "luis",
+    "wasSunny": false
+  },
+  {
+    "id": 3,
+    "name": "Wildflower Loop",
+    "distanceKm": 10.6,
+    "elevationGain": 174,
+    "companion": "sam",
+    "wasSunny": true
+  },
+  {
+    "id": 4,
+    "name": "Summit Pass",
+    "distanceKm": 7.6,
+    "elevationGain": 211,
+    "companion": "ana",
+    "wasSunny": true
+  },
+  {
+    "id": 5,
+    "name": "Echo Canyon",
+    "distanceKm": 4,
+    "elevationGain": 248,
+    "companion": "luis",
+    "wasSunny": false
+  },
+  {
+    "id": 6,
+    "name": "Bear Creek Path",
+    "distanceKm": 3.2,
+    "elevationGain": 285,
+    "companion": "sam",
+    "wasSunny": true
+  },
+  {
+    "id": 7,
+    "name": "Aspen Meadows",
+    "distanceKm": 5.9,
+    "elevationGain": 322,
+    "companion": "ana",
+    "wasSunny": true
+  },
+  {
+    "id": 8,
+    "name": "Iron Peak Loop",
+    "distanceKm": 9.6,
+    "elevationGain": 359,
+    "companion": "luis",
+    "wasSunny": false
+  },
+  {
+    "id": 9,
+    "name": "Sunrise Ridge",
+    "distanceKm": 11,
+    "elevationGain": 396,
+    "companion": "sam",
+    "wasSunny": true
+  },
+  {
+    "id": 10,
+    "name": "Hidden Falls",
+    "distanceKm": 8.6,
+    "elevationGain": 433,
+    "companion": "ana",
+    "wasSunny": true
+  },
+  {
+    "id": 11,
+    "name": "Granite Basin",
+    "distanceKm": 4.8,
+    "elevationGain": 470,
+    "companion": "luis",
+    "wasSunny": false
+  },
+  {
+    "id": 12,
+    "name": "Thunder Valley",
+    "distanceKm": 3,
+    "elevationGain": 507,
+    "companion": "sam",
+    "wasSunny": true
+  },
+  {
+    "id": 13,
+    "name": "Crystal Lake",
+    "distanceKm": 4.9,
+    "elevationGain": 544,
+    "companion": "ana",
+    "wasSunny": true
+  },
+  {
+    "id": 14,
+    "name": "Wind Cave Trail",
+    "distanceKm": 8.7,
+    "elevationGain": 581,
+    "companion": "luis",
+    "wasSunny": false
+  },
+  {
+    "id": 15,
+    "name": "Prairie Hawk",
+    "distanceKm": 11,
+    "elevationGain": 618,
+    "companion": "sam",
+    "wasSunny": true
+  },
+  {
+    "id": 16,
+    "name": "Sage Flat",
+    "distanceKm": 9.6,
+    "elevationGain": 655,
+    "companion": "ana",
+    "wasSunny": true
+  },
+  {
+    "id": 17,
+    "name": "Juniper Springs",
+    "distanceKm": 5.8,
+    "elevationGain": 692,
+    "companion": "luis",
+    "wasSunny": false
+  },
+  {
+    "id": 18,
+    "name": "Lost Mine Path",
+    "distanceKm": 3.2,
+    "elevationGain": 729,
+    "companion": "sam",
+    "wasSunny": true
+  },
+  {
+    "id": 19,
+    "name": "Osprey Point",
+    "distanceKm": 4,
+    "elevationGain": 766,
+    "companion": "ana",
+    "wasSunny": true
+  },
+  {
+    "id": 20,
+    "name": "Deer Creek",
+    "distanceKm": 7.6,
+    "elevationGain": 103,
+    "companion": "luis",
+    "wasSunny": false
+  }
+]

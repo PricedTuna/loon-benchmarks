@@ -1,0 +1,51 @@
+S:@T1[43]=[na:s,co:s,ca:s,po:i,ak:f,em:b,cu:s]
+A:name,code,capital,population,area_km2,eu_member,currency
+FP:ak=2
+D:defaults=em=1,cu=EUR
+D:cu=EUR
+@T1:
+F:csv
+!,Albania,AL,Tirana,2877797,28748,0,ALL
+Andorra,AD,Andorra la Vella,1nm9,1040,0
+Austria,AT,Vienna,5d1dq,4zs58
+Belarus,BY,Minsk,5mj57,ccyio,0,!BYN
+Belgium,BE,Brussels,6welz,1tfk0
+Bosnia and Herzegovina,BA,Sarajevo,1ybhv,31qdw,0,!BAM
+Bulgaria,BG,Sofia,44xgd,6lnh8,~,!BGN
+Croatia,HR,Zagreb,2fzn7,3datk
+Czech Republic,CZ,Prague,6dj3p,4p1c8,~,!CZK
+Denmark,DK,Copenhagen,3g5ai,2kd5k,~,!DKK
+Estonia,EE,Tallinn,sfk7,2oxqk
+Finland,FI,Helsinki,3ar8w,k5cyo
+France,FR,Paris,12v1d3,12bw04
+Germany,DE,Berlin,1dvs3q,l97zs
+Greece,GR,Athens,67eha,7utv8
+Hungary,HU,Budapest,5r1z3,5je34,~,!HUF
+Iceland,IS,Reykjavik,7baz,64rj4,0,!ISK
+Ireland,IE,Dublin,2xu0q,46mas
+Italy,IT,Rome,zzwn6,hxvjk
+Latvia,LV,Riga,14fee,3ufpw
+Liechtenstein,LI,Vaduz,tf4,ccg,0,!CHF
+Lithuania,LT,Vilnius,1mcj5,3vykw
+Luxembourg,LU,Luxembourg City,df0a,5jjc
+Malta,MT,Valletta,9gp3,ods
+Moldova,MD,Chișinău,1kyn9,20jyk,0,!MDL
+Monaco,MC,Monaco,ua2,5k,0
+Montenegro,ME,Podgorica,dgma,tlqo,0
+Netherlands,NL,Amsterdam,a79co,2h1h8
+North Macedonia,MK,Skopje,18nji,1j410,0,!MKD
+Norway,NO,Oslo,38721,ja0q0,0,!NOK
+Poland,PL,Warsaw,mj6mr,im7s0,~,!PLN
+Portugal,PT,Lisbon,62jtx,5hdpk
+Romania,RO,Bucharest,bgbwb,e6ytw,~,!RON
+San Marino,SM,San Marino,q6j,4pg,0
+Serbia,RS,Belgrade,579sr,59dz8,0,!RSD
+Slovakia,SK,Bratislava,390oq,2x3kc
+Slovenia,SI,Ljubljana,18k4a,17g9w
+Spain,ES,Madrid,ru47u,u4ifs
+Sweden,SE,Stockholm,60gn5,qt4zg,~,!SEK
+Switzerland,CH,Bern,55hy6,2ghhs,0,!CHF
+Ukraine,UA,Kyiv,q1d6q,zxm7s,0,!UAH
+United Kingdom,GB,London,14f16j,efr18,0,!GBP
+Vatican City,VA,Vatican City,mx,18,0
+END:@T1

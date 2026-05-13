@@ -1,0 +1,44 @@
+{
+  "version": "3.0",
+  "created": "2026-04-21T07:33:18.418Z",
+  "source": "https://fakestoreapi.com/products",
+  "device": {
+    "cpu": "Intel(R) Core(TM) Ultra 9 185H",
+    "cores": 22,
+    "mhz": 3072,
+    "ram_mb": 32253,
+    "free_mb": 7939,
+    "used_pct": 75,
+    "platform": "win32",
+    "arch": "x64",
+    "release": "10.0.26200",
+    "node": "v22.14.0"
+  },
+  "fetchMs": 862,
+  "datasets": {
+    "struct20": {
+      "jsonBytes": 1722,
+      "hyperBytes": 496,
+      "ultraBytes": 493,
+      "hyperPct": 71,
+      "file": "fakestore_struct.tron",
+      "ok": true
+    },
+    "struct1k": {
+      "jsonBytes": 87394,
+      "hyperBytes": 8507,
+      "ultraBytes": 11463,
+      "hyperPct": 90,
+      "file": "fakestore_struct_1k.tron",
+      "ok": true
+    },
+    "business1k": {
+      "jsonBytes": 162537,
+      "hyperBytes": 10207,
+      "ultraBytes": 21612,
+      "hyperPct": 94,
+      "file": "fakestore_business.tron",
+      "ok": true
+    }
+  }
+}

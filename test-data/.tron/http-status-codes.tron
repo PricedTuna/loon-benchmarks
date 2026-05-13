@@ -1,0 +1,39 @@
+S:@T1[33]=[code:i,message:s,category:s,description:s]
+D:defaults=category=Client Error
+D:category=Informational,Success,Redirection,Client Error,Server Error
+@T1:
+F:csv
+!,100,Continue,The server has received the request headers and the client should proceed to send the request body.,Informational
+2t,Switching Protocols,The requester has asked the server to switch protocols.,0
+5k,OK,The request was successful.,1
+5l,Created,The request was successful and a resource was created.,1
+5m,Accepted,The request has been accepted for processing\, but not completed.,1
+5o,No Content,The request was successful but there is no content to send.,1
+5q,Partial Content,The server is delivering only part of the resource due to a range header.,1
+8d,Moved Permanently,The resource has been permanently moved to a new URL.,2
+8e,Found,The resource resides temporarily at a different URL.,2
+8f,See Other,The response can be found at a different URL using GET.,2
+8g,Not Modified,The resource has not been modified since last requested.,2
+8j,Temporary Redirect,The resource temporarily resides at a different URL.,2
+8k,Permanent Redirect,The resource has been permanently moved\, use same method.,2
+b4,Bad Request,The server cannot process the request due to client error.
+b5,Unauthorized,Authentication is required and has failed or not been provided.
+b7,Forbidden,The server understood the request but refuses to authorize it.
+b8,Not Found,The requested resource could not be found.
+b9,Method Not Allowed,The request method is not supported for the resource.
+ba,Not Acceptable,The resource is not available in a format acceptable to the client.
+bc,Request Timeout,The server timed out waiting for the request.
+bd,Conflict,The request conflicts with the current state of the server.
+be,Gone,The resource is no longer available and will not be available again.
+bh,Payload Too Large,The request is larger than the server is willing to process.
+bi,URI Too Long,The URI provided was too long for the server to process.
+bj,Unsupported Media Type,The media format of the request is not supported.
+bm,I'm a Teapot,The server refuses to brew coffee because it is a teapot.
+bq,Unprocessable Entity,The request was well-formed but semantically incorrect.
+bx,Too Many Requests,The user has sent too many requests in a given time.
+dw,Internal Server Error,The server encountered an unexpected condition.,4
+dx,Not Implemented,The server does not support the functionality required.,4
+dy,Bad Gateway,The server received an invalid response from an upstream server.,4
+dz,Service Unavailable,The server is not ready to handle the request.,4
+e0,Gateway Timeout,The server did not receive a timely response from an upstream server.,4
+END:@T1

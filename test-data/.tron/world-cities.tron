@@ -1,0 +1,38 @@
+S:@T1[30]=[name:s,country:s,population:i,lat:f,lon:f,timezone:s]
+FP:lat=4
+FP:lon=4
+D:country=India,China,Brazil,United States,Pakistan
+D:timezone=Asia/Tokyo,Asia/Kolkata,Asia/Shanghai,America/Sao_Paulo,Asia/Karachi
+@T1:
+F:csv
+!,Tokyo,Japan,37400068,35.6762,139.6503,Asia/Tokyo
+Delhi,0,gz5jk,65hd,gixd,1
+Shanghai,1,f8b74,6oz4,q1ap,2
+São Paulo,2,cw18w,-51pt,-9ztp,3
+Mexico City,!Mexico,cuk08,45xy,-l8x0,!America/Mexico_City
+Cairo,!Egypt,byaqo,6fto,6p0l,!Africa/Cairo
+Mumbai,0,bw8o0,436w,fmbt,1
+Beijing,1,bohcg,8jwi,oy7e,2
+Dhaka,!Bangladesh,bnmhc,53pz,jdml,!Asia/Dhaka
+Osaka,!Japan,bh9bc,7fp5,t1jj,0
+New York,3,b7cu0,8q54,-fv18,!America/New_York
+Karachi,4,962ps,5btr,eczf,4
+Buenos Aires,!Argentina,8wsm0,-7f05,-cih4,!America/Argentina/Buenos_Aires
+Istanbul,!Turkey,8s5y0,8sf6,67lk,!Europe/Istanbul
+Kolkata,0,8qnxk,4u66,ixtj,1
+Manila,!Philippines,80ys0,34nf,pxiq,!Asia/Manila
+Lagos,!Nigeria,80k48,1ecc,q2o,!Africa/Lagos
+Rio de Janeiro,2,7wwy0,-4wr0,-994h,3
+Tianjin,1,7v8rc,8fkq,p5kg,2
+Kinshasa,!DR Congo,7uat4,-y9v,39sn,!Africa/Kinshasa
+Guangzhou,1,7ivjk,4ygr,o9yc,2
+Los Angeles,3,7f0nk,7aqy,-pcdh,!America/Los_Angeles
+Moscow,!Russia,7dzm8,by7q,8299,!Europe/Moscow
+Shenzhen,1,7389s,4txz,og2r,2
+Lahore,4,6zl3k,6r7o,fxr7,4
+Bangalore,0,6t75s,2s38,gmq2,1
+Paris,!France,6hn9k,agza,i5e,!Europe/Paris
+Jakarta,!Indonesia,6eu6o,-1bwo,mwfc,!Asia/Jakarta
+Seoul,!South Korea,5xji0,81v5,r7ro,!Asia/Seoul
+London,!United Kingdom,5dvxs,b1fm,-zi,!Europe/London
+END:@T1

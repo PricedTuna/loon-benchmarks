@@ -1,0 +1,26 @@
+context:
+  task: Our favorite hikes together
+  location: Boulder
+  season: spring_2025
+friends[3]: ana,luis,sam
+hikes[20]{id,name,distanceKm,elevationGain,companion,wasSunny}:
+  1,Blue Lake Trail,7,100,ana,true
+  2,Ridge Overlook,10.4,137,luis,false
+  3,Wildflower Loop,10.6,174,sam,true
+  4,Summit Pass,7.6,211,ana,true
+  5,Echo Canyon,4,248,luis,false
+  6,Bear Creek Path,3.2,285,sam,true
+  7,Aspen Meadows,5.9,322,ana,true
+  8,Iron Peak Loop,9.6,359,luis,false
+  9,Sunrise Ridge,11,396,sam,true
+  10,Hidden Falls,8.6,433,ana,true
+  11,Granite Basin,4.8,470,luis,false
+  12,Thunder Valley,3,507,sam,true
+  13,Crystal Lake,4.9,544,ana,true
+  14,Wind Cave Trail,8.7,581,luis,false
+  15,Prairie Hawk,11,618,sam,true
+  16,Sage Flat,9.6,655,ana,true
+  17,Juniper Springs,5.8,692,luis,false
+  18,Lost Mine Path,3.2,729,sam,true
+  19,Osprey Point,4,766,ana,true
+  20,Deer Creek,7.6,103,luis,false
