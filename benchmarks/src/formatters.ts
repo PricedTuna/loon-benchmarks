@@ -4,6 +4,7 @@ import { XMLBuilder } from 'fast-xml-parser'
 import { stringify as stringifyYAML } from 'yaml'
 import { encode as encodeToon } from '@toon-format/toon'
 import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
+import { loon } from '../../extra-formats/LOON/dist/index.mjs'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
@@ -43,6 +44,7 @@ export const formatters: Record<string, (data: unknown) => string> = {
   'csv': data => toCSV(data),
   'toon': data => encodeToon(data),
   'tron': data => toTRON(data),
+  'loon': data => toLOON(data),
   'jton': data => toJTON(data),
 }
 
@@ -130,6 +132,10 @@ function toTRON(data: unknown): string {
   }
 
   return tron.toJSON([{ value: data }])
+}
+
+function toLOON(data: unknown): string {
+  return loon.toJSON(data, { mode: 'llm', target: 'llm' })
 }
 
 /**
