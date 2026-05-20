@@ -1,0 +1,7002 @@
+[
+  {
+    "id": 1,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 2,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 3,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 4,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 5,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 6,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 7,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 8,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 9,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 10,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 11,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 12,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 13,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 14,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 15,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 16,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 17,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 18,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 19,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 20,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 21,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 22,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 23,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 24,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 25,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 26,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 27,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 28,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 29,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 30,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 31,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 32,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 33,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 34,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 35,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 36,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 37,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 38,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 39,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 40,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 41,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 42,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 43,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 44,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 45,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 46,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 47,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 48,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 49,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 50,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 51,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 52,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 53,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 54,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 55,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 56,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 57,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 58,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 59,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 60,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 61,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 62,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 63,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 64,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 65,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 66,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 67,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 68,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 69,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 70,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 71,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 72,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 73,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 74,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 75,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 76,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 77,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 78,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 79,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 80,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 81,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 82,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 83,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 84,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 85,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 86,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 87,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 88,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 89,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 90,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 91,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 92,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 93,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 94,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 95,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 96,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 97,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 98,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 99,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 100,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 101,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 102,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 103,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 104,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 105,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 106,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 107,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 108,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 109,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 110,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 111,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 112,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 113,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 114,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 115,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 116,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 117,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 118,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 119,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 120,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 121,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 122,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 123,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 124,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 125,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 126,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 127,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 128,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 129,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 130,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 131,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 132,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 133,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 134,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 135,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 136,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 137,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 138,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 139,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 140,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 141,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 142,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 143,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 144,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 145,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 146,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 147,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 148,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 149,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 150,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 151,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 152,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 153,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 154,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 155,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 156,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 157,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 158,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 159,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 160,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 161,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 162,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 163,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 164,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 165,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 166,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 167,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 168,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 169,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 170,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 171,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 172,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 173,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 174,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 175,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 176,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 177,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 178,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 179,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 180,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 181,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 182,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 183,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 184,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 185,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 186,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 187,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 188,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 189,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 190,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 191,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 192,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 193,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 194,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 195,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 196,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 197,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 198,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 199,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 200,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 201,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 202,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 203,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 204,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 205,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 206,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 207,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 208,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 209,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 210,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 211,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 212,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 213,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 214,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 215,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 216,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 217,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 218,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 219,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 220,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 221,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 222,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 223,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 224,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 225,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 226,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 227,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 228,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 229,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 230,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 231,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 232,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 233,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 234,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 235,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 236,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 237,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 238,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 239,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 240,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 241,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 242,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 243,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 244,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 245,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 246,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 247,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 248,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 249,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 250,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 251,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 252,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 253,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 254,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 255,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 256,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 257,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 258,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 259,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 260,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 261,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 262,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 263,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 264,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 265,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 266,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 267,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 268,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 269,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 270,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 271,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 272,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 273,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 274,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 275,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 276,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 277,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 278,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 279,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 280,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 281,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 282,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 283,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 284,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 285,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 286,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 287,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 288,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 289,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 290,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 291,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 292,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 293,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 294,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 295,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 296,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 297,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 298,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 299,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 300,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 301,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 302,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 303,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 304,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 305,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 306,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 307,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 308,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 309,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 310,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 311,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 312,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 313,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 314,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 315,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 316,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 317,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 318,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 319,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 320,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 321,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 322,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 323,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 324,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 325,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 326,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 327,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 328,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 329,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 330,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 331,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 332,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 333,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 334,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 335,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 336,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 337,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 338,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 339,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 340,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 341,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 342,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 343,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 344,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 345,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 346,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 347,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 348,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 349,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 350,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 351,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 352,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 353,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 354,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 355,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 356,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 357,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 358,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 359,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 360,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 361,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 362,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 363,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 364,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 365,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 366,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 367,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 368,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 369,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 370,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 371,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 372,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 373,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 374,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 375,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 376,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 377,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 378,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 379,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 380,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 381,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 382,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 383,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 384,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 385,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 386,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 387,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 388,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 389,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 390,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 391,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 392,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 393,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 394,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 395,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 396,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 397,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 398,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 399,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 400,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 401,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 402,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 403,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 404,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 405,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 406,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 407,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 408,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 409,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 410,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 411,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 412,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 413,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 414,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 415,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 416,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 417,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 418,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 419,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 420,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 421,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 422,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 423,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 424,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 425,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 426,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 427,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 428,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 429,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 430,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 431,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 432,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 433,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 434,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 435,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 436,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 437,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 438,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 439,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 440,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 441,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 442,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 443,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 444,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 445,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 446,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 447,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 448,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 449,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 450,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 451,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 452,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 453,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 454,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 455,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 456,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 457,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 458,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 459,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 460,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 461,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 462,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 463,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 464,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 465,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 466,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 467,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 468,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 469,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 470,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 471,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 472,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 473,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 474,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 475,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 476,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 477,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 478,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 479,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 480,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 481,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 482,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 483,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 484,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 485,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 486,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 487,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 488,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 489,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 490,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 491,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 492,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 493,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 494,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 495,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 496,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 497,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 498,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 499,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 500,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 501,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 502,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 503,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 504,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 505,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 506,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 507,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 508,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 509,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 510,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 511,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 512,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 513,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 514,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 515,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 516,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 517,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 518,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 519,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 520,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 521,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 522,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 523,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 524,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 525,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 526,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 527,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 528,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 529,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 530,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 531,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 532,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 533,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 534,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 535,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 536,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 537,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 538,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 539,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 540,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 541,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 542,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 543,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 544,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 545,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 546,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 547,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 548,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 549,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 550,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 551,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 552,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 553,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 554,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 555,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 556,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 557,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 558,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 559,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 560,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 561,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 562,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 563,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 564,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 565,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 566,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 567,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 568,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 569,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 570,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 571,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 572,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 573,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 574,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 575,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 576,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 577,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 578,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 579,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 580,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 581,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 582,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 583,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 584,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 585,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 586,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 587,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 588,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 589,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 590,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 591,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 592,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 593,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 594,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 595,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 596,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 597,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 598,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 599,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 600,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 601,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 602,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 603,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 604,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 605,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 606,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 607,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 608,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 609,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 610,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 611,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 612,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 613,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 614,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 615,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 616,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 617,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 618,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 619,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 620,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 621,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 622,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 623,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 624,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 625,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 626,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 627,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 628,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 629,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 630,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 631,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 632,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 633,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 634,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 635,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 636,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 637,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 638,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 639,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 640,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 641,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 642,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 643,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 644,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 645,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 646,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 647,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 648,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 649,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 650,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 651,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 652,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 653,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 654,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 655,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 656,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 657,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 658,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 659,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 660,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 661,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 662,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 663,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 664,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 665,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 666,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 667,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 668,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 669,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 670,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 671,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 672,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 673,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 674,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 675,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 676,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 677,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 678,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 679,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 680,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 681,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 682,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 683,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 684,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 685,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 686,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 687,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 688,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 689,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 690,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 691,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 692,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 693,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 694,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 695,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 696,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 697,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 698,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 699,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 700,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 701,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 702,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 703,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 704,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 705,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 706,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 707,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 708,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 709,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 710,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 711,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 712,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 713,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 714,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 715,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 716,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 717,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 718,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 719,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 720,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 721,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 722,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 723,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 724,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 725,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 726,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 727,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 728,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 729,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 730,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 731,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 732,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 733,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 734,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 735,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 736,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 737,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 738,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 739,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 740,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 741,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 742,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 743,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 744,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 745,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 746,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 747,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 748,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 749,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 750,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 751,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 752,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 753,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 754,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 755,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 756,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 757,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 758,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 759,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 760,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 761,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 762,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 763,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 764,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 765,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 766,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 767,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 768,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 769,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 770,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 771,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 772,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 773,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 774,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 775,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 776,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 777,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 778,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 779,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 780,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 781,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 782,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 783,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 784,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 785,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 786,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 787,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 788,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 789,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 790,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 791,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 792,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 793,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 794,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 795,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 796,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 797,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 798,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 799,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 800,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 801,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 802,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 803,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 804,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 805,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 806,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 807,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 808,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 809,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 810,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 811,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 812,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 813,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 814,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 815,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 816,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 817,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 818,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 819,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 820,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 821,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 822,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 823,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 824,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 825,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 826,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 827,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 828,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 829,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 830,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 831,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 832,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 833,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 834,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 835,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 836,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 837,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 838,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 839,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 840,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 841,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 842,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 843,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 844,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 845,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 846,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 847,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 848,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 849,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 850,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 851,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 852,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 853,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 854,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 855,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 856,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 857,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 858,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 859,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 860,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 861,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 862,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 863,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 864,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 865,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 866,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 867,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 868,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 869,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 870,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 871,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 872,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 873,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 874,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 875,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 876,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 877,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 878,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 879,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 880,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 881,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 882,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 883,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 884,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 885,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 886,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 887,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 888,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 889,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 890,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 891,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 892,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 893,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 894,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 895,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 896,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 897,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 898,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 899,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 900,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 901,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 902,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 903,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 904,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 905,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 906,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 907,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 908,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 909,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 910,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 911,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 912,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 913,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 914,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 915,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 916,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 917,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 918,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 919,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 920,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 921,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 922,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 923,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 924,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 925,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 926,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 927,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 928,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 929,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 930,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 931,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 932,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 933,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 934,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 935,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 936,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 937,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 938,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 939,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 940,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 941,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 942,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 943,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 944,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 945,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 946,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 947,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 948,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 949,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 950,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 951,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 952,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 953,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 954,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 955,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 956,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 957,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 958,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 959,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 960,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 961,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 962,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 963,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 964,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 965,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 966,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 967,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 968,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 969,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 970,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 971,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 972,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 973,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 974,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 975,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 976,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 977,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 978,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 979,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 980,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  },
+  {
+    "id": 981,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 982,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 983,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 984,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 985,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 986,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 987,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 988,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 989,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 990,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 991,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 992,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 993,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 994,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 995,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 996,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 997,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 998,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 999,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 1000,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  }
+]

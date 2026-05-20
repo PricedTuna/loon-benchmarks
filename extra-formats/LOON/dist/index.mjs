@@ -123,9 +123,7 @@ var COMMON_CHILD_KEYS = [
   "childNodes",
   "kids",
   "subnodes",
-  "branches",
-  "leaves",
-  "features"
+  "branches"
 ];
 var DEFAULT_MAX_DEPTH = 200;
 var DEFAULT_ID_COL = "_id";
@@ -258,6 +256,7 @@ var TreeCodec = class {
     if (meta.isArray) parts.push("arr=1");
     if (meta.idCol !== DEFAULT_ID_COL) parts.push(`id=${esc(meta.idCol)}`);
     if (meta.pidCol !== DEFAULT_PID_COL) parts.push(`pid=${esc(meta.pidCol)}`);
+    if (meta.flat) parts.push("flat=1");
     return parts.join(",");
   }
   /**
@@ -286,12 +285,14 @@ var TreeCodec = class {
       const eq = p.indexOf("=");
       if (eq > 0) kv[p.slice(0, eq)] = p.slice(eq + 1);
     }
-    return {
+    const meta = {
       childKey: kv["ck"] ?? "children",
       isArray: kv["arr"] === "1",
       idCol: kv["id"] ?? DEFAULT_ID_COL,
       pidCol: kv["pid"] ?? DEFAULT_PID_COL
     };
+    if (kv["flat"] === "1") meta.flat = true;
+    return meta;
   }
   // ─── Private helpers ───────────────────────────────────────────────────────
   /**
@@ -927,6 +928,267 @@ function commonSuffix(vals) {
   return len >= 1 ? vals[0].slice(-len) : "";
 }
 
+// src/utils/flatten.ts
+function flattenRecord(obj, prefix = "") {
+  const result = {};
+  for (const [key, val] of Object.entries(obj)) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    if (val !== null && typeof val === "object" && !Array.isArray(val)) {
+      Object.assign(result, flattenRecord(val, fullKey));
+    } else {
+      result[fullKey] = val;
+    }
+  }
+  return result;
+}
+function unflattenRecord(obj) {
+  if (!Object.keys(obj).some((k) => k.includes("."))) return obj;
+  const result = {};
+  for (const [key, val] of Object.entries(obj)) {
+    const parts = key.split(".");
+    let cursor = result;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (!(parts[i] in cursor) || cursor[parts[i]] === null || typeof cursor[parts[i]] !== "object" || Array.isArray(cursor[parts[i]])) {
+        cursor[parts[i]] = {};
+      }
+      cursor = cursor[parts[i]];
+    }
+    cursor[parts[parts.length - 1]] = val;
+  }
+  return result;
+}
+
+// src/decoder/compact.ts
+function decodeCompact(tron) {
+  const records = tron.split(/\n---\n/);
+  return records.map((record) => {
+    const obj = {};
+    const lines = record.split("\n");
+    for (const line of lines) {
+      const idx = line.indexOf(": ");
+      const idxNoSpace = line.lastIndexOf(":");
+      let keyEnd;
+      let rawStart;
+      if (idx >= 1) {
+        keyEnd = idx;
+        rawStart = idx + 2;
+      } else if (idxNoSpace >= 1 && line.endsWith(":")) {
+        keyEnd = idxNoSpace;
+        rawStart = idxNoSpace + 1;
+      } else {
+        continue;
+      }
+      const keySegment = line.substring(0, keyEnd).trim();
+      const raw = line.substring(rawStart);
+      const arrInfo = parseArraySuffix(keySegment);
+      if (arrInfo) {
+        const { baseKey, length, cols } = arrInfo;
+        if (length === 0) {
+          obj[baseKey] = [];
+          continue;
+        }
+        if (cols) {
+          obj[baseKey] = decodeObjectArray(raw, cols);
+        } else {
+          obj[baseKey] = decodeScalarArray(raw);
+        }
+        continue;
+      }
+      if (raw.startsWith("\\S")) {
+        obj[keySegment] = unescapeBasic(raw.slice(2));
+        continue;
+      }
+      if (raw.startsWith("\\J")) {
+        const inner = unescapeBasic(raw.slice(2));
+        try {
+          obj[keySegment] = JSON.parse(inner);
+        } catch {
+          obj[keySegment] = inner;
+        }
+        continue;
+      }
+      const val = unescapeBasic(raw);
+      if (val === "^") {
+        obj[keySegment] = null;
+      } else if (val === "true") {
+        obj[keySegment] = true;
+      } else if (val === "false") {
+        obj[keySegment] = false;
+      } else if (/^-?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(val)) {
+        obj[keySegment] = Number(val);
+      } else if ((val.startsWith("[") || val.startsWith("{")) && (val.endsWith("]") || val.endsWith("}"))) {
+        try {
+          obj[keySegment] = JSON.parse(val);
+        } catch {
+          obj[keySegment] = val;
+        }
+      } else {
+        obj[keySegment] = val;
+      }
+    }
+    return obj;
+  });
+}
+function decodeIndent(text) {
+  return text.split(/\n---\n/).map(decodeIndentBlock);
+}
+function decodeIndentBlock(text) {
+  const lines = text.split("\n");
+  const root = {};
+  const stack = [{ indent: 0, obj: root }];
+  for (const line of lines) {
+    if (line.trim() === "") continue;
+    const indent = line.length - line.trimStart().length;
+    const content = line.slice(indent);
+    while (stack.length > 1 && indent < stack[stack.length - 1].indent) {
+      stack.pop();
+    }
+    const parent = stack[stack.length - 1].obj;
+    if (content.endsWith(":") && !content.endsWith(": ")) {
+      const keySegment2 = content.slice(0, -1).trim();
+      const arrInfo = parseArraySuffix(keySegment2);
+      if (arrInfo && arrInfo.length === 0) {
+        parent[arrInfo.baseKey] = [];
+        continue;
+      }
+      const child = {};
+      parent[keySegment2] = child;
+      stack.push({ indent: indent + 2, obj: child });
+      continue;
+    }
+    const idx = content.indexOf(": ");
+    if (idx < 1) continue;
+    const keySegment = content.substring(0, idx).trim();
+    const raw = content.substring(idx + 2);
+    assignValue(parent, keySegment, raw);
+  }
+  return root;
+}
+function assignValue(obj, keySegment, raw) {
+  const arrInfo = parseArraySuffix(keySegment);
+  if (arrInfo) {
+    const { baseKey, length, cols } = arrInfo;
+    if (length === 0) {
+      obj[baseKey] = [];
+    } else if (cols) {
+      obj[baseKey] = decodeObjectArray(raw, cols);
+    } else {
+      obj[baseKey] = decodeScalarArray(raw);
+    }
+    return;
+  }
+  if (raw.startsWith("\\S")) {
+    obj[keySegment] = unescapeBasic(raw.slice(2));
+    return;
+  }
+  if (raw.startsWith("\\J")) {
+    const inner = unescapeBasic(raw.slice(2));
+    try {
+      obj[keySegment] = JSON.parse(inner);
+    } catch {
+      obj[keySegment] = inner;
+    }
+    return;
+  }
+  const val = unescapeBasic(raw);
+  if (val === "^") {
+    obj[keySegment] = null;
+  } else if (val === "true") {
+    obj[keySegment] = true;
+  } else if (val === "false") {
+    obj[keySegment] = false;
+  } else if (/^-?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(val)) {
+    obj[keySegment] = Number(val);
+  } else if ((val.startsWith("[") || val.startsWith("{")) && (val.endsWith("]") || val.endsWith("}"))) {
+    try {
+      obj[keySegment] = JSON.parse(val);
+    } catch {
+      obj[keySegment] = val;
+    }
+  } else {
+    obj[keySegment] = val;
+  }
+}
+function unescapeBasic(s) {
+  return s.replace(
+    /\\(\\|n|r|t)/g,
+    (_, c) => c === "\\" ? "\\" : c === "n" ? "\n" : c === "r" ? "\r" : "	"
+  );
+}
+function unescapeCell(s) {
+  return s.replace(/\\(\\|n|r|t|,|;|\|)/g, (_, c) => {
+    if (c === "\\") return "\\";
+    if (c === "n") return "\n";
+    if (c === "r") return "\r";
+    if (c === "t") return "	";
+    return c;
+  });
+}
+function coerceCell(s) {
+  if (s === "^") return null;
+  if (s === "true") return true;
+  if (s === "false") return false;
+  if (/^-?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(s)) return Number(s);
+  return unescapeCell(s);
+}
+function splitEscaped(s, delim) {
+  const out = [];
+  let buf = "";
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (ch === "\\" && i + 1 < s.length) {
+      buf += ch + s[i + 1];
+      i++;
+      continue;
+    }
+    if (ch === delim) {
+      out.push(buf);
+      buf = "";
+      continue;
+    }
+    buf += ch;
+  }
+  out.push(buf);
+  return out;
+}
+function parseArraySuffix(key) {
+  if (!key.endsWith("]") && !key.endsWith("}")) return null;
+  let cols = null;
+  let cursor = key;
+  if (cursor.endsWith("}")) {
+    const open2 = cursor.lastIndexOf("{");
+    if (open2 < 0) return null;
+    const colsStr = cursor.substring(open2 + 1, cursor.length - 1);
+    cols = splitEscaped(colsStr, ",").map(unescapeCell);
+    cursor = cursor.substring(0, open2);
+  }
+  if (!cursor.endsWith("]")) return null;
+  const open = cursor.lastIndexOf("[");
+  if (open < 0) return null;
+  const lenStr = cursor.substring(open + 1, cursor.length - 1);
+  if (!/^\d+$/.test(lenStr)) return null;
+  const length = Number(lenStr);
+  const baseKey = cursor.substring(0, open);
+  return { baseKey, length, cols };
+}
+function decodeScalarArray(raw) {
+  if (raw === "") return [];
+  return splitEscaped(raw, ",").map(coerceCell);
+}
+function decodeObjectArray(raw, cols) {
+  if (raw === "") return [];
+  const rows = splitEscaped(raw, ";");
+  const hasDottedCols = cols.some((c) => c.includes("."));
+  return rows.map((rowStr) => {
+    const cells = splitEscaped(rowStr, ",");
+    const obj = {};
+    for (let i = 0; i < cols.length; i++) {
+      obj[cols[i]] = coerceCell(cells[i] ?? "");
+    }
+    return hasDottedCols ? unflattenRecord(obj) : obj;
+  });
+}
+
 // src/decoder/micro.ts
 function decodeMicro(loon2) {
   const lines = loon2.trim().split("\n");
@@ -970,62 +1232,6 @@ function decodeMicro(loon2) {
   return result;
 }
 
-// src/decoder/compact.ts
-function decodeCompact(tron) {
-  const records = tron.split(/\n---\n/);
-  return records.map((record) => {
-    const obj = {};
-    const lines = record.split("\n");
-    for (const line of lines) {
-      const idx = line.indexOf(": ");
-      if (idx < 1) continue;
-      const key = line.substring(0, idx).trim();
-      const raw = line.substring(idx + 2);
-      if (raw.startsWith("\\S")) {
-        obj[key] = raw.slice(2).replace(
-          /\\(\\|n|r|t)/g,
-          (_, c) => c === "\\" ? "\\" : c === "n" ? "\n" : c === "r" ? "\r" : "	"
-        );
-        continue;
-      }
-      if (raw.startsWith("\\J")) {
-        const inner = raw.slice(2).replace(
-          /\\(\\|n|r|t)/g,
-          (_, c) => c === "\\" ? "\\" : c === "n" ? "\n" : c === "r" ? "\r" : "	"
-        );
-        try {
-          obj[key] = JSON.parse(inner);
-        } catch {
-          obj[key] = inner;
-        }
-        continue;
-      }
-      const val = raw.replace(
-        /\\(\\|n|r|t)/g,
-        (_, c) => c === "\\" ? "\\" : c === "n" ? "\n" : c === "r" ? "\r" : "	"
-      );
-      if (val === "^") {
-        obj[key] = null;
-      } else if (val === "true") {
-        obj[key] = true;
-      } else if (val === "false") {
-        obj[key] = false;
-      } else if (/^-?\d+(\.\d+)?$/.test(val)) {
-        obj[key] = Number(val);
-      } else if ((val.startsWith("[") || val.startsWith("{")) && (val.endsWith("]") || val.endsWith("}"))) {
-        try {
-          obj[key] = JSON.parse(val);
-        } catch {
-          obj[key] = val;
-        }
-      } else {
-        obj[key] = val;
-      }
-    }
-    return obj;
-  });
-}
-
 // src/decoder/json-hybrid.ts
 function decodeJSONHybrid(parsed) {
   const columns = parsed.S;
@@ -1037,6 +1243,27 @@ function decodeJSONHybrid(parsed) {
     }
     return obj;
   });
+}
+
+// src/utils/token-picker.ts
+import { encode } from "gpt-tokenizer";
+function tokenLen(s) {
+  try {
+    return encode(s).length || 1;
+  } catch {
+    return Math.ceil(s.length / 4) || 1;
+  }
+}
+function preferDecimalForColumn(vals, sampleSize = 30) {
+  const sample = vals.slice(0, sampleSize);
+  if (sample.length === 0) return false;
+  let decTotal = 0;
+  let b36Total = 0;
+  for (const v of sample) {
+    decTotal += tokenLen(v.toString(10));
+    b36Total += tokenLen(v.toString(36));
+  }
+  return decTotal <= b36Total;
 }
 
 // src/compression/adaptive.ts
@@ -1117,6 +1344,61 @@ var AdaptiveEngine = class {
       }
     }
     return s;
+  }
+  /**
+   * Encodes a uniform object-array against a known sub-schema. Objects become
+   * `|`-joined value lists, rows joined by `;`. No JSON keys/braces — the keys
+   * live once in the `AS:` header. Fields escape `\ | ; , \n \r \t`.
+   */
+  encodeTabArray(arr, schema) {
+    if (arr.length === 0) return "";
+    const esc2 = (v) => {
+      if (v === null || v === void 0) return "^";
+      return String(v).replace(/\\/g, "\\\\").replace(/\|/g, "\\|").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
+    };
+    return arr.map((obj) => schema.map((k) => esc2(obj[k])).join("|")).join(";");
+  }
+  /** Reverses encodeTabArray: rebuilds the object array from the sub-schema. */
+  decodeTabArray(token, schema) {
+    if (token === "") return [];
+    const split = (s, delim) => {
+      const out = [];
+      let cur = "";
+      for (let i = 0; i < s.length; i++) {
+        if (s[i] === "\\" && i + 1 < s.length) {
+          cur += s[i] + s[i + 1];
+          i++;
+          continue;
+        }
+        if (s[i] === delim) {
+          out.push(cur);
+          cur = "";
+          continue;
+        }
+        cur += s[i];
+      }
+      out.push(cur);
+      return out;
+    };
+    const unesc = (s) => s.replace(/\\(\\|\||;|,|n|r|t)/g, (_, c) => {
+      if (c === "n") return "\n";
+      if (c === "r") return "\r";
+      if (c === "t") return "	";
+      return c;
+    });
+    const coerce = (s) => {
+      if (s === "^") return null;
+      if (s === "true") return true;
+      if (s === "false") return false;
+      if (/^-?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(s)) return Number(s);
+      return unesc(s);
+    };
+    return split(token, ";").map((rowStr) => {
+      const fields = split(rowStr, "|");
+      const obj = {};
+      for (let i = 0; i < schema.length; i++) obj[schema[i]] = coerce(fields[i] ?? "");
+      return obj;
+    });
   }
   /**
    * Compresses a value using dictionary lookups, default elimination,
@@ -1251,6 +1533,19 @@ var AdaptiveEngine = class {
   }
   /** Decompresses a token back to its original value. */
   decompress(token, column, type, schemaId, csvMode = false) {
+    if (token.startsWith("!")) {
+      const rest = token.slice(1);
+      if (type === "s") return csvMode ? this.decodeCsvVal(rest) : this.decodeStrVal(rest);
+      if (type === "o") {
+        const decoded = csvMode ? this.decodeCsvVal(rest) : this.decodeStrVal(rest);
+        try {
+          return JSON.parse(decoded);
+        } catch {
+          return decoded;
+        }
+      }
+      return this.castType(rest, type);
+    }
     const dict = this.stateManager.getDictionary(schemaId, column);
     if (dict) {
       const reverseDict = this.stateManager.getReverseDictionary(schemaId, column);
@@ -1291,7 +1586,7 @@ var AdaptiveEngine = class {
         return parseInt(value, 36);
       case "float":
       case "f":
-        return value.includes(".") ? Number(value) : parseInt(value, 36);
+        return value.includes(".") || /\d[eE][+-]?\d/.test(value) ? Number(value) : parseInt(value, 36);
       case "bool":
       case "b":
       case "boolean":
@@ -1311,7 +1606,7 @@ var AdaptiveEngine = class {
         return value;
     }
   }
-  /** Builds dictionaries for a dataset. */
+  /** Builds dictionaries for a dataset using semantic abbreviations for string columns. */
   buildDictionaries(data, columns, schemaId) {
     const globalPrefixes = /* @__PURE__ */ new Map();
     columns.forEach((column) => {
@@ -1335,11 +1630,12 @@ var AdaptiveEngine = class {
           }
         }
       });
-      const sorted = Array.from(frequencyMap.entries()).filter(([val, count]) => count > 2 || count > 1 && val.length > 5).sort((a, b) => b[1] - a[1]);
+      const sorted = Array.from(frequencyMap.entries()).filter(([, count]) => count > 2 || count > 1 && frequencyMap.size > 2).filter(([val]) => tokenLen(val) > 1).sort((a, b) => b[1] - a[1]);
       const dictionary = {};
-      let tokenIndex = 0;
+      const usedTokens = /* @__PURE__ */ new Set();
       for (const [val] of sorted) {
-        dictionary[val] = (tokenIndex++).toString(36);
+        dictionary[val] = semanticAbbrev(val, usedTokens);
+        usedTokens.add(dictionary[val]);
       }
       if (Object.keys(dictionary).length > 0) {
         this.stateManager.registerDictionary(schemaId, column, dictionary);
@@ -1357,6 +1653,40 @@ var AdaptiveEngine = class {
     }
   }
 };
+function semanticAbbrev(value, used) {
+  const clean = value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (clean.length === 0) {
+    for (let n = 0; n < 100; n++) {
+      const cand = "x" + n;
+      if (!used.has(cand)) return cand;
+    }
+    return "x" + Math.random().toString(36).slice(2, 5);
+  }
+  const candidates = [];
+  for (let len = Math.min(2, clean.length); len <= Math.min(4, clean.length); len++) {
+    const cand = clean.substring(0, len);
+    if (!used.has(cand)) candidates.push(cand);
+  }
+  if (candidates.length > 0) {
+    let best = candidates[0];
+    let bestTokens = tokenLen(best);
+    for (let i = 1; i < candidates.length; i++) {
+      const c = candidates[i];
+      const t = tokenLen(c);
+      if (t < bestTokens || t === bestTokens && c.length < best.length) {
+        best = c;
+        bestTokens = t;
+      }
+    }
+    return best;
+  }
+  const base = clean.substring(0, 2);
+  for (let n = 2; n < 100; n++) {
+    const cand = base + n;
+    if (!used.has(cand)) return cand;
+  }
+  return base + Math.random().toString(36).slice(2, 4);
+}
 
 // src/decoder/utils.ts
 function splitCsvRow(s) {
@@ -1378,7 +1708,7 @@ function splitCsvRow(s) {
   tokens.push(cur);
   return tokens;
 }
-function splitEscaped(s, delimiter) {
+function splitEscaped2(s, delimiter) {
   const parts = [];
   let current = "";
   let i = 0;
@@ -1420,6 +1750,15 @@ var AdaptiveDecoderState = class {
     this.deltaFirstValues = {};
     this.deltaState = {};
     this.normCols = {};
+    /** Uniform object-array sub-schemas, keyed schemaId → column → ordered keys. */
+    this.arraySchemas = {};
+    /**
+     * Per-schema readable-mode flag. Set when the `@T1[N]{...}` header carried
+     * no `:type` codes — the decoder must infer the type of every string cell
+     * from its shape (numeric → number, true/false → bool, `null` → null,
+     * `"..."` → string, else literal string).
+     */
+    this.readableSchema = {};
   }
   exp(col) {
     if (!this.currentSchemaId) return col;
@@ -1434,9 +1773,10 @@ function parseHeader(line, state, stateManager, adaptive) {
   if (!line) return;
   if (line.startsWith("SCHEMA:") || line.startsWith("S:")) {
     if (line.startsWith("S:")) state.standardMode = true;
+    state.adaptiveMode = true;
     const match = line.match(/(?:SCHEMA|S):(@\w+)(?:\[(\d+)\])?=\[(.*)]/);
     if (match && match[1] && match[3]) {
-      state.currentSchemaId = match[1];
+      state.currentSchemaId = match[1].replace(/^@/, "");
       const rowCount = match[2] ? parseInt(match[2], 10) : void 0;
       const rawFields = match[3].split(",").map((f) => f.trim());
       const columns = [];
@@ -1455,6 +1795,53 @@ function parseHeader(line, state, stateManager, adaptive) {
       }
       state.activeColumns = null;
       state.rowCounter = 0;
+    }
+    return;
+  }
+  if (line.startsWith("@") && line.endsWith("}")) {
+    const m = line.match(/^@(\w*)(?:\[(\d+)\])?\{(.*)\}$/);
+    if (m && m[3] !== void 0) {
+      const tableId = m[1] || "T1";
+      state.adaptiveMode = true;
+      state.standardMode = true;
+      state.csvMode = true;
+      state.currentSchemaId = tableId;
+      state.currentBlockTable = tableId;
+      const rowCount = m[2] ? parseInt(m[2], 10) : void 0;
+      const columns = [];
+      const types = {};
+      let anyTyped = false;
+      m[3].split(",").forEach((f) => {
+        const t = f.trim();
+        if (!t) return;
+        const [name, type] = t.split(":");
+        columns.push(name);
+        if (type) {
+          types[name] = type;
+          anyTyped = true;
+        } else types[name] = "s";
+      });
+      if (!anyTyped) state.readableSchema[tableId] = true;
+      stateManager.registerContext(tableId, columns, types);
+      const ctx = stateManager.getContext(tableId);
+      if (ctx) {
+        ctx.rowCount = rowCount;
+        ctx.lastValues = {};
+      }
+      state.decCols[tableId] = new Set(columns.filter((c) => types[c] === "i"));
+      state.activeColumns = [...columns];
+      state.rowCounter = 0;
+    }
+    return;
+  }
+  if (line.startsWith("AS:") && state.currentSchemaId) {
+    state.adaptiveMode = true;
+    const eqIdx = line.indexOf("=");
+    if (eqIdx > 3) {
+      const col = state.exp(line.substring(3, eqIdx));
+      const keys = line.substring(eqIdx + 1).split(",").map((k) => adaptive.decodeHdrVal(k.trim()));
+      if (!state.arraySchemas[state.currentSchemaId]) state.arraySchemas[state.currentSchemaId] = {};
+      state.arraySchemas[state.currentSchemaId][col] = keys;
     }
     return;
   }
@@ -1482,7 +1869,20 @@ function parseHeader(line, state, stateManager, adaptive) {
       const col = state.exp(line.substring(2, eqIdx));
       const rawVal = line.substring(eqIdx + 1).trimEnd();
       if (!state.constants[state.currentSchemaId]) state.constants[state.currentSchemaId] = {};
-      state.constants[state.currentSchemaId][col] = rawVal === "^" ? null : adaptive.decodeHdrVal(rawVal);
+      let val = rawVal === "^" ? null : adaptive.decodeHdrVal(rawVal);
+      if (val !== null) {
+        const ctx = stateManager.getContext(state.currentSchemaId);
+        const colType = ctx?.types[col];
+        const isDec = state.decCols[state.currentSchemaId]?.has(col);
+        if (colType === "i") val = parseInt(val, isDec ? 10 : 36);
+        else if (colType === "f") val = parseFloat(val);
+        else if (colType === "b") val = val === "1" || val === "true";
+      }
+      state.constants[state.currentSchemaId][col] = val;
+      if (state.activeColumns) {
+        const idx = state.activeColumns.indexOf(col);
+        if (idx >= 0) state.activeColumns.splice(idx, 1);
+      }
     }
     return;
   }
@@ -1492,8 +1892,8 @@ function parseHeader(line, state, stateManager, adaptive) {
     if (eqIdx > 2 && state.currentSchemaId) {
       const col = state.exp(line.substring(2, eqIdx));
       const parts = line.substring(eqIdx + 1).split(",");
-      const start = parseInt(parts[0], 36);
-      const step = parts.length > 1 ? parseInt(parts[1], 36) : 0;
+      const start = parseInt(parts[0], 10);
+      const step = parts.length > 1 ? parseInt(parts[1], 10) : 0;
       if (!state.sequences[state.currentSchemaId]) state.sequences[state.currentSchemaId] = {};
       state.sequences[state.currentSchemaId][col] = { start, step };
     }
@@ -1587,7 +1987,7 @@ function parseHeader(line, state, stateManager, adaptive) {
           if (!state.parsedDefaults[state.currentSchemaId]) state.parsedDefaults[state.currentSchemaId] = {};
           let rhs = line.substring(line.indexOf("=") + 1);
           if (rhs.startsWith("{")) rhs = rhs.slice(1, rhs.endsWith("}") ? -1 : void 0);
-          splitEscaped(rhs, ",").forEach((pair) => {
+          splitEscaped2(rhs, ",").forEach((pair) => {
             const eqIdx = pair.indexOf("=");
             if (eqIdx < 1) return;
             const col = state.exp(pair.substring(0, eqIdx));
@@ -1606,7 +2006,7 @@ function parseHeader(line, state, stateManager, adaptive) {
       const mapping = {};
       if (rhs.startsWith("{")) {
         const inner = rhs.slice(1, rhs.endsWith("}") ? -1 : void 0);
-        splitEscaped(inner, ",").forEach((e) => {
+        splitEscaped2(inner, ",").forEach((e) => {
           const colonIdx = e.indexOf(":");
           if (colonIdx > 0) {
             const tokenStr = e.substring(0, colonIdx);
@@ -1616,7 +2016,7 @@ function parseHeader(line, state, stateManager, adaptive) {
           }
         });
       } else {
-        splitEscaped(rhs, ",").forEach((valStr, idx) => {
+        splitEscaped2(rhs, ",").forEach((valStr, idx) => {
           mapping[idx.toString(36)] = adaptive.decodeHdrVal(valStr);
         });
       }
@@ -1631,7 +2031,25 @@ function parseHeader(line, state, stateManager, adaptive) {
     }
     return;
   }
-  if (line.startsWith("LY:NM")) {
+  if (line.startsWith("LY:NM") || line.startsWith("LOSSY:")) {
+    return;
+  }
+  if (line.startsWith("NORM:") && state.currentSchemaId) {
+    state.adaptiveMode = true;
+    const eqIdx = line.indexOf("=");
+    if (eqIdx > 5) {
+      const col = state.exp(line.substring(5, eqIdx));
+      const parts = line.substring(eqIdx + 1).split(",").map(Number);
+      if (parts.length >= 2) {
+        if (!state.normCols[state.currentSchemaId]) state.normCols[state.currentSchemaId] = {};
+        state.normCols[state.currentSchemaId][col] = {
+          mean: parts[0],
+          std: parts[1],
+          sigmaT: parts[2] ?? 25,
+          mT: parts[3] ?? 500
+        };
+      }
+    }
     return;
   }
   if (line.startsWith("NM:")) {
@@ -1655,13 +2073,18 @@ function parseHeader(line, state, stateManager, adaptive) {
     state.currentBlockTable = line.substring(1, line.length - 1);
     const ctx = stateManager.getContext(state.currentBlockTable);
     if (ctx && state.activeColumns === null) {
-      state.activeColumns = ctx.columns.filter((c) => {
-        const hasConst = state.constants[state.currentBlockTable] && state.constants[state.currentBlockTable][c] !== void 0;
-        const hasSeq = state.sequences[state.currentBlockTable] && state.sequences[state.currentBlockTable][c] !== void 0;
-        const hasFSeq = state.floatSequences[state.currentBlockTable] && state.floatSequences[state.currentBlockTable][c] !== void 0;
-        const hasSSeq = state.strSequences[state.currentBlockTable] && state.strSequences[state.currentBlockTable][c] !== void 0;
+      const tbl = state.currentBlockTable;
+      const active = ctx.columns.filter((c) => {
+        const hasConst = state.constants[tbl] && state.constants[tbl][c] !== void 0;
+        const hasSeq = state.sequences[tbl] && state.sequences[tbl][c] !== void 0;
+        const hasFSeq = state.floatSequences[tbl] && state.floatSequences[tbl][c] !== void 0;
+        const hasSSeq = state.strSequences[tbl] && state.strSequences[tbl][c] !== void 0;
         return !hasConst && !hasSeq && !hasFSeq && !hasSSeq;
       });
+      const defs = state.parsedDefaults[tbl] || {};
+      const nonDef = active.filter((c) => defs[c] === void 0);
+      const withDef = active.filter((c) => defs[c] !== void 0);
+      state.activeColumns = [...nonDef, ...withDef];
     }
     return;
   }
@@ -1674,18 +2097,22 @@ function reconstructAdaptiveRow(tokens, context, stateManager, adaptive, state) 
   const activeCols = state.activeColumns || [];
   let tokenIdx = 0;
   const decodedValues = {};
+  const ABSENT = /* @__PURE__ */ Symbol("absent");
+  const absentCols = /* @__PURE__ */ new Set();
   for (let i = 0; i < activeCols.length; i++) {
     const col = activeCols[i];
     const type = types[col] || "s";
     const dataPart = tokens[tokenIdx];
     tokenIdx++;
     let val;
-    if (dataPart === void 0 || dataPart === "~") {
+    if (dataPart === "+") {
+      val = ABSENT;
+    } else if (dataPart === void 0 || dataPart === "~") {
       const defDict = state.parsedDefaults[schemaId] || {};
       if (defDict[col] !== void 0) {
         const ctx = stateManager.getContext(schemaId);
-        const globalDict = stateManager.getDictionary(schemaId, "__global__");
-        const colDict = stateManager.getDictionary(schemaId, col);
+        const globalDict = stateManager.getDictionary(schemaId, "__global__") || {};
+        const colDict = stateManager.getDictionary(schemaId, col) || {};
         const dictToUse = Object.keys(colDict).length > 0 ? colDict : globalDict;
         const defToken = defDict[col];
         let represents = null;
@@ -1713,11 +2140,18 @@ function reconstructAdaptiveRow(tokens, context, stateManager, adaptive, state) 
       }
     } else if (dataPart === "^") {
       val = null;
+    } else if (state.arraySchemas[schemaId] && state.arraySchemas[schemaId][col] !== void 0) {
+      val = adaptive.decodeTabArray(dataPart, state.arraySchemas[schemaId][col]);
     } else if (state.normCols[schemaId] && state.normCols[schemaId][col] !== void 0) {
       const { mean, std, sigmaT, mT } = state.normCols[schemaId][col];
-      const token = parseInt(dataPart, 36);
+      const isDec = state.decCols[schemaId] && state.decCols[schemaId].has(col);
+      const token = parseInt(dataPart, isDec ? 10 : 36);
       const z = (token - mT) / sigmaT;
       val = mean + z * std;
+    } else if (state.fpCols[schemaId] && state.fpCols[schemaId][col] !== void 0 && type !== "i") {
+      const isDec = state.decCols[schemaId] && state.decCols[schemaId].has(col);
+      const scale = Math.pow(10, state.fpCols[schemaId][col]);
+      val = parseInt(dataPart, isDec ? 10 : 36) / scale;
     } else if (state.deltaFirstValues[schemaId] && state.deltaFirstValues[schemaId][col] !== void 0) {
       if (state.rowCounter === 0) {
         val = state.deltaFirstValues[schemaId][col];
@@ -1732,8 +2166,21 @@ function reconstructAdaptiveRow(tokens, context, stateManager, adaptive, state) 
       if (state.fpCols[schemaId] && state.fpCols[schemaId][col] !== void 0) {
         val = val / Math.pow(10, state.fpCols[schemaId][col]);
       }
+    } else if (state.readableSchema && state.readableSchema[schemaId]) {
+      if (dataPart === "null") val = null;
+      else if (dataPart === "true") val = true;
+      else if (dataPart === "false") val = false;
+      else if (/^-?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(dataPart)) val = Number(dataPart);
+      else if (dataPart.length >= 2 && dataPart.startsWith('"') && dataPart.endsWith('"')) {
+        const inner = dataPart.slice(1, -1).replace(/\\"/g, '"');
+        val = adaptive.decompress(inner, col, "s", schemaId, state.csvMode);
+      } else val = adaptive.decompress(dataPart, col, "s", schemaId, state.csvMode);
     } else {
       val = adaptive.decompress(dataPart, col, type, schemaId, state.csvMode);
+    }
+    if (val === ABSENT) {
+      absentCols.add(col);
+      continue;
     }
     if (val !== null && state.suffixMap[schemaId] && state.suffixMap[schemaId][col]) {
       val = String(val) + state.suffixMap[schemaId][col];
@@ -1755,8 +2202,12 @@ function reconstructAdaptiveRow(tokens, context, stateManager, adaptive, state) 
     } else if (state.strSequences[schemaId] && state.strSequences[schemaId][col]) {
       const sq = state.strSequences[schemaId][col];
       const n = sq.start + sq.step * (state.rowCounter - 1);
-      obj[col] = sq.prefix + n;
-    } else if (!(col in decodedValues)) {
+      let v = sq.prefix + n;
+      if (state.suffixMap[schemaId] && state.suffixMap[schemaId][col]) {
+        v += state.suffixMap[schemaId][col];
+      }
+      obj[col] = v;
+    } else if (!(col in decodedValues) && !absentCols.has(col)) {
       obj[col] = null;
     }
   });
@@ -1799,22 +2250,26 @@ var AdaptiveDecoder = class {
     lines.forEach((line) => {
       line = line.trimStart();
       if (!line) return;
-      if (line.startsWith("SCHEMA:") || line.startsWith("S:") || line.startsWith("A:") || line.startsWith("C:") || line.startsWith("Q:") || line.startsWith("QF:") || line.startsWith("FP:") || line.startsWith("DL:") || line.startsWith("DELTA:") || line.startsWith("X:") || line.startsWith("QS:") || line.startsWith("DICT:") || line.startsWith("D:") || line.startsWith("DC:") || line.startsWith("LY:") || line.startsWith("NM:") || line.startsWith("F:") || line.startsWith("@") && line.endsWith(":")) {
+      if (line.startsWith("SCHEMA:") || line.startsWith("S:") || line.startsWith("AS:") || line.startsWith("A:") || line.startsWith("C:") || line.startsWith("Q:") || line.startsWith("QF:") || line.startsWith("FP:") || line.startsWith("DL:") || line.startsWith("DELTA:") || line.startsWith("X:") || line.startsWith("QS:") || line.startsWith("DICT:") || line.startsWith("D:") || line.startsWith("DC:") || line.startsWith("LY:") || line.startsWith("NM:") || line.startsWith("LOSSY:") || line.startsWith("NORM:") || line.startsWith("F:") || line.startsWith("@") && line.endsWith(":") || // Readable-mode schema header: @name[N]{col:type,...}
+      line.startsWith("@") && line.endsWith("}")) {
         parseHeader(line, state, this.stateManager, this.adaptive);
         return;
       }
-      if (line.startsWith("CK:") || line.startsWith("END:") || line.startsWith("EX:") || line.startsWith("LEGEND:")) {
+      if (line.startsWith("#") || line.startsWith("CK:") || line.startsWith("END:") || line.startsWith("EX:") || line.startsWith("LEGEND:")) {
         return;
       }
       if (line.startsWith("!")) {
         if (!state.currentBlockTable) return;
         const dataPart = line.substring(1);
-        const tokens = state.csvMode ? splitCsvRow(dataPart) : splitEscaped(dataPart, " ");
         const ctx = this.stateManager.getContext(state.currentBlockTable);
         if (ctx) {
-          const obj = reconstructRow(tokens, ctx, this.adaptive, state.csvMode);
-          result.push(obj);
-          state.rowCounter++;
+          const tokens = dataPart === "" ? [] : state.csvMode ? splitCsvRow(dataPart) : splitEscaped2(dataPart, " ");
+          if (state.adaptiveMode) {
+            result.push(reconstructAdaptiveRow(tokens, ctx, this.stateManager, this.adaptive, state));
+          } else {
+            result.push(reconstructRow(tokens, ctx, this.adaptive, state.csvMode));
+            state.rowCounter++;
+          }
         }
         return;
       }
@@ -1827,7 +2282,7 @@ var AdaptiveDecoder = class {
           if (!state.currentBlockTable) return;
           const ctx = this.stateManager.getContext(state.currentBlockTable);
           if (!ctx) return;
-          const tokens = dataPart === "" ? [] : state.csvMode ? splitCsvRow(dataPart) : splitEscaped(dataPart, " ");
+          const tokens = dataPart === "" ? [] : state.csvMode ? splitCsvRow(dataPart) : splitEscaped2(dataPart, " ");
           for (let k = 0; k < rleCount; k++) {
             if (state.adaptiveMode) {
               result.push(reconstructAdaptiveRow(tokens, ctx, this.stateManager, this.adaptive, state));
@@ -1842,7 +2297,7 @@ var AdaptiveDecoder = class {
         const ctx = this.stateManager.getContext(state.currentBlockTable);
         if (ctx) {
           const dataPart = line === "." ? "" : line;
-          const tokens = dataPart === "" ? [] : state.csvMode ? splitCsvRow(dataPart) : splitEscaped(dataPart, " ");
+          const tokens = dataPart === "" ? [] : state.csvMode ? splitCsvRow(dataPart) : splitEscaped2(dataPart, " ");
           if (state.adaptiveMode) {
             result.push(reconstructAdaptiveRow(tokens, ctx, this.stateManager, this.adaptive, state));
           } else {
@@ -1872,7 +2327,9 @@ var LoonDecoder = class {
       } catch {
       }
     }
-    if (!tron.startsWith("SCHEMA:") && !tron.startsWith("S:")) {
+    const firstLine = trimmed.split("\n", 1)[0] ?? "";
+    const isReadableSchema = firstLine.startsWith("@") && firstLine.includes("{") && firstLine.endsWith("}");
+    if (!tron.startsWith("SCHEMA:") && !tron.startsWith("S:") && !isReadableSchema) {
       if (trimmed.startsWith("#")) return decodeMicro(tron);
       return decodeCompact(tron);
     }
@@ -1888,23 +2345,120 @@ function encodeCompact(data) {
     let line = "";
     const keys = Object.keys(row);
     for (let j = 0; j < keys.length; j++) {
-      const raw = row[keys[j]];
-      let val;
-      if (raw === null || raw === void 0) {
-        val = "^";
-      } else if (typeof raw === "object") {
-        val = "\\J" + JSON.stringify(raw).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
-      } else {
-        val = String(raw).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
-        if (val.startsWith("{") || val.startsWith("[")) {
-          val = "\\S" + val;
-        }
-      }
-      line += keys[j] + ": " + val + (j < keys.length - 1 ? "\n" : "");
+      const key = keys[j];
+      const raw = row[key];
+      const last = j === keys.length - 1;
+      line += encodeKeyValue(key, raw) + (last ? "" : "\n");
     }
     output += line + (i < data.length - 1 ? "\n---\n" : "");
   }
   return output;
+}
+function encodeIndent(root) {
+  if (Array.isArray(root)) {
+    return root.map((el) => encodeIndentNode(el)).join("\n---\n");
+  }
+  return encodeIndentNode(root);
+}
+function encodeIndentNode(node) {
+  if (node === null || node === void 0) return "value: ^";
+  if (typeof node !== "object" || Array.isArray(node)) {
+    return encodeKeyValue("value", node);
+  }
+  return encodeIndentObject(node, 0);
+}
+function encodeIndentObject(obj, depth) {
+  const pad = "  ".repeat(depth);
+  const lines = [];
+  for (const [k, v] of Object.entries(obj)) {
+    if (v !== null && typeof v === "object" && !Array.isArray(v)) {
+      if (Object.keys(v).length === 0) {
+        lines.push(`${pad}${k}: \\J{}`);
+      } else {
+        lines.push(`${pad}${k}:`);
+        lines.push(encodeIndentObject(v, depth + 1));
+      }
+    } else {
+      lines.push(pad + encodeKeyValue(k, v));
+    }
+  }
+  return lines.join("\n");
+}
+function encodeKeyValue(key, raw) {
+  if (raw === null || raw === void 0) {
+    return key + ": ^";
+  }
+  if (Array.isArray(raw)) {
+    return encodeArrayLine(key, raw);
+  }
+  if (typeof raw === "object") {
+    return key + ": " + encodeJ(raw);
+  }
+  let val = String(raw).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
+  if (val.startsWith("{") || val.startsWith("[")) {
+    val = "\\S" + val;
+  }
+  return key + ": " + val;
+}
+function encodeArrayLine(key, arr) {
+  if (arr.length === 0) return key + "[0]: ";
+  const flatObjs = tryFlatUniform(arr);
+  if (flatObjs) {
+    const cols = Object.keys(flatObjs[0]);
+    const headerCols = cols.map(escapeCell).join(",");
+    const rowStrs = [];
+    for (const obj of flatObjs) {
+      const cells = [];
+      for (const c of cols) cells.push(encodeCell(obj[c]));
+      rowStrs.push(cells.join(","));
+    }
+    return `${key}[${arr.length}]{${headerCols}}: ${rowStrs.join(";")}`;
+  }
+  if (isPrimitiveArray(arr)) {
+    return `${key}[${arr.length}]: ${arr.map(encodeCell).join(",")}`;
+  }
+  return key + ": " + encodeJ(arr);
+}
+function isPrimitiveArray(arr) {
+  for (const v of arr) {
+    if (v === null) continue;
+    if (typeof v === "object") return false;
+  }
+  return true;
+}
+function tryFlatUniform(arr) {
+  if (arr.length === 0) return null;
+  const flats = [];
+  let cols = null;
+  for (const item of arr) {
+    if (item === null || typeof item !== "object" || Array.isArray(item)) return null;
+    const flat = flattenRecord(item);
+    for (const k in flat) {
+      const v = flat[k];
+      if (v !== null && typeof v === "object") return null;
+    }
+    const keys = Object.keys(flat);
+    if (cols === null) {
+      cols = keys;
+    } else {
+      if (keys.length !== cols.length) return null;
+      for (let i = 0; i < cols.length; i++) {
+        if (keys[i] !== cols[i]) return null;
+      }
+    }
+    flats.push(flat);
+  }
+  return flats;
+}
+function encodeCell(v) {
+  if (v === null || v === void 0) return "^";
+  return escapeCell(String(v));
+}
+function escapeCell(s) {
+  return s.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t").replace(/,/g, "\\,").replace(/;/g, "\\;");
+}
+function encodeJ(obj) {
+  return "\\J" + JSON.stringify(obj).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
 }
 
 // src/encoder/micro.ts
@@ -1951,6 +2505,33 @@ function detectColumnType(data, key) {
   if (allObj) return "o";
   return "s";
 }
+function findCommonSuffix(values) {
+  if (values.length < 2) return "";
+  let minLen = Infinity;
+  for (const v of values) if (v.length < minLen) minLen = v.length;
+  let suffixLen = 0;
+  for (let i = 1; i <= minLen - 1; i++) {
+    const char = values[0][values[0].length - i];
+    let allMatch = true;
+    for (let j = 1; j < values.length; j++) {
+      if (values[j][values[j].length - i] !== char) {
+        allMatch = false;
+        break;
+      }
+    }
+    if (!allMatch) break;
+    suffixLen = i;
+  }
+  return suffixLen >= 3 ? values[0].substring(values[0].length - suffixLen) : "";
+}
+function makeAbbrev(name) {
+  if (name.length <= 3) return name;
+  const parts = name.split(/[_-]/);
+  if (parts.length > 1) return parts.map((p) => p[0] || "").join("").toLowerCase();
+  const camel = name.replace(/([A-Z])/g, "_$1").toLowerCase().split("_").filter(Boolean);
+  if (camel.length > 1) return camel.map((p) => p[0]).join("");
+  return name.substring(0, 2);
+}
 
 // src/encoder/json-hybrid.ts
 function encodeJSONHybrid(data) {
@@ -1971,6 +2552,672 @@ function encodeJSONHybrid(data) {
   return JSON.stringify({ S: columns, T: types, R: rows });
 }
 
+// src/encoder/adaptive/analyzer.ts
+function analyzeColumns(data, options, tableId, mode, isLocal, csvMode, decThreshold, stateManager, adaptive) {
+  const allColumns = Array.from(new Set(data.flatMap(Object.keys)));
+  const types = {};
+  for (const key of allColumns) types[key] = detectColumnType(data, key);
+  const arraySchemas = {};
+  for (const col of allColumns) {
+    let schema = null;
+    let sawAny = false;
+    let uniform = true;
+    for (const row of data) {
+      const v = row[col];
+      if (v === null || v === void 0) continue;
+      if (!Array.isArray(v) || v.length === 0) {
+        uniform = false;
+        break;
+      }
+      for (const el of v) {
+        if (el === null || typeof el !== "object" || Array.isArray(el)) {
+          uniform = false;
+          break;
+        }
+        for (const ev of Object.values(el)) {
+          if (ev !== null && typeof ev === "object") {
+            uniform = false;
+            break;
+          }
+        }
+        if (!uniform) break;
+        const keys = Object.keys(el);
+        if (schema === null) {
+          schema = keys;
+        } else if (keys.length !== schema.length || !keys.every((k, i) => k === schema[i])) {
+          uniform = false;
+          break;
+        }
+      }
+      if (!uniform) break;
+      sawAny = true;
+    }
+    if (uniform && sawAny && schema && schema.length > 0) {
+      arraySchemas[col] = schema;
+    }
+  }
+  const constants = {};
+  for (const col of allColumns) {
+    const first = data[0][col];
+    let isConst = true;
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][col] !== first) {
+        isConst = false;
+        break;
+      }
+    }
+    if (isConst) constants[col] = first;
+  }
+  const sequences = {};
+  for (const col of allColumns) {
+    if (isLocal) break;
+    if (col in constants) continue;
+    if (typeof data[0][col] !== "number" || !Number.isInteger(data[0][col])) continue;
+    if (data.length < 3) continue;
+    const start = data[0][col];
+    const step = data[1][col] - data[0][col];
+    if (step === 0) continue;
+    if (!Number.isInteger(step)) continue;
+    let isSeq = true;
+    for (let i = 2; i < data.length; i++) {
+      if (data[i][col] !== start + step * i) {
+        isSeq = false;
+        break;
+      }
+    }
+    if (isSeq) sequences[col] = { start, step };
+  }
+  const floatSequences = {};
+  for (const col of allColumns) {
+    if (isLocal) break;
+    if (col in constants || col in sequences) continue;
+    if (typeof data[0][col] !== "number") continue;
+    if (data.length < 3) continue;
+    const start = data[0][col];
+    const step = parseFloat((data[1][col] - data[0][col]).toFixed(10));
+    if (step === 0) continue;
+    const dec2 = (n) => {
+      const s = n.toFixed(10).replace(/0+$/, "");
+      const d = s.indexOf(".");
+      return d < 0 ? 0 : s.length - d - 1;
+    };
+    const precision = Math.max(dec2(start), dec2(step));
+    const scale = Math.pow(10, precision);
+    let isSeq = true;
+    for (let i = 2; i < data.length; i++) {
+      const expected = Math.round((start + step * i) * scale) / scale;
+      if (data[i][col] !== expected) {
+        isSeq = false;
+        break;
+      }
+    }
+    if (isSeq) floatSequences[col] = { start, step, precision };
+  }
+  const primaryColSet = new Set(options.primaryCols ?? []);
+  const dec = (n) => {
+    const s = Math.abs(n).toFixed(10).replace(/0+$/, "");
+    const d = s.indexOf(".");
+    return d < 0 ? 0 : s.length - d - 1;
+  };
+  const fpCols = {};
+  for (const col of allColumns) {
+    if (isLocal) break;
+    if (col in constants || col in sequences || col in floatSequences) continue;
+    if (primaryColSet.has(col)) continue;
+    if (detectColumnType(data, col) !== "f") continue;
+    let maxDec = 0;
+    for (const row of data) {
+      const v = row[col];
+      if (v === null || v === void 0 || !Number.isFinite(v)) continue;
+      maxDec = Math.max(maxDec, dec(v));
+    }
+    if (maxDec >= 1 && maxDec <= 6) {
+      const scale = Math.pow(10, maxDec);
+      let lossless = true;
+      for (const row of data) {
+        const v = row[col];
+        if (v === null || v === void 0 || !Number.isFinite(v)) continue;
+        if (Math.round(v * scale) / scale !== v) {
+          lossless = false;
+          break;
+        }
+      }
+      if (lossless) fpCols[col] = maxDec;
+    }
+  }
+  const normCols = {};
+  if (options.norm && !isLocal) {
+    const SIGMA_T = 25, M_T = 500;
+    const normTargets = options.norm === true ? allColumns.filter((c) => types[c] === "f" && !(c in constants) && !(c in sequences) && !(c in floatSequences) && !(c in fpCols)) : options.norm.filter((c) => types[c] === "f" && !(c in constants) && !(c in sequences) && !(c in floatSequences) && !(c in fpCols));
+    for (const col of normTargets) {
+      const vals = data.map((r) => r[col]).filter((v) => typeof v === "number" && Number.isFinite(v));
+      if (vals.length < 2) continue;
+      const mean = vals.reduce((s, v) => s + v, 0) / vals.length;
+      const std = Math.sqrt(vals.reduce((s, v) => s + (v - mean) ** 2, 0) / vals.length);
+      if (std === 0) continue;
+      normCols[col] = { mean, std, sigmaT: SIGMA_T, mT: M_T };
+    }
+  }
+  let activeColumnsRaw = allColumns.filter((c) => !(c in constants) && !(c in sequences) && !(c in floatSequences));
+  const suffixes = {};
+  const suffixAllowed = mode !== "llm" && !isLocal;
+  for (const col of activeColumnsRaw) {
+    if (!suffixAllowed) break;
+    if (types[col] !== "s") continue;
+    const uniqueVals = [];
+    const seen = /* @__PURE__ */ new Set();
+    for (let i = 0; i < data.length; i++) {
+      const v = data[i][col];
+      if (typeof v !== "string" || seen.has(v)) continue;
+      seen.add(v);
+      uniqueVals.push(v);
+    }
+    if (uniqueVals.length < 2) continue;
+    const suffix = findCommonSuffix(uniqueVals);
+    if (suffix) suffixes[col] = suffix;
+  }
+  if (Object.keys(suffixes).length > 0) {
+    data = data.map((row) => {
+      const r = { ...row };
+      for (const col in suffixes) {
+        if (typeof r[col] === "string") {
+          r[col] = r[col].slice(0, -suffixes[col].length);
+        }
+      }
+      return r;
+    });
+  }
+  const stringSequences = {};
+  for (const col of activeColumnsRaw) {
+    if (isLocal) break;
+    if (types[col] !== "s" || data.length < 2) continue;
+    const first = String(data[0][col]);
+    const prefix = first.replace(/[0-9]+$/, "");
+    if (prefix === first || prefix.length === 0) continue;
+    let allMatch = true;
+    const nums = [];
+    for (let i = 0; i < data.length; i++) {
+      const v = String(data[i][col]);
+      if (!v.startsWith(prefix)) {
+        allMatch = false;
+        break;
+      }
+      const numStr = v.substring(prefix.length);
+      const num = parseInt(numStr, 10);
+      if (isNaN(num) || num.toString() !== numStr) {
+        allMatch = false;
+        break;
+      }
+      nums.push(num);
+    }
+    if (!allMatch || nums.length < 2) continue;
+    const seqStart = nums[0];
+    const seqStep = nums[1] - nums[0];
+    if (seqStep === 0) continue;
+    let isSeq = true;
+    for (let i = 2; i < nums.length; i++) {
+      if (nums[i] !== seqStart + seqStep * i) {
+        isSeq = false;
+        break;
+      }
+    }
+    if (isSeq) stringSequences[col] = { prefix, start: seqStart, step: seqStep };
+  }
+  activeColumnsRaw = activeColumnsRaw.filter((c) => !(c in stringSequences));
+  stateManager.registerContext(tableId, allColumns, types);
+  if (!isLocal) {
+    const dictCols = activeColumnsRaw.filter(
+      (c) => !(c in fpCols) && !(c in normCols) && types[c] !== "i" && types[c] !== "b" && types[c] !== "a"
+    );
+    adaptive.buildDictionaries(data, dictCols, tableId);
+  }
+  const defaults = {};
+  for (const col of activeColumnsRaw) {
+    if (isLocal) break;
+    if (col in normCols) continue;
+    const freq = {};
+    for (let i = 0; i < data.length; i++) {
+      const norm = adaptive.normalize(data[i][col]);
+      freq[norm] = (freq[norm] || 0) + 1;
+    }
+    let best = "";
+    let max = 0;
+    for (const val in freq) {
+      if (freq[val] > max) {
+        max = freq[val];
+        best = val;
+      }
+    }
+    if (max > data.length * 0.3) defaults[col] = best;
+  }
+  const primaryActive = activeColumnsRaw.filter((c) => primaryColSet.has(c));
+  const nonPrimaryRaw = activeColumnsRaw.filter((c) => !primaryColSet.has(c));
+  const nonDefCols = nonPrimaryRaw.filter((c) => !(c in defaults));
+  const defCols = nonPrimaryRaw.filter((c) => c in defaults);
+  const activeColumns = [...primaryActive, ...nonDefCols, ...defCols];
+  const ctx = stateManager.getContext(tableId);
+  const globalDict = stateManager.getDictionary(tableId, "__global__");
+  if (globalDict) {
+    for (const col of activeColumns) {
+      const colDict = stateManager.getDictionary(tableId, col);
+      if (!colDict || Object.keys(colDict).length < 15) continue;
+      const seen = /* @__PURE__ */ new Set();
+      let allCovered = true;
+      for (let j = 0; j < data.length && allCovered; j++) {
+        const val = data[j][col];
+        if (typeof val !== "string") {
+          allCovered = false;
+          break;
+        }
+        if (seen.has(val)) continue;
+        seen.add(val);
+        let found = false;
+        for (const prefix of Object.keys(globalDict)) {
+          if (val.startsWith(prefix)) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) allCovered = false;
+      }
+      if (allCovered) delete ctx.dictionary[col];
+    }
+  }
+  const intActiveCols = allColumns.filter(
+    (c) => types[c] === "i" && !(c in constants) && !(c in sequences) && !(c in floatSequences) && !(c in stringSequences) && !(c in fpCols)
+  );
+  const useDecimal = data.length * intActiveCols.length < decThreshold;
+  const decColSet = new Set(useDecimal ? intActiveCols : []);
+  if (!useDecimal) {
+    for (const col of intActiveCols) {
+      if (decColSet.has(col)) continue;
+      const vals = data.map((r) => r[col]).filter((v) => typeof v === "number" && Number.isInteger(v));
+      if (vals.length > 0 && preferDecimalForColumn(vals)) decColSet.add(col);
+    }
+  }
+  for (const col of primaryColSet) {
+    if (types[col] === "i" && intActiveCols.includes(col)) decColSet.add(col);
+  }
+  if (mode === "llm" || isLocal) {
+    for (const col of intActiveCols) decColSet.add(col);
+    for (const col in fpCols) decColSet.add(col);
+    for (const col in normCols) decColSet.add(col);
+  }
+  const deltaCols = {};
+  if (data.length >= 4 && mode === "full") {
+    for (const col of activeColumns) {
+      if (types[col] !== "i" || col in fpCols || decColSet.has(col)) continue;
+      const vals = [];
+      let allInt = true;
+      for (const row of data) {
+        const v = row[col];
+        if (v === null || v === void 0 || !Number.isInteger(v)) {
+          allInt = false;
+          break;
+        }
+        vals.push(v);
+      }
+      if (!allInt || vals.length < 4) continue;
+      const avgAbsVal = vals.reduce((s, v) => s + Math.abs(v), 0) / vals.length;
+      if (avgAbsVal <= 200) continue;
+      const deltas = vals.slice(1).map((v, i) => Math.abs(v - vals[i]));
+      const avgAbsDelta = deltas.reduce((s, d) => s + d, 0) / deltas.length;
+      if (avgAbsDelta / avgAbsVal < 0.35) deltaCols[col] = vals[0];
+    }
+  }
+  const abbrevMap = {};
+  let useAbbreviation = false;
+  if (!isLocal) {
+    const candidateAbbrev = {};
+    const used = /* @__PURE__ */ new Set();
+    for (const col of allColumns) {
+      let abbrev = makeAbbrev(col);
+      let candidate = abbrev;
+      let n = 2;
+      while (used.has(candidate)) candidate = abbrev + n++;
+      used.add(candidate);
+      candidateAbbrev[col] = candidate;
+    }
+    let charSaved = 0;
+    for (const col of allColumns) {
+      const abbrev = candidateAbbrev[col];
+      const saved = col.length - abbrev.length;
+      if (saved <= 0) continue;
+      let appearances = 1;
+      if (col in constants) appearances++;
+      if (col in sequences) appearances++;
+      if (col in floatSequences) appearances++;
+      if (col in fpCols) appearances++;
+      if (col in suffixes) appearances++;
+      if (col in stringSequences) appearances++;
+      if (col in defaults) appearances++;
+      if (ctx.dictionary[col] !== void 0) appearances++;
+      charSaved += saved * appearances;
+    }
+    const aLineCost = 3 + allColumns.join(",").length;
+    if (charSaved > aLineCost) {
+      Object.assign(abbrevMap, candidateAbbrev);
+      useAbbreviation = true;
+    }
+  }
+  const ab = (col) => useAbbreviation ? abbrevMap[col] ?? col : col;
+  return {
+    data,
+    rowCount: data.length,
+    tableId,
+    mode,
+    isLocal,
+    csvMode,
+    // Neither mode emits anchor / EX: / CK: / END: anymore. They were dead
+    // weight: `full` never used them, and the readable `llm` mode is meant to
+    // be self-evident — those scaffolds added tokens without lifting accuracy.
+    anchorRow: false,
+    endSentinel: false,
+    legend: false,
+    decThreshold,
+    allColumns,
+    activeColumns,
+    types,
+    constants,
+    sequences,
+    floatSequences,
+    stringSequences,
+    fpCols,
+    normCols,
+    deltaCols,
+    suffixes,
+    defaults,
+    decColSet,
+    arraySchemas,
+    abbrevs: abbrevMap,
+    useAbbreviation,
+    checkpointEvery: options.checkpointEvery ?? 0,
+    anchorMidPayload: options.anchorMidPayload ?? 0,
+    primaryCols: primaryColSet
+  };
+}
+
+// src/encoder/adaptive/header.ts
+function buildHeaders(ctx, stateManager, adaptive) {
+  let output = "";
+  const ab = (col) => ctx.useAbbreviation ? ctx.abbrevs[col] ?? col : col;
+  const dictionary = stateManager.getContext(ctx.tableId)?.dictionary ?? {};
+  const {
+    tableId,
+    isLocal,
+    csvMode,
+    rowCount,
+    allColumns,
+    types,
+    constants,
+    sequences,
+    floatSequences,
+    stringSequences,
+    fpCols,
+    normCols,
+    deltaCols,
+    suffixes,
+    defaults,
+    decColSet,
+    arraySchemas,
+    legend
+  } = ctx;
+  let colDefs = "";
+  for (let i = 0; i < allColumns.length; i++) {
+    colDefs += ab(allColumns[i]) + ":" + types[allColumns[i]] + (i < allColumns.length - 1 ? "," : "");
+  }
+  if (isLocal) {
+    const colNames = allColumns.map((c) => ab(c)).join(",");
+    const idPart = tableId === "T1" ? "" : tableId;
+    output += "@" + idPart + "[" + rowCount + "]{" + colNames + "}\n";
+    for (const col in constants) {
+      const cv = constants[col];
+      let cvStr;
+      if (cv === null || cv === void 0) cvStr = "^";
+      else if (typeof cv === "boolean") cvStr = cv ? "true" : "false";
+      else if (typeof cv === "number") cvStr = String(cv);
+      else cvStr = adaptive.encodeHdrVal(adaptive.normalize(cv));
+      output += "C:" + ab(col) + "=" + cvStr + "\n";
+    }
+    for (const col in arraySchemas) {
+      output += "AS:" + ab(col) + "=" + arraySchemas[col].map((c) => adaptive.encodeHdrVal(c)).join(",") + "\n";
+    }
+    return output;
+  }
+  output += "S:@" + tableId + "[" + rowCount + "]=[" + colDefs + "]\n";
+  if (ctx.useAbbreviation) {
+    output += "A:" + allColumns.join(",") + "\n";
+  }
+  if (decColSet.size > 0) {
+    output += "DC:" + Array.from(decColSet).map((c) => ab(c)).join(",") + "\n";
+  }
+  for (const col in constants) {
+    const cv = constants[col];
+    if (cv === null || cv === void 0) {
+      output += "C:" + ab(col) + "=^\n";
+    } else {
+      output += "C:" + ab(col) + "=" + adaptive.encodeHdrVal(adaptive.normalize(cv)) + "\n";
+    }
+  }
+  for (const col in sequences) {
+    const s = sequences[col];
+    output += "Q:" + ab(col) + "=" + s.start + "," + s.step + "\n";
+  }
+  for (const col in floatSequences) {
+    const s = floatSequences[col];
+    output += "QF:" + ab(col) + "=" + s.start + "," + s.step + "\n";
+  }
+  {
+    const byPrecision = {};
+    for (const col in fpCols) {
+      const p = fpCols[col];
+      if (!byPrecision[p]) byPrecision[p] = [];
+      byPrecision[p].push(ab(col));
+    }
+    for (const p in byPrecision) {
+      output += "FP:" + p + "=" + byPrecision[p].join(",") + "\n";
+    }
+  }
+  for (const col in suffixes) {
+    output += "X:" + ab(col) + "=" + adaptive.encodeHdrVal(suffixes[col]) + "\n";
+  }
+  for (const col in stringSequences) {
+    const sq = stringSequences[col];
+    if (isLocal) {
+      output += "QS:" + ab(col) + "=" + sq.start + "," + sq.step + "," + adaptive.encodeHdrVal(sq.prefix) + "\n";
+    } else {
+      output += "QS:" + ab(col) + "=" + sq.start.toString(36) + "," + sq.step.toString(36) + "," + adaptive.encodeHdrVal(sq.prefix) + "\n";
+    }
+  }
+  const defKeys = Object.keys(defaults);
+  if (defKeys.length > 0) {
+    let defStr = "";
+    for (let i = 0; i < defKeys.length; i++) {
+      defStr += ab(defKeys[i]) + "=" + adaptive.encodeHdrVal(defaults[defKeys[i]]) + (i < defKeys.length - 1 ? "," : "");
+    }
+    output += "D:defaults=" + defStr + "\n";
+  }
+  for (const col in dictionary) {
+    const mapping = dictionary[col];
+    const entries = Object.entries(mapping);
+    const parts = entries.map(([val, tok]) => `${tok}:${adaptive.encodeHdrVal(val)}`).join(",");
+    output += "D:" + ab(col) + "={" + parts + "}\n";
+  }
+  if (legend) {
+    const legendDictCols = Object.keys(dictionary).filter((c) => c !== "__global__");
+    if (legendDictCols.length > 0) {
+      const parts = [];
+      for (const col of legendDictCols) {
+        const m = dictionary[col];
+        const entries = Object.entries(m).map(([val, tok]) => `${tok}=${val}`).join("|");
+        parts.push(`${ab(col)}{${entries}}`);
+      }
+      output += "LEGEND:" + parts.join(";") + "\n";
+    }
+  }
+  for (const col in deltaCols) {
+    output += "DL:" + ab(col) + "=" + deltaCols[col] + "\n";
+  }
+  if (Object.keys(normCols).length > 0) {
+    output += "LY:NM\n";
+    for (const col in normCols) {
+      const n = normCols[col];
+      output += "NM:" + ab(col) + "=" + n.mean + "," + n.std + "," + n.sigmaT + "," + n.mT + "\n";
+    }
+  }
+  for (const col in arraySchemas) {
+    output += "AS:" + ab(col) + "=" + arraySchemas[col].map((c) => adaptive.encodeHdrVal(c)).join(",") + "\n";
+  }
+  output += "@" + tableId + ":\n";
+  if (csvMode) output += "F:csv\n";
+  return output;
+}
+
+// src/encoder/adaptive/rows.ts
+function isAmbiguousReadableString(s) {
+  if (s === "null" || s === "true" || s === "false") return true;
+  if (s === "+" || s === "^" || s === "~") return true;
+  return /^-?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(s);
+}
+function compressRows(data, ctx, stateManager, adaptive) {
+  let output = "";
+  const { tableId, mode, isLocal, csvMode, anchorRow, endSentinel, allColumns, activeColumns, types, fpCols, normCols, deltaCols, defaults, decColSet, arraySchemas, checkpointEvery, anchorMidPayload, abbrevs, useAbbreviation } = ctx;
+  const ab = (col) => useAbbreviation ? abbrevs[col] ?? col : col;
+  const compressedRows = [];
+  const rowSep = csvMode ? "," : " ";
+  const deltaRowState = { ...deltaCols };
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i];
+    const tokens = [];
+    for (const col of activeColumns) {
+      if (!(col in row)) {
+        tokens.push("+");
+        continue;
+      }
+      const val = row[col];
+      if (val === null || val === void 0) {
+        tokens.push(isLocal ? "null" : "^");
+        continue;
+      }
+      if (arraySchemas[col] !== void 0 && Array.isArray(val)) {
+        tokens.push(adaptive.encodeTabArray(val, arraySchemas[col]));
+        continue;
+      }
+      if (isLocal && typeof val === "boolean") {
+        tokens.push(val ? "true" : "false");
+        continue;
+      }
+      if (normCols[col] !== void 0 && typeof val === "number") {
+        const { mean, std, sigmaT, mT } = normCols[col];
+        const z = (val - mean) / std;
+        const token = Math.max(0, Math.min(999, Math.round(z * sigmaT + mT)));
+        const useDecimal = isLocal || decColSet.has(col);
+        tokens.push(useDecimal ? String(token) : token.toString(36));
+        continue;
+      }
+      if (deltaCols[col] !== void 0 && typeof val === "number") {
+        const delta = val - deltaRowState[col];
+        deltaRowState[col] = val;
+        tokens.push(delta.toString(10));
+        continue;
+      }
+      if (fpCols[col] !== void 0 && typeof val === "number") {
+        const scale = Math.pow(10, fpCols[col]);
+        const useDecimal = isLocal || decColSet.has(col);
+        tokens.push(useDecimal ? String(Math.round(val * scale)) : Math.round(val * scale).toString(36));
+        continue;
+      }
+      if (isLocal && typeof val === "string" && isAmbiguousReadableString(val)) {
+        tokens.push('"' + val.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/,/g, "\\,").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t") + '"');
+        continue;
+      }
+      const normVal = adaptive.normalize(val);
+      if (defaults[col] !== void 0 && normVal === defaults[col]) {
+        tokens.push("~");
+      } else if (decColSet.has(col) && typeof val === "number" && Number.isInteger(val)) {
+        tokens.push(val.toString(10));
+      } else {
+        const compressed = adaptive.compress(val, col, tableId, csvMode);
+        const colDict = stateManager.getDictionary(tableId, col);
+        if (colDict && Object.keys(colDict).length > 0) {
+          const norm = adaptive.normalize(val);
+          if (colDict[norm] === void 0 && !compressed.startsWith("$")) {
+            tokens.push("!" + compressed);
+          } else {
+            tokens.push(compressed);
+          }
+        } else {
+          tokens.push(compressed);
+        }
+      }
+    }
+    while (tokens.length > 0 && tokens[tokens.length - 1] === "~") {
+      tokens.pop();
+    }
+    if (tokens.length > 0 && tokens.every((t) => t === "")) {
+      tokens[tokens.length - 1] = "^";
+    }
+    compressedRows.push(tokens.join(rowSep));
+  }
+  const buildAnchor = () => "!" + compressedRows[0];
+  const startIdx = anchorRow && data.length > 0 ? 1 : 0;
+  if (anchorRow && data.length > 0) {
+    output += buildAnchor() + "\n";
+  }
+  const ckpLine = checkpointEvery > 0 ? (() => {
+    const pairs = activeColumns.map((c) => ab(c) + "=" + c).filter((p) => !p.startsWith(p.split("=")[1]));
+    if (!useAbbreviation || pairs.length === 0) return "#CKP:" + activeColumns.join(",");
+    return "#CKP:" + activeColumns.map((c) => ab(c) + "=" + c).join(",");
+  })() : "";
+  const buildDecodedRow = (idx, label) => {
+    const row = data[idx];
+    const pairs = [];
+    for (const col of allColumns) {
+      const v = row[col];
+      if (v === null || v === void 0) pairs.push(col + ":^");
+      else if (typeof v === "string")
+        pairs.push(col + ":" + v.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r"));
+      else pairs.push(col + ":" + String(v));
+    }
+    return label + "=[" + pairs.join(",") + "]";
+  };
+  let rowsEmitted = 0;
+  let ri = startIdx;
+  while (ri < compressedRows.length) {
+    if (checkpointEvery > 0 && rowsEmitted > 0 && rowsEmitted % checkpointEvery === 0) {
+      output += ckpLine + "\n";
+    }
+    if (anchorMidPayload > 0 && rowsEmitted > 0 && rowsEmitted % anchorMidPayload === 0) {
+      output += "#ANCHOR:" + buildDecodedRow(ri, "row" + ri) + "\n";
+    }
+    if (isLocal) {
+      const rowStr2 = compressedRows[ri];
+      output += (rowStr2 === "" ? "." : rowStr2) + "\n";
+      ri++;
+      rowsEmitted++;
+      continue;
+    }
+    let count = 1;
+    while (ri + count < compressedRows.length && compressedRows[ri + count] === compressedRows[ri]) {
+      count++;
+    }
+    const rowStr = compressedRows[ri];
+    if (count > 1) {
+      if (rowStr === "") {
+        output += "*" + count.toString(36) + "[]\n";
+      } else {
+        output += "*" + count.toString(36) + "[" + rowStr + "]\n";
+      }
+    } else {
+      output += (rowStr === "" ? "." : rowStr) + "\n";
+    }
+    ri += count;
+    rowsEmitted += count;
+  }
+  if (endSentinel) output += "END:@" + tableId + "\n";
+  return output;
+}
+
 // src/encoder/adaptive/adaptive-encoder.ts
 var AdaptiveEncoder = class {
   constructor(stateManager) {
@@ -1980,523 +3227,14 @@ var AdaptiveEncoder = class {
   encodeAdaptive(data, options = {}) {
     if (!data || data.length === 0) return "";
     const tableId = options.tableId || "T1";
-    const target = options.target ?? "transmission";
+    const mode = options.mode === "llm" || options.mode === "local" ? "llm" : "full";
+    const readable = mode === "llm";
     const csvMode = true;
-    const isLocal = target === "local";
-    const anchorRow = target === "llm" || isLocal;
-    const endSentinel = target === "llm" || isLocal;
-    const legend = false;
-    const DEC_THRESHOLD = 30;
-    const decThreshold = isLocal ? Infinity : target === "llm" ? DEC_THRESHOLD : 0;
-    const colSet = /* @__PURE__ */ new Set();
-    for (const row of data) for (const k of Object.keys(row)) colSet.add(k);
-    const allColumns = Array.from(colSet);
-    const types = {};
-    for (const key of allColumns) {
-      types[key] = this.detectColumnType(data, key);
-    }
-    const constants = {};
-    for (const col of allColumns) {
-      const first = data[0][col];
-      let isConst = true;
-      for (let i = 1; i < data.length; i++) {
-        if (data[i][col] !== first) {
-          isConst = false;
-          break;
-        }
-      }
-      if (isConst) constants[col] = first;
-    }
-    const sequences = {};
-    for (const col of allColumns) {
-      if (col in constants) continue;
-      if (typeof data[0][col] !== "number" || !Number.isInteger(data[0][col])) continue;
-      if (data.length < 2) continue;
-      const start = data[0][col];
-      const step = data[1][col] - data[0][col];
-      if (step === 0) continue;
-      let isSeq = true;
-      for (let i = 2; i < data.length; i++) {
-        if (data[i][col] !== start + step * i) {
-          isSeq = false;
-          break;
-        }
-      }
-      if (isSeq) sequences[col] = { start, step };
-    }
-    const floatSequences = {};
-    for (const col of allColumns) {
-      if (col in constants || col in sequences) continue;
-      if (typeof data[0][col] !== "number" || Number.isInteger(data[0][col])) continue;
-      if (data.length < 3) continue;
-      const start = data[0][col];
-      const step = parseFloat((data[1][col] - data[0][col]).toFixed(10));
-      if (step === 0) continue;
-      const dec2 = (n) => {
-        const s = n.toFixed(10).replace(/0+$/, "");
-        const d = s.indexOf(".");
-        return d < 0 ? 0 : s.length - d - 1;
-      };
-      const precision = Math.max(dec2(start), dec2(step));
-      const scale = Math.pow(10, precision);
-      let isSeq = true;
-      for (let i = 2; i < data.length; i++) {
-        const expected = Math.round((start + step * i) * scale) / scale;
-        if (data[i][col] !== expected) {
-          isSeq = false;
-          break;
-        }
-      }
-      if (isSeq) floatSequences[col] = { start, step, precision };
-    }
-    const dec = (n) => {
-      const s = Math.abs(n).toFixed(10).replace(/0+$/, "");
-      const d = s.indexOf(".");
-      return d < 0 ? 0 : s.length - d - 1;
-    };
-    const fpCols = {};
-    for (const col of allColumns) {
-      if (col in constants || col in sequences || col in floatSequences) continue;
-      if (this.detectColumnType(data, col) !== "f") continue;
-      let maxDec = 0;
-      for (const row of data) {
-        const v = row[col];
-        if (v === null || v === void 0 || !Number.isFinite(v)) continue;
-        maxDec = Math.max(maxDec, dec(v));
-      }
-      if (maxDec >= 1 && maxDec <= 6) {
-        const scale = Math.pow(10, maxDec);
-        let lossless = true;
-        for (const row of data) {
-          const v = row[col];
-          if (v === null || v === void 0 || !Number.isFinite(v)) continue;
-          if (Math.round(v * scale) / scale !== v) {
-            lossless = false;
-            break;
-          }
-        }
-        if (lossless) fpCols[col] = maxDec;
-      }
-    }
-    const normCols = {};
-    if (options.norm) {
-      const SIGMA_T = 25, M_T = 500;
-      const normTargets = options.norm === true ? allColumns.filter((c) => types[c] === "f" && !(c in constants) && !(c in sequences) && !(c in floatSequences) && !(c in fpCols)) : options.norm.filter((c) => types[c] === "f" && !(c in constants) && !(c in sequences) && !(c in floatSequences) && !(c in fpCols));
-      for (const col of normTargets) {
-        const vals = data.map((r) => r[col]).filter((v) => typeof v === "number" && Number.isFinite(v));
-        if (vals.length < 2) continue;
-        const mean = vals.reduce((s, v) => s + v, 0) / vals.length;
-        const std = Math.sqrt(vals.reduce((s, v) => s + (v - mean) ** 2, 0) / vals.length);
-        if (std === 0) continue;
-        normCols[col] = { mean, std, sigmaT: SIGMA_T, mT: M_T };
-      }
-    }
-    let activeColumnsRaw = allColumns.filter((c) => !(c in constants) && !(c in sequences) && !(c in floatSequences));
-    const suffixes = {};
-    for (const col of activeColumnsRaw) {
-      if (types[col] !== "s") continue;
-      const uniqueVals = [];
-      const seen = /* @__PURE__ */ new Set();
-      for (let i = 0; i < data.length; i++) {
-        const v = data[i][col];
-        if (typeof v !== "string" || seen.has(v)) continue;
-        seen.add(v);
-        uniqueVals.push(v);
-      }
-      if (uniqueVals.length < 2) continue;
-      const suffix = this.findCommonSuffix(uniqueVals);
-      if (suffix) suffixes[col] = suffix;
-    }
-    if (Object.keys(suffixes).length > 0) {
-      data = data.map((row) => {
-        const r = { ...row };
-        for (const col in suffixes) {
-          if (typeof r[col] === "string") {
-            r[col] = r[col].slice(0, -suffixes[col].length);
-          }
-        }
-        return r;
-      });
-    }
-    const stringSequences = {};
-    for (const col of activeColumnsRaw) {
-      if (types[col] !== "s" || data.length < 2) continue;
-      const first = String(data[0][col]);
-      const prefix = first.replace(/[0-9]+$/, "");
-      if (prefix === first || prefix.length === 0) continue;
-      let allMatch = true;
-      const nums = [];
-      for (let i = 0; i < data.length; i++) {
-        const v = String(data[i][col]);
-        if (!v.startsWith(prefix)) {
-          allMatch = false;
-          break;
-        }
-        const numStr = v.substring(prefix.length);
-        const num = parseInt(numStr, 10);
-        if (isNaN(num) || num.toString() !== numStr) {
-          allMatch = false;
-          break;
-        }
-        nums.push(num);
-      }
-      if (!allMatch || nums.length < 2) continue;
-      const seqStart = nums[0];
-      const seqStep = nums[1] - nums[0];
-      if (seqStep === 0) continue;
-      let isSeq = true;
-      for (let i = 2; i < nums.length; i++) {
-        if (nums[i] !== seqStart + seqStep * i) {
-          isSeq = false;
-          break;
-        }
-      }
-      if (isSeq) stringSequences[col] = { prefix, start: seqStart, step: seqStep };
-    }
-    activeColumnsRaw = activeColumnsRaw.filter((c) => !(c in stringSequences));
-    this.stateManager.registerContext(tableId, allColumns, types);
-    const dictCols = activeColumnsRaw.filter(
-      (c) => !(c in fpCols) && !(c in normCols) && types[c] !== "i" && types[c] !== "b" && types[c] !== "a"
-    );
-    this.adaptive.buildDictionaries(data, dictCols, tableId);
-    const defaults = {};
-    for (const col of activeColumnsRaw) {
-      if (col in normCols) continue;
-      const freq = {};
-      for (let i = 0; i < data.length; i++) {
-        const norm = this.adaptive.normalize(data[i][col]);
-        freq[norm] = (freq[norm] || 0) + 1;
-      }
-      let best = "";
-      let max = 0;
-      for (const val in freq) {
-        if (freq[val] > max) {
-          max = freq[val];
-          best = val;
-        }
-      }
-      if (max > data.length * 0.3) defaults[col] = best;
-    }
-    const nonDefCols = activeColumnsRaw.filter((c) => !(c in defaults));
-    const defCols = activeColumnsRaw.filter((c) => c in defaults);
-    const activeColumns = [...nonDefCols, ...defCols];
-    const ctx = this.stateManager.getContext(tableId);
-    const globalDict = this.stateManager.getDictionary(tableId, "__global__");
-    if (globalDict) {
-      for (const col of activeColumns) {
-        const colDict = this.stateManager.getDictionary(tableId, col);
-        if (!colDict || Object.keys(colDict).length < 15) continue;
-        const seen = /* @__PURE__ */ new Set();
-        let allCovered = true;
-        for (let j = 0; j < data.length && allCovered; j++) {
-          const val = data[j][col];
-          if (typeof val !== "string") {
-            allCovered = false;
-            break;
-          }
-          if (seen.has(val)) continue;
-          seen.add(val);
-          let found = false;
-          for (const prefix of Object.keys(globalDict)) {
-            if (val.startsWith(prefix)) {
-              found = true;
-              break;
-            }
-          }
-          if (!found) allCovered = false;
-        }
-        if (allCovered) delete ctx.dictionary[col];
-      }
-    }
-    const intActiveCols = allColumns.filter(
-      (c) => types[c] === "i" && !(c in constants) && !(c in sequences) && !(c in floatSequences) && !(c in stringSequences) && !(c in fpCols)
-    );
-    const useDecimal = data.length * intActiveCols.length < decThreshold;
-    const decColSet = new Set(useDecimal ? intActiveCols : []);
-    const deltaCols = {};
-    if (data.length >= 4 && target === "transmission") {
-      for (const col of activeColumns) {
-        if (types[col] !== "i" || col in fpCols || decColSet.has(col)) continue;
-        const vals = [];
-        let allInt = true;
-        for (const row of data) {
-          const v = row[col];
-          if (v === null || v === void 0 || !Number.isInteger(v)) {
-            allInt = false;
-            break;
-          }
-          vals.push(v);
-        }
-        if (!allInt || vals.length < 4) continue;
-        const avgAbsVal = vals.reduce((s, v) => s + Math.abs(v), 0) / vals.length;
-        if (avgAbsVal <= 200) continue;
-        const deltas = vals.slice(1).map((v, i) => Math.abs(v - vals[i]));
-        const avgAbsDelta = deltas.reduce((s, d) => s + d, 0) / deltas.length;
-        if (avgAbsDelta / avgAbsVal < 0.35) deltaCols[col] = vals[0];
-      }
-    }
-    const abbrevMap = {};
-    let useAbbreviation = false;
-    if (!isLocal) {
-      const candidateAbbrev = {};
-      const used = /* @__PURE__ */ new Set();
-      for (const col of allColumns) {
-        let abbrev = this.makeAbbrev(col);
-        let candidate = abbrev;
-        let n = 2;
-        while (used.has(candidate)) candidate = abbrev + n++;
-        used.add(candidate);
-        candidateAbbrev[col] = candidate;
-      }
-      let charSaved = 0;
-      for (const col of allColumns) {
-        const abbrev = candidateAbbrev[col];
-        const saved = col.length - abbrev.length;
-        if (saved <= 0) continue;
-        let appearances = 1;
-        if (col in constants) appearances++;
-        if (col in sequences) appearances++;
-        if (col in floatSequences) appearances++;
-        if (col in fpCols) appearances++;
-        if (col in suffixes) appearances++;
-        if (col in stringSequences) appearances++;
-        if (col in defaults) appearances++;
-        if (ctx.dictionary[col] !== void 0) appearances++;
-        charSaved += saved * appearances;
-      }
-      const aLineCost = 3 + allColumns.join(",").length;
-      if (charSaved > aLineCost) {
-        Object.assign(abbrevMap, candidateAbbrev);
-        useAbbreviation = true;
-      }
-    }
-    const ab = (col) => useAbbreviation ? abbrevMap[col] ?? col : col;
-    let output = "";
-    let colDefs = "";
-    for (let i = 0; i < allColumns.length; i++) {
-      colDefs += ab(allColumns[i]) + ":" + types[allColumns[i]] + (i < allColumns.length - 1 ? "," : "");
-    }
-    output += "S:@" + tableId + "[" + data.length + "]=[" + colDefs + "]\n";
-    if (useAbbreviation) {
-      output += "A:" + allColumns.join(",") + "\n";
-    }
-    if (decColSet.size > 0) {
-      output += "DC:" + Array.from(decColSet).map((c) => ab(c)).join(",") + "\n";
-    }
-    for (const col in constants) {
-      const cv = constants[col];
-      if (cv === null || cv === void 0) {
-        output += "C:" + ab(col) + "=^\n";
-      } else {
-        output += "C:" + ab(col) + "=" + this.adaptive.encodeHdrVal(this.adaptive.normalize(cv)) + "\n";
-      }
-    }
-    for (const col in sequences) {
-      const s = sequences[col];
-      if (isLocal) {
-        output += "Q:" + ab(col) + "=" + s.start + "," + s.step + "\n";
-      } else {
-        output += "Q:" + ab(col) + "=" + s.start.toString(36) + "," + s.step.toString(36) + "\n";
-      }
-    }
-    for (const col in floatSequences) {
-      const s = floatSequences[col];
-      output += "QF:" + ab(col) + "=" + s.start + "," + s.step + "\n";
-    }
-    {
-      const byPrecision = {};
-      for (const col in fpCols) {
-        const p = fpCols[col];
-        if (!byPrecision[p]) byPrecision[p] = [];
-        byPrecision[p].push(ab(col));
-      }
-      for (const p in byPrecision) {
-        output += "FP:" + p + "=" + byPrecision[p].join(",") + "\n";
-      }
-    }
-    for (const col in suffixes) {
-      output += "X:" + ab(col) + "=" + this.adaptive.encodeHdrVal(suffixes[col]) + "\n";
-    }
-    for (const col in stringSequences) {
-      const sq = stringSequences[col];
-      if (isLocal) {
-        output += "QS:" + ab(col) + "=" + sq.start + "," + sq.step + "," + this.adaptive.encodeHdrVal(sq.prefix) + "\n";
-      } else {
-        output += "QS:" + ab(col) + "=" + sq.start.toString(36) + "," + sq.step.toString(36) + "," + this.adaptive.encodeHdrVal(sq.prefix) + "\n";
-      }
-    }
-    const defKeys = Object.keys(defaults);
-    if (defKeys.length > 0) {
-      let defStr = "";
-      for (let i = 0; i < defKeys.length; i++) {
-        defStr += ab(defKeys[i]) + "=" + this.adaptive.encodeHdrVal(defaults[defKeys[i]]) + (i < defKeys.length - 1 ? "," : "");
-      }
-      output += "D:defaults=" + defStr + "\n";
-    }
-    for (const col in ctx.dictionary) {
-      const mapping = ctx.dictionary[col];
-      const sorted = Object.entries(mapping).sort(
-        (a, b) => parseInt(a[1].toString(), 36) - parseInt(b[1].toString(), 36)
-      );
-      const valList = sorted.map(([val]) => this.adaptive.encodeHdrVal(val)).join(",");
-      output += "D:" + ab(col) + "=" + valList + "\n";
-    }
-    if (legend) {
-      const legendDictCols = Object.keys(ctx.dictionary).filter((c) => c !== "__global__");
-      if (legendDictCols.length > 0) {
-        const parts = [];
-        for (const col of legendDictCols) {
-          const m = ctx.dictionary[col];
-          const entries = Object.entries(m).map(([val, tok]) => `${tok}=${val}`).join("|");
-          parts.push(`${ab(col)}{${entries}}`);
-        }
-        output += "LEGEND:" + parts.join(";") + "\n";
-      }
-    }
-    for (const col in deltaCols) {
-      output += "DL:" + ab(col) + "=" + deltaCols[col] + "\n";
-    }
-    if (Object.keys(normCols).length > 0) {
-      output += "LY:NM\n";
-      for (const col in normCols) {
-        const n = normCols[col];
-        output += "NM:" + ab(col) + "=" + n.mean + "," + n.std + "," + n.sigmaT + "," + n.mT + "\n";
-      }
-    }
-    output += "@" + tableId + ":\n";
-    if (csvMode) output += "F:csv\n";
-    const compressedRows = [];
-    const rowSep = csvMode ? "," : " ";
-    const deltaRowState = { ...deltaCols };
-    for (let i = 0; i < data.length; i++) {
-      const row = data[i];
-      const tokens = [];
-      for (const col of activeColumns) {
-        const val = row[col] ?? null;
-        if (val === null) {
-          tokens.push(csvMode && defaults[col] === void 0 ? "" : "^");
-          continue;
-        }
-        if (normCols[col] !== void 0 && typeof val === "number") {
-          const { mean, std, sigmaT, mT } = normCols[col];
-          const z = (val - mean) / std;
-          const token = Math.max(0, Math.min(999, Math.round(z * sigmaT + mT)));
-          tokens.push(isLocal ? String(token) : token.toString(36));
-          continue;
-        }
-        if (deltaCols[col] !== void 0 && typeof val === "number") {
-          const delta = val - deltaRowState[col];
-          deltaRowState[col] = val;
-          tokens.push(delta.toString(10));
-          continue;
-        }
-        if (fpCols[col] !== void 0 && typeof val === "number") {
-          const scale = Math.pow(10, fpCols[col]);
-          tokens.push(isLocal ? String(Math.round(val * scale)) : Math.round(val * scale).toString(36));
-          continue;
-        }
-        const normVal = this.adaptive.normalize(val);
-        if (defaults[col] !== void 0 && normVal === defaults[col]) {
-          tokens.push("~");
-        } else if (decColSet.has(col) && typeof val === "number" && Number.isInteger(val)) {
-          tokens.push(val.toString(10));
-        } else {
-          const compressed = this.adaptive.compress(val, col, tableId, csvMode);
-          const colDict = this.stateManager.getDictionary(tableId, col);
-          if (colDict && Object.keys(colDict).length > 0) {
-            const norm = this.adaptive.normalize(val);
-            if (colDict[norm] === void 0 && !compressed.startsWith("$")) {
-              tokens.push("!" + compressed);
-            } else {
-              tokens.push(compressed);
-            }
-          } else {
-            tokens.push(compressed);
-          }
-        }
-      }
-      while (tokens.length > 0 && tokens[tokens.length - 1] === "~") {
-        tokens.pop();
-      }
-      if (tokens.length > 0 && tokens.every((t) => t === "")) {
-        tokens[tokens.length - 1] = "^";
-      }
-      compressedRows.push(tokens.join(rowSep));
-    }
-    const buildAnchor = () => {
-      const aTokens = ["!"];
-      const row0 = data[0];
-      for (const col of activeColumns) {
-        const val = row0[col];
-        if (val === null || val === void 0) {
-          aTokens.push(csvMode ? "" : "^");
-          continue;
-        }
-        const t = types[col];
-        if (t === "b") {
-          aTokens.push(val ? "1" : "0");
-        } else if (t === "i" || t === "f" || fpCols[col] !== void 0) {
-          aTokens.push(String(val));
-        } else if (t === "a") {
-          aTokens.push(this.adaptive.encodeArray(val, csvMode));
-        } else {
-          const s = String(val);
-          aTokens.push(csvMode ? this.adaptive.encodeCsvVal(s) : this.adaptive.encodeStrVal(s));
-        }
-      }
-      return aTokens.join(rowSep);
-    };
-    const startIdx = anchorRow && data.length > 0 ? 1 : 0;
-    if (anchorRow && data.length > 0) {
-      output += buildAnchor() + "\n";
-    }
-    let ri = startIdx;
-    while (ri < compressedRows.length) {
-      if (isLocal) {
-        const rowStr2 = compressedRows[ri];
-        output += (rowStr2 === "" ? "." : rowStr2) + "\n";
-        ri++;
-        continue;
-      }
-      let count = 1;
-      while (ri + count < compressedRows.length && compressedRows[ri + count] === compressedRows[ri]) {
-        count++;
-      }
-      const rowStr = compressedRows[ri];
-      if (count > 1) {
-        if (rowStr === "") {
-          output += "*" + count.toString(36) + "[]\n";
-        } else {
-          output += "*" + count.toString(36) + "[" + rowStr + "]\n";
-        }
-      } else {
-        output += (rowStr === "" ? "." : rowStr) + "\n";
-      }
-      ri += count;
-    }
-    if (target === "llm" || isLocal) {
-      const firstIntCol = activeColumns.find((c) => types[c] === "i");
-      let intSum = 0;
-      if (firstIntCol) {
-        for (const row of data) {
-          const v = row[firstIntCol];
-          if (typeof v === "number") intSum += v;
-        }
-      }
-      output += "CK:" + data.length + "," + activeColumns.length + (firstIntCol ? "," + intSum : "") + "\n";
-    }
-    if (endSentinel) output += "END:@" + tableId + "\n";
-    if ((target === "llm" || isLocal) && data.length > 0) {
-      const row0 = data[0];
-      const pairs = [];
-      for (const col of allColumns) {
-        const v = row0[col];
-        if (v === null || v === void 0) pairs.push(col + ":^");
-        else if (typeof v === "string") pairs.push(col + ":" + v);
-        else pairs.push(col + ":" + String(v));
-      }
-      output += "EX:row0=[" + pairs.join(",") + "]\n";
-    }
+    const isLocal = readable;
+    const decThreshold = readable ? Infinity : 0;
+    const ctx = analyzeColumns(data, options, tableId, mode, isLocal, csvMode, decThreshold, this.stateManager, this.adaptive);
+    let output = buildHeaders(ctx, this.stateManager, this.adaptive);
+    output += compressRows(ctx.data, ctx, this.stateManager, this.adaptive);
     return output.trim();
   }
 };
@@ -2515,7 +3253,7 @@ var LoonEncoder = class {
   }
   /**
    * Adaptive-mode encoder.
-   * Selects compression features automatically based on options target.
+   * Selects compression features automatically based on options.mode.
    */
   encodeAdaptive(data, options = {}) {
     return this.adaptiveEncoder.encodeAdaptive(data, options);
@@ -2582,6 +3320,20 @@ var StateManager = class {
     }
     return schemaCache[column];
   }
+  /**
+   * Decoder-side dict registration. Receives {token→value} format from the
+   * header parser, inverts it to {value→token} for consistent storage, then
+   * invalidates the reverse cache for that column.
+   */
+  setDictionary(schemaId, column, tokenToValue) {
+    const valueToToken = {};
+    for (const [tok, val] of Object.entries(tokenToValue)) {
+      valueToToken[String(val)] = tok;
+    }
+    this.registerDictionary(schemaId, column, valueToToken);
+    const schemaCache = this.reverseCache.get(schemaId);
+    if (schemaCache) delete schemaCache[column];
+  }
   clear() {
     this.contexts.clear();
     this.reverseCache.clear();
@@ -2592,36 +3344,6 @@ var StateManager = class {
     return ctx?.columns.join(",") === signature;
   }
 };
-
-// src/utils/flatten.ts
-function flattenRecord(obj, prefix = "") {
-  const result = {};
-  for (const [key, val] of Object.entries(obj)) {
-    const fullKey = prefix ? `${prefix}.${key}` : key;
-    if (val !== null && typeof val === "object" && !Array.isArray(val)) {
-      Object.assign(result, flattenRecord(val, fullKey));
-    } else {
-      result[fullKey] = val;
-    }
-  }
-  return result;
-}
-function unflattenRecord(obj) {
-  if (!Object.keys(obj).some((k) => k.includes("."))) return obj;
-  const result = {};
-  for (const [key, val] of Object.entries(obj)) {
-    const parts = key.split(".");
-    let cursor = result;
-    for (let i = 0; i < parts.length - 1; i++) {
-      if (!(parts[i] in cursor) || cursor[parts[i]] === null || typeof cursor[parts[i]] !== "object" || Array.isArray(cursor[parts[i]])) {
-        cursor[parts[i]] = {};
-      }
-      cursor = cursor[parts[i]];
-    }
-    cursor[parts[parts.length - 1]] = val;
-  }
-  return result;
-}
 
 // src/utils/validate.ts
 function checkType(val, type) {
@@ -2777,83 +3499,6 @@ function repairHint(loonString, errors) {
   return lines.join("\n");
 }
 
-// src/session.ts
-function splitLoon(loon2) {
-  const lines = loon2.split("\n");
-  let blockLine = -1;
-  for (let i = 0; i < lines.length; i++) {
-    if (/^@\w+:$/.test(lines[i] || "")) {
-      blockLine = i;
-      break;
-    }
-  }
-  if (blockLine < 0) {
-    return { schema: loon2, dataBlock: "", full: loon2, schemaBytes: loon2.length, dataBytes: 0 };
-  }
-  const schema = lines.slice(0, blockLine + 1).join("\n");
-  const dataBlock = lines.slice(blockLine + 1).join("\n");
-  return { schema, dataBlock, full: loon2, schemaBytes: schema.length, dataBytes: dataBlock.length };
-}
-var LoonSession = class {
-  constructor() {
-    this.opts = {};
-    this.split = null;
-  }
-  /**
-   * Initializes the session with a representative dataset.
-   * Encodes the full first batch and locks the schema.
-   */
-  init(data, opts = {}) {
-    this.opts = opts;
-    const l = new Loon();
-    const full = l.toJSON(data, opts);
-    l.reset();
-    this.split = splitLoon(full);
-    return this.split;
-  }
-  /** Schema block — inject into system prompt or first message header. */
-  get schema() {
-    return this.split?.schema ?? "";
-  }
-  /** Number of bytes in the schema block. */
-  get schemaBytes() {
-    return this.split?.schemaBytes ?? 0;
-  }
-  /**
-   * Encodes a new batch. Returns ONLY the data rows block (no schema headers).
-   * The LLM decodes them using the schema already in its context window.
-   */
-  encodeRows(data) {
-    const l = new Loon();
-    const full = l.toJSON(data, this.opts);
-    l.reset();
-    const s = splitLoon(full);
-    return {
-      schema: this.split?.schema ?? s.schema,
-      dataBlock: s.dataBlock,
-      full: s.full,
-      schemaBytes: this.split?.schemaBytes ?? s.schemaBytes,
-      dataBytes: s.dataBytes
-    };
-  }
-  /**
-   * Decodes a rows-only block using the cached schema.
-   * Prepends the saved schema headers so the standard decoder works.
-   */
-  decode(rowBlock) {
-    if (!this.split) throw new Error("Call init() first");
-    const l = new Loon();
-    const result = l.fromLOON(this.split.schema + "\n" + rowBlock);
-    l.reset();
-    return result;
-  }
-  /** Resets the session state. */
-  reset() {
-    this.split = null;
-    this.opts = {};
-  }
-};
-
 // src/utils/get-spec.ts
 var SECTIONS = {
   base: `Data is in LOON Adaptive format. Decode rules:
@@ -2865,12 +3510,22 @@ S:@T1[N]=[col:type,\u2026]  \u2014 schema (i=int, f=float, s=str, b=bool, a=arra
                          comma-delimited; otherwise rows are space-delimited.
 
 Active columns = schema columns minus those declared via C: / Q: / QF: / QS:.
+Columns WITHOUT a default come first, defaulted columns last.
 Fill active columns left-to-right from row tokens, then fill constants and sequences.
 
-Special tokens: ^ = null | ~ = column default | !value = raw literal string`,
+Special tokens (a whole cell equal to one of these):
+  ^  = null
+  ~  = use the column default (or null if the column has none)
+  +  = the key was absent from this row \u2014 omit it entirely from the object
+  !value = raw literal string (decode "value" as-is, ignore any dictionary)`,
   compact: `Data is in LOON Compact format: each record is key: value pairs, one field per line,
 records separated by ---. Types: numbers are numbers, true/false are booleans, ^ is null,
-everything else is a string. Escape sequences: \\n, \\r, \\t, \\\\.`,
+everything else is a string. Escape sequences: \\n, \\r, \\t, \\\\.
+Array suffixes on keys:
+  key[N]: v1,v2,\u2026             \u2014 scalar array of length N (comma-separated values).
+  key[N]{c1,c2,\u2026}: r1c1,r1c2;r2c1,r2c2  \u2014 array of N objects; the {\u2026} lists the
+                                shared field names, rows are ";"-separated,
+                                fields ","-separated.`,
   abbreviations: `A:n1,n2,\u2026  \u2014 full column names. The schema S: uses short abbreviations; A: gives the real
 names. ALWAYS use the full names from A: in your answer, never the abbreviated schema names.`,
   dec: `DC:col1,col2,\u2026  \u2014 these integer columns use PLAIN DECIMAL (parseInt base 10), NOT Base36.
@@ -2887,6 +3542,13 @@ D:defaults=col=val,\u2026   \u2014 default values. ~ in a row means "use this de
                          missing tokens at the end of a row also use the column default.`,
   suffix: `X:col=suffix  \u2014 append suffix to every decoded value in this column. The column is absent
 from row tokens; the suffix is added after decoding.`,
+  "array-schema": `AS:col=k1,k2,k3  \u2014 this column holds an array of objects that all share the field
+                   names k1,k2,k3. The cell carries values only, never the keys.
+                   Within the cell: fields of one object are "|"-separated, and
+                   the objects (array elements) are ";"-separated.
+                   Cell  "a|b|1;c|d|2"  with  AS:items=sku,name,qty  decodes to
+                   [{sku:a,name:b,qty:1},{sku:c,name:d,qty:2}].
+                   An empty cell = empty array [].`,
   rle: `*N[t1 t2 \u2026]  \u2014 run-length encoding: repeat the bracketed row N times (N in Base36).
 *N[]          \u2014 repeat an all-defaults row N times.
 .             \u2014 single all-defaults row.`,
@@ -2938,6 +3600,7 @@ var HEADER_SECTION_MAP = [
   { pattern: /^D:[^d]/m, section: "dictionaries" },
   { pattern: /^D:defaults=/m, section: "dictionaries" },
   { pattern: /^X:/m, section: "suffix" },
+  { pattern: /^AS:/m, section: "array-schema" },
   { pattern: /\*[0-9a-z]+\[/m, section: "rle" },
   { pattern: /^!/m, section: "llm-target" },
   { pattern: /^END:/m, section: "llm-target" },
@@ -2973,6 +3636,7 @@ function getSpec(encoded) {
     "fixed-point",
     "dictionaries",
     "suffix",
+    "array-schema",
     "rle",
     "delta",
     "norm",
@@ -3021,7 +3685,15 @@ function buildWalkthrough(encoded) {
   const dictMap = {};
   const deltaMap = {};
   const normMap = {};
+  const arraySchemaMap = {};
   for (const line of allLines) {
+    if (line.startsWith("AS:")) {
+      const eqIdx = line.indexOf("=");
+      if (eqIdx > 3) {
+        arraySchemaMap[resolve(line.substring(3, eqIdx))] = line.substring(eqIdx + 1).split(",").map((s) => s.trim());
+      }
+      continue;
+    }
     if (line.startsWith("C:")) {
       const col = resolve(line.substring(2, line.indexOf("=")));
       constants.add(col);
@@ -3107,6 +3779,15 @@ function buildWalkthrough(encoded) {
       steps.push(`  ${name}: "~" \u2192 default value`);
       continue;
     }
+    if (token === "+") {
+      steps.push(`  ${name}: "+" \u2192 key absent in this row (omit it)`);
+      continue;
+    }
+    if (arraySchemaMap[name]) {
+      const keys = arraySchemaMap[name];
+      steps.push(`  ${name}: "${token}" \u2192 array of objects {${keys.join(",")}}: split on ";" then "|", zip with field names`);
+      continue;
+    }
     if (token.startsWith("!")) {
       steps.push(`  ${name}: "${token}" \u2192 raw literal "${token.slice(1)}"`);
       continue;
@@ -3158,14 +3839,109 @@ function buildWalkthrough(encoded) {
   return steps.join("\n");
 }
 
+// src/session.ts
+function splitLoon(loon2) {
+  const lines = loon2.split("\n");
+  let blockLine = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^@\w+:$/.test(lines[i] || "")) {
+      blockLine = i;
+      break;
+    }
+  }
+  if (blockLine < 0) {
+    return { schema: loon2, dataBlock: "", full: loon2, schemaBytes: loon2.length, dataBytes: 0 };
+  }
+  const schema = lines.slice(0, blockLine + 1).join("\n");
+  const dataBlock = lines.slice(blockLine + 1).join("\n");
+  return { schema, dataBlock, full: loon2, schemaBytes: schema.length, dataBytes: dataBlock.length };
+}
+var LoonSession = class {
+  constructor() {
+    this.opts = {};
+    this.split = null;
+  }
+  /**
+   * Initializes the session with a representative dataset.
+   * Encodes the full first batch and locks the schema.
+   */
+  init(data, opts = {}) {
+    this.opts = opts;
+    const l = new Loon();
+    const full = l.toJSON(data, opts);
+    l.reset();
+    this.split = splitLoon(full);
+    return this.split;
+  }
+  /** Schema block — inject into system prompt or first message header. */
+  get schema() {
+    return this.split?.schema ?? "";
+  }
+  /** Number of bytes in the schema block. */
+  get schemaBytes() {
+    return this.split?.schemaBytes ?? 0;
+  }
+  /** Data rows of the batch passed to {@link init}. */
+  get dataBlock() {
+    return this.split?.dataBlock ?? "";
+  }
+  /**
+   * The complete cacheable prompt prefix: the minimal decode spec
+   * (`getSpec()`) followed by the schema headers. Put this in the system
+   * prompt (and mark it for prompt caching); every subsequent call then only
+   * carries a {@link dataBlock}. Paid once, reused for the whole session.
+   */
+  get primer() {
+    if (!this.split) return "";
+    const spec = getSpec(this.split.full);
+    return `${spec.text}
+
+${this.split.schema}`;
+  }
+  /**
+   * Encodes a new batch. Returns ONLY the data rows block (no schema headers).
+   * The LLM decodes them using the schema already in its context window.
+   */
+  encodeRows(data) {
+    const l = new Loon();
+    const full = l.toJSON(data, this.opts);
+    l.reset();
+    const s = splitLoon(full);
+    return {
+      schema: this.split?.schema ?? s.schema,
+      dataBlock: s.dataBlock,
+      full: s.full,
+      schemaBytes: this.split?.schemaBytes ?? s.schemaBytes,
+      dataBytes: s.dataBytes
+    };
+  }
+  /**
+   * Decodes a rows-only block using the cached schema.
+   * Prepends the saved schema headers so the standard decoder works.
+   */
+  decode(rowBlock) {
+    if (!this.split) throw new Error("Call init() first");
+    const l = new Loon();
+    const result = l.fromLOON(this.split.schema + "\n" + rowBlock);
+    l.reset();
+    return result;
+  }
+  /** Resets the session state. */
+  reset() {
+    this.split = null;
+    this.opts = {};
+  }
+};
+
 // src/index.ts
 var VALID_MODES = [
   "compact",
   "full",
   "llm",
-  "local",
   "compat",
   // public
+  "local",
+  // deprecated alias of 'llm'
   "adaptive",
   "micro",
   "json"
@@ -3208,7 +3984,7 @@ var Loon = class _Loon {
    *
    * If `mode` is omitted, it is auto-selected from dataset shape.
    */
-  toJSON(json, options = {}) {
+  toLOON(json, options = {}) {
     validateOptions(options);
     if (!json || json.length === 0) return "";
     const keep = options.fields && options.fields.length > 0 ? new Set(options.fields) : null;
@@ -3225,22 +4001,21 @@ var Loon = class _Loon {
     });
     let mode = options.mode;
     if (!mode) mode = selectMode(flatData);
-    if (mode === "adaptive") {
-      const target = options.target ?? "transmission";
-      if (target === "llm") mode = "llm";
-      else if (target === "local") mode = "local";
-      else mode = "full";
-    }
+    if (mode === "adaptive") mode = "full";
+    if (mode === "local") mode = "llm";
     let result = "";
     if (mode === "micro") {
       result = this.encoder.encodeMicro(flatData, options.fields);
     } else if (mode === "compact") {
-      result = this.encoder.encodeCompact(flatData);
+      if (isUniformTabular(flatData)) {
+        result = this.encoder.encodeAdaptive(flatData, { ...options, mode: "llm" });
+      } else {
+        result = this.encoder.encodeCompact(flatData);
+      }
     } else if (mode === "compat" || mode === "json") {
       result = this.encoder.encodeJSONHybrid(flatData);
     } else {
-      const target = mode === "llm" ? "llm" : mode === "local" ? "local" : "transmission";
-      result = this.encoder.encodeAdaptive(flatData, { ...options, target });
+      result = this.encoder.encodeAdaptive(flatData, { ...options, mode });
     }
     if (options.outFile) {
       try {
@@ -3256,10 +4031,22 @@ var Loon = class _Loon {
   fromLOON(loon2) {
     return this.decoder.decode(loon2).map((r) => unflattenRecord(r));
   }
+  /** Alias for {@link toLOON}. */
+  encode(json, options = {}) {
+    return this.toLOON(json, options);
+  }
+  /** Alias for {@link fromLOON}. */
+  decode(loon2) {
+    return this.fromLOON(loon2);
+  }
+  /** @deprecated Use {@link toLOON} instead. */
+  toJSON(json, options = {}) {
+    return this.toLOON(json, options);
+  }
   /** Parses a CSV string and encodes it as LOON. */
   fromCSV(csv, options = {}) {
     const data = this.csv.parse(csv);
-    return data.length ? this.toJSON(data, options) : "";
+    return data.length ? this.toLOON(data, options) : "";
   }
   /** Decodes a LOON string and serializes it as CSV. */
   toCSV(loon2) {
@@ -3269,7 +4056,7 @@ var Loon = class _Loon {
   /** Parses a tabular XML string and encodes it as LOON. */
   fromXML(xml, options = {}) {
     const data = this.xml.parse(xml, options.rowTag);
-    return data.length ? this.toJSON(data, options) : "";
+    return data.length ? this.toLOON(data, options) : "";
   }
   /** Decodes a LOON string and serializes it as XML. */
   toXML(loon2, rootTag = "data", rowTag = "item") {
@@ -3278,7 +4065,7 @@ var Loon = class _Loon {
   /** Parses a YAML string and encodes it as LOON. */
   fromYAML(yaml, options = {}) {
     const data = this.yaml.parse(yaml);
-    return data.length ? this.toJSON(data, options) : "";
+    return data.length ? this.toLOON(data, options) : "";
   }
   /** Decodes a LOON string and serializes it as YAML. */
   toYAML(loon2) {
@@ -3301,11 +4088,11 @@ var Loon = class _Loon {
    *
    * @example
    *   const l = new Loon();
-   *   const encoded = l.fromTree(domRoot, { target: 'llm' });
+   *   const encoded = l.fromTree(domRoot, { mode: 'llm' });
    *   const back = l.toTree(encoded);  // exact round-trip
    */
   fromTree(input, opts = {}) {
-    const { childKey, maxDepth, idCol, pidCol, target, tableId } = opts;
+    const { childKey, maxDepth, idCol, pidCol, mode, tableId } = opts;
     const treeOpts = {};
     if (childKey !== void 0) treeOpts.childKey = childKey;
     if (maxDepth !== void 0) treeOpts.maxDepth = maxDepth;
@@ -3313,9 +4100,15 @@ var Loon = class _Loon {
     if (pidCol !== void 0) treeOpts.pidCol = pidCol;
     const { rows, meta } = this.treeCodec.parse(input, treeOpts);
     if (rows.length === 0) return "";
-    const loonOpts = { mode: "adaptive", target: target ?? "transmission" };
+    const loonOpts = { mode: mode ?? "full" };
     if (tableId !== void 0) loonOpts.tableId = tableId;
-    const encoded = this.toJSON(rows, loonOpts);
+    if (shouldEncodeFlat(rows, meta.idCol, meta.pidCol)) {
+      const flatMeta = { ...meta, flat: true };
+      const flatPayload = encodeIndent(input);
+      return `TREE:${this.treeCodec.encodeMeta(flatMeta)}
+${flatPayload}`;
+    }
+    const encoded = this.toLOON(rows, loonOpts);
     return `TREE:${this.treeCodec.encodeMeta(meta)}
 ${encoded}`;
   }
@@ -3341,6 +4134,10 @@ ${encoded}`;
     }
     const meta = this.treeCodec.decodeMeta(firstLine.slice(5));
     const rest = nlIdx >= 0 ? loon2.slice(nlIdx + 1) : "";
+    if (meta.flat) {
+      const decoded = decodeIndent(rest);
+      return meta.isArray ? decoded : decoded[0] ?? null;
+    }
     const rows = this.fromLOON(rest);
     return this.treeCodec.serialize(rows, meta, opts);
   }
@@ -3377,16 +4174,16 @@ ${encoded}`;
       };
     };
     const sampleSize = Math.min(10, data.length);
-    const sampleEncoded = this.toJSON(data.slice(0, sampleSize), loonOpts);
+    const sampleEncoded = this.toLOON(data.slice(0, sampleSize), loonOpts);
     const { schema, dataBlock } = splitLoonLocal(sampleEncoded);
     const schemaTokens = Math.ceil(schema.length / 4);
     const dataTokensPerRow = dataBlock.length > 0 ? Math.ceil(dataBlock.length / 4 / sampleSize) : Math.ceil(sampleEncoded.length / 4 / sampleSize);
     const rowsPerChunk = Math.max(1, Math.floor((maxTokens - schemaTokens) / Math.max(1, dataTokensPerRow)));
-    if (rowsPerChunk >= data.length) return [this.toJSON(data, loonOpts)];
+    if (rowsPerChunk >= data.length) return [this.toLOON(data, loonOpts)];
     const chunks = [];
     for (let i = 0; i < data.length; i += rowsPerChunk) {
       const batch = data.slice(i, i + rowsPerChunk);
-      const encoded = this.toJSON(batch, loonOpts);
+      const encoded = this.toLOON(batch, loonOpts);
       if (i === 0) {
         chunks.push(encoded);
       } else {
@@ -3424,7 +4221,7 @@ ${encoded}`;
     for await (const batch of source) {
       if (batch.length === 0) continue;
       if (!initialized) {
-        yield this.toJSON(batch, options);
+        yield this.toLOON(batch, options);
         initialized = true;
       } else {
         const tempLoon = new _Loon();
@@ -3500,6 +4297,38 @@ ${encoded}`;
     return repairHint(loonString, errors);
   }
 };
+function shouldEncodeFlat(rows, idCol, pidCol) {
+  if (rows.length <= 1) return true;
+  const cols = /* @__PURE__ */ new Set();
+  for (const row of rows) {
+    for (const k of Object.keys(row)) {
+      if (k !== idCol && k !== pidCol && k !== "_pkey") cols.add(k);
+    }
+  }
+  if (cols.size === 0) return false;
+  let filled = 0;
+  for (const row of rows) {
+    for (const k of cols) {
+      const v = row[k];
+      if (v !== void 0 && v !== null) filled++;
+    }
+  }
+  const fillRatio = filled / (rows.length * cols.size);
+  return fillRatio < 0.5;
+}
+function isUniformTabular(data) {
+  if (!Array.isArray(data) || data.length < 2) return false;
+  const first = data[0];
+  if (first === null || typeof first !== "object" || Array.isArray(first)) return false;
+  const sig = Object.keys(first).join("");
+  if (sig.length === 0) return false;
+  for (let i = 1; i < data.length; i++) {
+    const r = data[i];
+    if (r === null || typeof r !== "object" || Array.isArray(r)) return false;
+    if (Object.keys(r).join("") !== sig) return false;
+  }
+  return true;
+}
 var loon = new Loon();
 export {
   Loon,

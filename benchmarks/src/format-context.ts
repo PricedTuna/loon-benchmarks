@@ -15,7 +15,7 @@ import { tokenize } from './utils.ts'
  *
  *   - Each format provides exactly one document.
  *   - The document is the format's own canonical LLM-facing reference
- *     (TRON: \`LLM_INSTRUCTIONS.md\`. TOON: \`docs/guide/llm-prompts.md\`.
+ *     (LOON: bundled `format-docs/loon.md`. TOON: \`docs/guide/llm-prompts.md\`.
  *      JSON / YAML / XML / CSV: a short paragraph-level primer comparable
  *      in informational content to what an LLM has already seen during
  *      pretraining for those formats).
@@ -27,12 +27,9 @@ import { tokenize } from './utils.ts'
  *   - No format is given a tutorial that contains the question's answer
  *     or hints about which fields exist in the dataset.
  *
- * Asymmetry note: TRON's document is substantially longer than the others
- * because TRON's encoding is denser and has more rules to learn. This is
- * a real-world property of the format, not a bias in the experiment;
- * making TRON's document artificially short would understate the cost of
- * adopting TRON. The token-cost columns in the report make this trade-off
- * visible to the reader.
+ * Asymmetry note: some format primers (e.g. LOON, TOON) are longer than JSON
+ * because the wire format carries more decoding rules. The token-cost
+ * columns in the report make that trade-off visible to the reader.
  */
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
@@ -45,7 +42,7 @@ const FORMAT_DOC_FILES: Record<string, string> = {
   'xml': 'xml.md',
   'csv': 'csv.md',
   'toon': 'toon.md',
-  'tron': 'tron.md',
+  'loon': 'loon.md',
 }
 
 const cache = new Map<string, string>()
@@ -61,7 +58,9 @@ export async function loadFormatContext(formatName: string): Promise<string> {
   if (cached !== undefined)
     return cached
 
-  const filename = FORMAT_DOC_FILES[formatName]
+  // LOON modes (loon-llm, loon-full, …) all share the same canonical doc.
+  const baseName = formatName.startsWith('loon') ? 'loon' : formatName
+  const filename = FORMAT_DOC_FILES[baseName]
   if (!filename) {
     cache.set(formatName, '')
     return ''

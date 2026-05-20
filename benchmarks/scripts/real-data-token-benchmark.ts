@@ -2,8 +2,7 @@ import * as fsp from 'node:fs/promises'
 import * as path from 'node:path'
 import * as prompts from '@clack/prompts'
 import { BENCHMARKS_DIR, FORMATTER_DISPLAY_NAMES, ROOT_DIR } from '../src/constants.ts'
-import { formatters, supportsJTON, supportsTRON } from '../src/formatters.ts'
-import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
+import { formatters, resetLoonEncoder, supportsJTON } from '../src/formatters.ts'
 import { ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
 
 /**
@@ -19,8 +18,8 @@ import { ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
  *   - Every formatter is attempted.
  *   - CSV is attempted on shape-compatible inputs only (root array of flat
  *     objects, or object with a single top-level array of flat objects).
- *   - TRON is attempted on the same shape-compatible inputs (it is row-
- *     oriented; deeply-nested non-array roots cannot be encoded faithfully).
+ *   - JTON is attempted only when the shape matches row-grid eligibility
+ *     (same predicate as other row-oriented encoders).
  *   - Failures are recorded as `null` (rendered as "n/a") and never silently
  *     replaced by another encoding's output.
  *
@@ -111,10 +110,9 @@ for (const file of FILES) {
   }
 
   for (const [formatName, formatter] of Object.entries(formatters)) {
-    // TRON and JTON are row-oriented; they collapse nested non-tabular data
-    // (e.g. GeoJSON coordinates) into a degenerate single-row encoding that
-    // is lossy and produces misleadingly low token counts.
-    if ((formatName === 'tron' || formatName === 'jton') && !supportsTRON(fakeDs)) {
+    // JTON is row-oriented; skip ineligible shapes so we do not measure a
+    // degenerate single-row encoding that is lossy and misleading.
+    if (formatName === 'jton' && !supportsJTON(fakeDs)) {
       tokensByFormat[formatName] = null
       errors[formatName] = 'format cannot represent this shape (skipped)'
       continue
@@ -137,9 +135,8 @@ for (const file of FILES) {
     }
   }
 
-  // Reset TRON session state between files so previous-file dictionaries do
-  // not leak into the next measurement (would understate per-file tokens).
-  tron.reset()
+  // Reset LOON encoder state between files so schema state does not leak.
+  resetLoonEncoder()
 
   measurements.push({
     filename: file.filename,
@@ -248,7 +245,7 @@ ${sections.join('\n')}
 
 ${failureSection}
 
-> Methodology note: TRON is given a fresh session (\`tron.reset()\`) between
+> Methodology note: LOON encoder state is reset (\`resetLoonEncoder()\`) between
 > files. This prevents dictionary state accumulated on file _N_ from
 > compressing file _N+1_ — that state is only useful within a single chat
 > context and would inflate measured savings on standalone files.

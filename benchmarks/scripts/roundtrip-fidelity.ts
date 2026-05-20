@@ -7,8 +7,8 @@ import { parse as parseCSV } from 'csv-parse/sync'
 import { decode as decodeToon } from '@toon-format/toon'
 import { BENCHMARKS_DIR, FORMATTER_DISPLAY_NAMES, ROOT_DIR } from '../src/constants.ts'
 import { ACCURACY_DATASETS, generateEmployees } from '../src/datasets.ts'
-import { formatters, supportsCSV, supportsJTON, supportsTRON } from '../src/formatters.ts'
-import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
+import { formatters, isLoonFormat, LOON_MODES, resetLoonEncoder, supportsCSV, supportsJTON } from '../src/formatters.ts'
+import { loon } from '../../extra-formats/LOON/dist/index.mjs'
 import { ensureDir, getMachineInfo } from '../src/utils.ts'
 
 /**
@@ -47,6 +47,12 @@ interface FidelityResult {
 
 prompts.intro('Roundtrip Fidelity Benchmark (neutral)')
 
+function decodeLoon(encoded: string): unknown {
+  const t = encoded.trimStart()
+  if (t.startsWith('TREE:')) return loon.toTree(encoded)
+  return loon.fromLOON(encoded)
+}
+
 // ── Decoders ─────────────────────────────────────────────────────────────────
 
 const decoders: Record<string, (encoded: string) => unknown> = {
@@ -68,7 +74,11 @@ const decoders: Record<string, (encoded: string) => unknown> = {
     return parseCSV(s, { columns: true, skip_empty_lines: true })
   },
   'toon': s => decodeToon(s),
-  'tron': s => tron.fromTRON(s),
+}
+// LOON decoding is mode-agnostic — `fromLOON` auto-detects the wire format —
+// so every `loon-<mode>` formatter shares the same decoder.
+for (const mode of LOON_MODES) {
+  decoders[`loon-${mode}`] = s => decodeLoon(s)
 }
 
 // ── Datasets to roundtrip ────────────────────────────────────────────────────
@@ -209,10 +219,6 @@ for (const dataset of FIDELITY_DATASETS) {
       }
       ;(fakeDs.metadata as any).supportsCSV = true
     }
-    if (formatName === 'tron' && !supportsTRON(fakeDs)) {
-      results.push({ format: formatName, dataset: dataset.name, ok: false, difference: 'format cannot represent this shape (skipped)' })
-      continue
-    }
     if (formatName === 'jton') {
       // JTON has no TypeScript decoder — roundtrip fidelity cannot be measured.
       if (!supportsJTON(fakeDs)) {
@@ -227,7 +233,7 @@ for (const dataset of FIDELITY_DATASETS) {
     let encoded: string
     try {
       encoded = formatter(dataset.data)
-      tron.reset() // independence between datasets
+      resetLoonEncoder() // independence between datasets
     }
     catch (err) {
       results.push({ format: formatName, dataset: dataset.name, ok: false, encodeError: err instanceof Error ? err.message : String(err) })
@@ -237,18 +243,17 @@ for (const dataset of FIDELITY_DATASETS) {
     let decoded: unknown
     try {
       decoded = decoders[formatName]!(encoded)
-      tron.reset()
+      resetLoonEncoder()
     }
     catch (err) {
       results.push({ format: formatName, dataset: dataset.name, ok: false, decodeError: err instanceof Error ? err.message : String(err) })
       continue
     }
 
-    // TRON strips single-key wrapper objects (e.g. { employees: [...] } → [...])
-    // because it is row-oriented. Compare against the inner array so the
-    // roundtrip is evaluated on the data TRON can actually represent.
+    // LOON row-mode strips single-key wrapper objects (e.g. `{ employees: [...] } → [...]`)
+    // when the formatter selected the inner array; compare against that array.
     let compareTarget: unknown = dataset.data
-    if (formatName === 'tron') {
+    if (isLoonFormat(formatName)) {
       const d = dataset.data as unknown
       if (typeof d === 'object' && d !== null && !Array.isArray(d)) {
         const entries = Object.entries(d)

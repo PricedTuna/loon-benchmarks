@@ -8,15 +8,21 @@ import { generateText } from 'ai'
 import { compareAnswers } from './normalize.ts'
 
 /**
- * Models used for evaluation. Edit freely; the benchmark loops over whatever
- * is present in this array.
+ * Models used for evaluation. Each entry is gated on the presence of its
+ * provider API key, so the benchmark runs with whatever keys are configured
+ * (e.g. only `GOOGLE_GENERATIVE_AI_API_KEY` set → only Gemini runs) instead
+ * of crashing on the first missing-key provider.
  */
-export const models: LanguageModelV3[] = [
-  anthropic('claude-haiku-4-5-20251001'),
-  google('gemini-3-flash-preview'),
-  openai('gpt-5-nano'),
-  xai('grok-4-1-fast-non-reasoning'),
+const ALL_MODELS: { model: LanguageModelV3; envKey: string }[] = [
+  { model: anthropic('claude-haiku-4-5-20251001'), envKey: 'ANTHROPIC_API_KEY' },
+  { model: google('gemini-3-flash-preview'), envKey: 'GOOGLE_GENERATIVE_AI_API_KEY' },
+  { model: openai('gpt-5-nano'), envKey: 'OPENAI_API_KEY' },
+  { model: xai('grok-4-1-fast-non-reasoning'), envKey: 'XAI_API_KEY' },
 ]
+
+export const models: LanguageModelV3[] = ALL_MODELS
+  .filter(m => (process.env[m.envKey] ?? '').trim() !== '')
+  .map(m => m.model)
 
 /**
  * Format primers.
@@ -38,7 +44,7 @@ export const PRIMERS: Record<string, string> = {
   'xml': 'The data below is in XML format.',
   'csv': 'The data below is in CSV format.',
   'toon': 'The data below is in TOON format.',
-  'tron': 'The data below is in TRON format.',
+  'loon': 'The data below is in LOON format.',
 }
 
 /**
@@ -52,7 +58,7 @@ export const FENCE: Record<string, string> = {
   'xml': 'xml',
   'csv': 'csv',
   'toon': 'toon',
-  'tron': 'tron',
+  'loon': 'text',
 }
 
 /**
@@ -81,8 +87,11 @@ export async function evaluateQuestion(
     extraContext?: string
   },
 ): Promise<EvaluationResult> {
-  const primer = PRIMERS[formatName] ?? ''
-  const fence = FENCE[formatName] ?? ''
+  // LOON is exercised in multiple modes (loon-llm, loon-full, …); they all
+  // share the same primer / fence / doc, so normalise to the base name.
+  const baseName = formatName.startsWith('loon') ? 'loon' : formatName
+  const primer = PRIMERS[baseName] ?? ''
+  const fence = FENCE[baseName] ?? ''
 
   const contextBlock = extraContext
     ? `${extraContext.trim()}\n\n---\n\n`

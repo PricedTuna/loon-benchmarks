@@ -4,7 +4,7 @@ import * as path from 'node:path'
 import * as prompts from '@clack/prompts'
 import { BENCHMARKS_DIR, FORMATTER_DISPLAY_NAMES, ROOT_DIR } from '../src/constants.ts'
 import { TOKEN_EFFICIENCY_DATASETS } from '../src/datasets.ts'
-import { formatters, supportsCSV, supportsJTON, supportsTRON } from '../src/formatters.ts'
+import { formatters, resetLoonEncoder, supportsCSV, supportsJTON } from '../src/formatters.ts'
 import { createProgressBar, ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
 
 /**
@@ -17,8 +17,8 @@ import { createProgressBar, ensureDir, getMachineInfo, tokenize } from '../src/u
  *   - All formats are reported with the same delta semantics; no format
  *     receives a leading row, baseline-bar, or "vs CSV" footnote.
  *   - CSV is skipped on datasets where it cannot represent the structure
- *     (`supportsCSV` returns false). Symmetrically, TRON is skipped on
- *     datasets it cannot represent (`supportsTRON`).
+ *     (`supportsCSV` returns false). JTON is skipped on datasets it cannot
+ *     represent (`supportsJTON`).
  *   - Reports are emitted with explicit "n/a" cells for unrepresentable
  *     pairs rather than silently omitting rows.
  */
@@ -60,10 +60,6 @@ for (const dataset of TOKEN_EFFICIENCY_DATASETS) {
       metrics.push({ name: formatName, tokens: null })
       continue
     }
-    if (formatName === 'tron' && !supportsTRON(dataset)) {
-      metrics.push({ name: formatName, tokens: null })
-      continue
-    }
     if (formatName === 'jton' && !supportsJTON(dataset)) {
       metrics.push({ name: formatName, tokens: null })
       continue
@@ -83,6 +79,7 @@ for (const dataset of TOKEN_EFFICIENCY_DATASETS) {
     metrics.push({ name: formatName, tokens })
   }
 
+  resetLoonEncoder()
   results.push({ dataset, metrics })
 }
 

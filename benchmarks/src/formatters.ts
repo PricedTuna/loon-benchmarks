@@ -3,7 +3,6 @@ import { stringify as stringifyCSV } from 'csv-stringify/sync'
 import { XMLBuilder } from 'fast-xml-parser'
 import { stringify as stringifyYAML } from 'yaml'
 import { encode as encodeToon } from '@toon-format/toon'
-import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
 import { loon } from '../../extra-formats/LOON/dist/index.mjs'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
@@ -23,19 +22,21 @@ const PYTHON_ARGS_PREFIX = process.platform === 'win32' ? ['-3.13'] : []
  * @remarks
  * All formatters use upstream/spec-correct encoders. No reimplementations:
  *   - TOON: official `@toon-format/toon` package (real spec, length markers, comma rows)
- *   - TRON: in-repo `tron.toJSON` from Tron-Core
+ *   - LOON: in-repo `loon` from `extra-formats/LOON`, exercised across all of its
+ *     encoding modes (`loon-llm`, `loon-full`, `loon-local`, `loon-compact`) so
+ *     each mode's token / fidelity / throughput characteristics are visible
+ *     side-by-side instead of judging LOON on a single mode.
  *   - JSON/YAML/XML/CSV: standard library encoders
  *
  * Each formatter is a pure function `(data) => string`. The caller is
  * responsible for skipping formatters whose semantics cannot represent
- * the dataset (see `supportsCSV`, `supportsTRON`).
- *
- * Semantic-equivalence note: TRON, like CSV, is row-oriented. Top-level
- * objects whose only meaningful content is a single array of records are
- * encoded directly; deeply nested non-array objects are wrapped as a
- * single-row array so the encoder can still produce output, but this is
- * disclosed to the reader via `supportsTRON()`.
+ * the dataset (see `supportsCSV`, `supportsJTON`).
  */
+
+/** LOON encoding modes exercised by the benchmarks. */
+export const LOON_MODES = ['llm', 'full', 'local', 'compact'] as const
+export type LoonMode = typeof LOON_MODES[number]
+
 export const formatters: Record<string, (data: unknown) => string> = {
   'json-pretty': data => JSON.stringify(data, undefined, 2),
   'json-compact': data => JSON.stringify(data),
@@ -43,9 +44,21 @@ export const formatters: Record<string, (data: unknown) => string> = {
   'xml': data => toXML(data),
   'csv': data => toCSV(data),
   'toon': data => encodeToon(data),
-  'tron': data => toTRON(data),
-  'loon': data => toLOON(data),
+  'loon-llm': data => encodeLoon(data, 'llm'),
+  'loon-full': data => encodeLoon(data, 'full'),
+  'loon-local': data => encodeLoon(data, 'local'),
+  'loon-compact': data => encodeLoon(data, 'compact'),
   'jton': data => toJTON(data),
+}
+
+/** True for any LOON-family formatter id (`loon-llm`, `loon-full`, …). */
+export function isLoonFormat(formatName: string): boolean {
+  return formatName.startsWith('loon')
+}
+
+/** Clears LOON encoder session/schema state between benchmark datasets. */
+export function resetLoonEncoder(): void {
+  loon.reset()
 }
 
 /**
@@ -101,41 +114,44 @@ function toXML(data: unknown): string {
 }
 
 /**
- * Convert data to TRON format using the in-repo encoder.
+ * Encode via in-repo LOON (`extra-formats/LOON`) in a given mode.
  *
  * @remarks
- * TRON is row-oriented like CSV. The encoder accepts an array of records.
- * For a top-level object whose only meaningful payload is a single array
- * of records (the common case here: `{ employees: [...] }`,
- * `{ orders: [...] }`, etc.), we pass that array.
+ * `Loon.toLOON` expects an array of records. Root objects with a single
+ * array property (e.g. `{ employees: [...] }`) use that array. Multi-key
+ * roots pick the longest object-array. Shapes without a representable row
+ * array use `fromTree` so nested configs still produce a LOON string
+ * (adjacency flatten + `TREE:` header).
  *
- * For non-tabular shapes, the encoder is still called on `[data]` so a
- * value can be produced, but `supportsTRON()` returns `false` for those
- * datasets and the runners skip TRON to avoid an apples-to-oranges
- * comparison.
+ * `mode` is threaded through to both `toLOON` and `fromTree` so every LOON
+ * encoding mode is exercised by the benchmark suite.
  */
-function toTRON(data: unknown): string {
-  if (Array.isArray(data)) return tron.toJSON(data)
+function encodeLoon(data: unknown, mode: LoonMode): string {
+  const opts = { mode }
+
+  if (Array.isArray(data)) {
+    return data.length === 0 ? '' : loon.toLOON(data, opts)
+  }
 
   if (typeof data === 'object' && data !== null) {
     const entries = Object.entries(data)
-    if (entries.length === 1 && Array.isArray(entries[0]![1]))
-      return tron.toJSON(entries[0]![1] as any[])
-    // Multi-key root: encode the largest array present.
-    let best: [string, any[]] | null = null
-    for (const [k, v] of entries) {
-      if (Array.isArray(v) && (!best || v.length > best[1].length))
-        best = [k, v as any[]]
+    if (entries.length === 1 && Array.isArray(entries[0]![1])) {
+      const rows = entries[0]![1] as unknown[]
+      return rows.length === 0 ? '' : loon.toLOON(rows as Record<string, unknown>[], opts)
     }
-    if (best) return tron.toJSON(best[1])
-    return tron.toJSON([data as Record<string, unknown>])
+
+    let best: unknown[] | null = null
+    for (const [, v] of entries) {
+      if (Array.isArray(v) && v.length > 0 && typeof v[0] === 'object' && v[0] !== null) {
+        if (!best || v.length > best.length) best = v
+      }
+    }
+    if (best) return loon.toLOON(best as Record<string, unknown>[], opts)
+
+    return loon.fromTree(data, opts)
   }
 
-  return tron.toJSON([{ value: data }])
-}
-
-function toLOON(data: unknown): string {
-  return loon.toJSON(data, { mode: 'llm', target: 'llm' })
+  return loon.toLOON([{ value: data }], opts)
 }
 
 /**
@@ -175,27 +191,18 @@ export function supportsCSV(dataset: Dataset): boolean {
 }
 
 /**
- * TRON is row-oriented. We treat as TRON-eligible any dataset whose top-level
- * payload is an array, or an object with a single key pointing to an array.
- * Deeply nested config-style data is excluded so its result is not used as a
- * headline comparison (it can still be measured separately).
+ * JTON Zen Grid is row-oriented. Eligible when the top-level payload is an
+ * array, or an object with a single key pointing to an array, or any key
+ * with a non-trivial object array (same shape gate historically used for
+ * row-grid encoders).
  */
-export function supportsTRON(dataset: Dataset): boolean {
+export function supportsJTON(dataset: Dataset): boolean {
   const data = dataset.data as unknown
   if (Array.isArray(data)) return true
   if (typeof data === 'object' && data !== null) {
     const entries = Object.entries(data)
     if (entries.length === 1 && Array.isArray(entries[0]![1])) return true
-    // Multi-key root: any key pointing to a non-trivial array qualifies.
     return entries.some(([, v]) => Array.isArray(v) && (v as any[]).length > 5)
   }
   return false
-}
-
-/**
- * JTON Zen Grid is row-oriented, same eligibility rules as TRON.
- * Additionally requires the Python `jton` package to be installed.
- */
-export function supportsJTON(dataset: Dataset): boolean {
-  return supportsTRON(dataset)
 }

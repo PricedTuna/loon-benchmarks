@@ -8,8 +8,9 @@ import { stringify as stringifyYAML, parse as parseYAML } from 'yaml'
 import { encode as encodeToon, decode as decodeToon } from '@toon-format/toon'
 import { BENCHMARKS_DIR, FORMATTER_DISPLAY_NAMES, ROOT_DIR } from '../src/constants.ts'
 import { generateEmployees, generateOrders, generateAnalyticsData } from '../src/datasets.ts'
+import { formatters, LOON_MODES, resetLoonEncoder } from '../src/formatters.ts'
+import { loon } from '../../extra-formats/LOON/dist/index.mjs'
 import { ensureDir, getMachineInfo } from '../src/utils.ts'
-import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
 
 /**
  * Encode/decode throughput benchmark.
@@ -20,7 +21,7 @@ import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
  * to surface the IPC overhead cost.
  *
  * Methodology:
- *   - 3 dataset sizes (small/medium/large) × 6 formats (JSON, YAML, XML, CSV, TOON, TRON)
+ *   - 3 dataset sizes (small/medium/large) × 6 formats (JSON, YAML, XML, CSV, TOON, LOON)
  *   - Encode phase: time N iterations of format(data) → string
  *   - Decode phase: time N iterations of parse(string) → object (where decoder exists)
  *   - Warm-up: 5 iterations discarded before timing
@@ -44,8 +45,6 @@ const MEASURE_ITERS = 50
 
 // ── Format definitions ────────────────────────────────────────────────────────
 
-type FormatId = 'json-compact' | 'json-pretty' | 'yaml' | 'xml' | 'toon' | 'tron'
-
 interface FormatSpec {
   encode: (data: unknown[]) => string
   decode?: (text: string) => unknown
@@ -54,7 +53,13 @@ interface FormatSpec {
 const xmlBuilder = new XMLBuilder({ format: false, suppressEmptyNode: true })
 const xmlParser = new XMLParser({ ignoreAttributes: false })
 
-const FORMATS: Record<FormatId, FormatSpec> = {
+function decodeLoonThroughput(text: string): unknown {
+  const t = text.trimStart()
+  if (t.startsWith('TREE:')) return loon.toTree(text)
+  return loon.fromLOON(text)
+}
+
+const FORMATS: Record<string, FormatSpec> = {
   'json-compact': {
     encode: data => JSON.stringify(data),
     decode: text => JSON.parse(text),
@@ -75,11 +80,23 @@ const FORMATS: Record<FormatId, FormatSpec> = {
     encode: data => encodeToon(data),
     decode: text => decodeToon(text),
   },
-  'tron': {
-    encode: (data) => { tron.reset(); return tron.toJSON(data as Record<string, unknown>[]) },
-    decode: text => tron.fromTRON(text),
-  },
 }
+
+// One FormatSpec per LOON mode so encode/decode throughput is measured for
+// each mode rather than only `llm`. Decode is mode-agnostic (`fromLOON`
+// auto-detects the wire format).
+for (const mode of LOON_MODES) {
+  const formatterId = `loon-${mode}`
+  FORMATS[formatterId] = {
+    encode: (data: unknown[]) => {
+      resetLoonEncoder()
+      return formatters[formatterId]!(data)
+    },
+    decode: (text: string) => decodeLoonThroughput(text),
+  }
+}
+
+type FormatId = string
 
 // ── Timer ─────────────────────────────────────────────────────────────────────
 

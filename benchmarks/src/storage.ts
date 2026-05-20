@@ -17,6 +17,24 @@ export const resultsStorage: Storage<StorageValue> = createStorage({
   }),
 })
 
+/**
+ * Storage for the with-format-context accuracy run.
+ *
+ * @remarks
+ * Kept in a SEPARATE directory (`results/accuracy/models-with-context/`) so
+ * the with-spec run does not clobber the no-spec results, and so the no-spec
+ * report's `getAllModelResults()` does not accidentally pick them up.
+ */
+export const contextResultsStorage: Storage<StorageValue> = createStorage({
+  driver: fsDriver({
+    base: path.join(BENCHMARKS_DIR, 'results', 'accuracy', 'models-with-context'),
+  }),
+})
+
+export async function saveContextModelResults(modelId: string, results: EvaluationResult[]): Promise<void> {
+  await contextResultsStorage.setItem(modelId, results)
+}
+
 export async function loadModelResults(modelId: string): Promise<EvaluationResult[] | undefined> {
   const data = await resultsStorage.getItem<EvaluationResult[]>(modelId)
   return data ?? undefined

@@ -8,7 +8,7 @@ import { generateText } from 'ai'
 import { BENCHMARKS_DIR, DEFAULT_CONCURRENCY, DRY_RUN, FORMATTER_DISPLAY_NAMES, MODEL_RPM_LIMITS, ROOT_DIR } from '../src/constants.ts'
 import { generateEmployees, generateEventLogs, generateOrders } from '../src/datasets.ts'
 import { models, PRIMERS } from '../src/evaluate.ts'
-import { formatters, supportsCSV, supportsTRON } from '../src/formatters.ts'
+import { formatters, supportsCSV } from '../src/formatters.ts'
 import { ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
 
 /**
@@ -42,7 +42,7 @@ interface Task {
   payload: unknown
   /**
    * The shape class controls which formats are skipped. A `flat-array` task
-   * is representable by every format including CSV and TRON; a `nested`
+   * is representable by every format including CSV; a `nested`
    * task skips both.
    */
   shape: 'flat-array' | 'flat-object-array' | 'nested'
@@ -166,14 +166,6 @@ function isFormatApplicable(formatName: string, task: Task): boolean {
       description: '',
       data: task.payload as Record<string, any>,
       metadata: { supportsCSV: true, structureClass: 'uniform', tabularEligibility: 100 },
-    })
-  }
-  if (formatName === 'tron') {
-    return supportsTRON({
-      name: 'task' as any,
-      description: '',
-      data: task.payload as Record<string, any>,
-      metadata: { supportsCSV: false, structureClass: 'uniform', tabularEligibility: 100 },
     })
   }
   return true

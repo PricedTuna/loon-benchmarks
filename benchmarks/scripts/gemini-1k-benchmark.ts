@@ -11,7 +11,7 @@ import { BENCHMARKS_DIR, ROOT_DIR } from '../src/constants.ts'
 import { ensureDir, getMachineInfo } from '../src/utils.ts'
 import fsDriver from 'unstorage/drivers/fs'
 import { createStorage } from 'unstorage'
-import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
+import { formatters, resetLoonEncoder } from '../src/formatters.ts'
 
 /**
  * Gemini multi-dataset benchmark.
@@ -244,45 +244,35 @@ if (datasets.length === 0) {
   process.exit(1)
 }
 
-// ── TRON format spec (for tron-llm context) ───────────────────────────────────
+// ── LOON format spec (for loon-spec / session context) ───────────────────────
 
-const TRON_SPEC = await fsp.readFile(
-  path.join(BENCHMARKS_DIR, 'format-docs', 'tron.md'),
+const LOON_SPEC = await fsp.readFile(
+  path.join(BENCHMARKS_DIR, 'format-docs', 'loon.md'),
   'utf-8',
 )
 
 // ── Format encoders ───────────────────────────────────────────────────────────
 
-// TRON 2×2 matrix + warm-up strategy comparison:
+// LOON × spec × session matrix:
 //
-//   Encoding mode × Spec context × Warm-up strategy
+//   per-call  = data only or spec+data in one prompt
+//   session   = spec+data as first turn; question as second turn
+//               (simulates prompt-caching / session reuse)
 //
-//   per-call  = spec + data bundled into every prompt (stateless, worst-case cost)
-//   session   = spec + data sent as first turn; question as second turn
-//               (simulates prompt-caching / session reuse — same API cost on stateless
-//                Gemini, but reflects real savings with Anthropic cache or Gemini
-//                Context Caching enabled)
-//
-//   tron              = transmission, no spec,  per-call
-//   tron-spec         = transmission + spec,    per-call
-//   tron-llm          = llm mode,    no spec,   per-call
-//   tron-llm-spec     = llm mode   + spec,      per-call   ← recommended
-//   tron-spec-session = transmission + spec,    session
-//   tron-llm-spec-session = llm mode + spec,   session
+//   loon              = llm mode, no spec,    per-call
+//   loon-spec         = llm mode + spec,      per-call
+//   loon-spec-session = llm mode + spec,      session
 type FormatId =
   | 'json-compact'
   | 'yaml'
   | 'csv'
   | 'toon'
-  | 'tron'
-  | 'tron-spec'
-  | 'tron-llm'
-  | 'tron-llm-spec'
-  | 'tron-spec-session'
-  | 'tron-llm-spec-session'
+  | 'loon'
+  | 'loon-spec'
+  | 'loon-spec-session'
 
 // Session formats use multi-turn messages (spec+data as prior turn, question as new turn)
-const SESSION_FORMATS = new Set<FormatId>(['tron-spec-session', 'tron-llm-spec-session'])
+const SESSION_FORMATS = new Set<FormatId>(['loon-spec-session'])
 
 
 function encodeFormat(id: FormatId, rows: unknown[]): string {
@@ -291,17 +281,11 @@ function encodeFormat(id: FormatId, rows: unknown[]): string {
     case 'yaml': return stringifyYAML(rows)
     case 'csv': return stringifyCSV(rows as object[], { header: true })
     case 'toon': return encodeToon(rows)
-    case 'tron':
-    case 'tron-spec':
-    case 'tron-spec-session': {
-      tron.reset()
-      return tron.toJSON(rows as Record<string, unknown>[])
-    }
-    case 'tron-llm':
-    case 'tron-llm-spec':
-    case 'tron-llm-spec-session': {
-      tron.reset()
-      return tron.toJSON(rows as Record<string, unknown>[], { mode: 'adaptive', target: 'llm' })
+    case 'loon':
+    case 'loon-spec':
+    case 'loon-spec-session': {
+      resetLoonEncoder()
+      return formatters['loon-llm'](rows)
     }
   }
 }
@@ -311,12 +295,9 @@ const FORMAT_LABELS: Record<FormatId, string> = {
   'yaml': 'YAML',
   'csv': 'CSV',
   'toon': 'TOON',
-  'tron': 'TRON (transmission)',
-  'tron-spec': 'TRON (transmission + spec, per-call)',
-  'tron-llm': 'TRON (llm mode)',
-  'tron-llm-spec': 'TRON (llm mode + spec, per-call)',
-  'tron-spec-session': 'TRON (transmission + spec, session)',
-  'tron-llm-spec-session': 'TRON (llm mode + spec, session)',
+  'loon': 'LOON (llm mode, per-call)',
+  'loon-spec': 'LOON (llm mode + spec, per-call)',
+  'loon-spec-session': 'LOON (llm mode + spec, session)',
 }
 
 const FORMAT_PRIMERS: Record<FormatId, string> = {
@@ -324,12 +305,9 @@ const FORMAT_PRIMERS: Record<FormatId, string> = {
   'yaml': 'The data below is in YAML format.',
   'csv': 'The data below is in CSV format.',
   'toon': 'The data below is in TOON format.',
-  'tron': 'The data below is in TRON format.',
-  'tron-spec': 'The data below is in TRON format.',
-  'tron-llm': 'The data below is in TRON format.',
-  'tron-llm-spec': 'The data below is in TRON format.',
-  'tron-spec-session': 'The data below is in TRON format.',
-  'tron-llm-spec-session': 'The data below is in TRON format.',
+  'loon': 'The data below is in LOON format.',
+  'loon-spec': 'The data below is in LOON format.',
+  'loon-spec-session': 'The data below is in LOON format.',
 }
 
 const FORMAT_FENCE: Record<FormatId, string> = {
@@ -337,20 +315,15 @@ const FORMAT_FENCE: Record<FormatId, string> = {
   'yaml': 'yaml',
   'csv': 'csv',
   'toon': 'toon',
-  'tron': 'tron',
-  'tron-spec': 'tron',
-  'tron-llm': 'tron',
-  'tron-llm-spec': 'tron',
-  'tron-spec-session': 'tron',
-  'tron-llm-spec-session': 'tron',
+  'loon': 'text',
+  'loon-spec': 'text',
+  'loon-spec-session': 'text',
 }
 
-// Formats that include the TRON spec as context
+// Formats that include the LOON spec as context
 const FORMAT_CONTEXT_PREFIX: Partial<Record<FormatId, string>> = {
-  'tron-spec': TRON_SPEC,
-  'tron-llm-spec': TRON_SPEC,
-  'tron-spec-session': TRON_SPEC,
-  'tron-llm-spec-session': TRON_SPEC,
+  'loon-spec': LOON_SPEC,
+  'loon-spec-session': LOON_SPEC,
 }
 
 const FORMAT_IDS: FormatId[] = [
@@ -358,12 +331,9 @@ const FORMAT_IDS: FormatId[] = [
   'yaml',
   'csv',
   'toon',
-  'tron',
-  'tron-spec',
-  'tron-llm',
-  'tron-llm-spec',
-  'tron-spec-session',
-  'tron-llm-spec-session',
+  'loon',
+  'loon-spec',
+  'loon-spec-session',
 ]
 
 // ── Answer comparison ─────────────────────────────────────────────────────────

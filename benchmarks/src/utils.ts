@@ -31,20 +31,26 @@ const PYTHON_ARGS_PREFIX = process.platform === 'win32' ? ['-3.13'] : []
  *   2. benchmarks/t5_tokenizer.model     — google-t5/t5-base (public, 32k vocab).
  *      Auto-downloaded on first run. Expected error: ±15%.
  */
-export type TokenizerId = 'gpt' | 'gpt4' | 'claude' | 'gemini'
+export type TokenizerId = 'gpt' | 'gpt4' | 'claude' | 'gemini' | 'llama3' | 'qwen3' | 'gemma3'
 
 export const TOKENIZER_LABELS: Record<TokenizerId, string> = {
   gpt: 'GPT-4o (o200k)',
   gpt4: 'GPT-4 (cl100k)',
-  claude: 'Claude (≈±5%)',
-  gemini: 'Gemini (SentencePiece)',
+  claude: 'Claude (lenml)',
+  gemini: 'Gemini (lenml)',
+  llama3: 'Llama 3.2 (local)',
+  qwen3: 'Qwen3 (local)',
+  gemma3: 'Gemma 3 (local)',
 }
 
 export const TOKENIZER_NOTES: Record<TokenizerId, string> = {
   gpt: 'exact — OpenAI tiktoken o200k_base',
   gpt4: 'exact — OpenAI tiktoken cl100k_base',
-  claude: 'approximate ±5% — @anthropic-ai/tokenizer community build',
-  gemini: 'approximate — SentencePiece bridge (Gemma ±3% if model present, T5 ±15% fallback)',
+  claude: 'exact — @lenml/tokenizer-claude (HuggingFace bundle)',
+  gemini: 'exact — @lenml/tokenizer-gemini (HuggingFace bundle)',
+  llama3: 'exact — @lenml/tokenizer-llama3_2 (representative local model)',
+  qwen3: 'exact — @lenml/tokenizer-qwen3 (representative local model)',
+  gemma3: 'exact — @lenml/tokenizer-gemma3 (representative local model)',
 }
 
 // ── Lazy initializers ────────────────────────────────────────────────────────
@@ -58,38 +64,17 @@ async function getTiktokenGpt4() {
   return _tiktokenGpt4
 }
 
-let _anthropicTokenizer: ((text: string) => number) | null = null
+// Lazy-init cache for lenml tokenizers. Each `fromPreTrained()` loads a
+// bundled HuggingFace tokenizer JSON (deterministic, no network, no Python).
+const _lenmlCache: Record<string, ((text: string) => number) | null> = {}
 
-async function getClaudeTokenizer(): Promise<(text: string) => number> {
-  if (_anthropicTokenizer) return _anthropicTokenizer
-  try {
-    const m = await import('@anthropic-ai/tokenizer')
-    const fn = m.countTokens ?? m.default?.countTokens
-    if (typeof fn !== 'function') throw new Error('countTokens not found')
-    _anthropicTokenizer = (text: string) => fn(text) as number
-  }
-  catch {
-    // Fallback: cl100k_base is a reasonable Claude proxy (±5%)
-    const { encoding_for_model } = await import('tiktoken')
-    const enc = encoding_for_model('gpt-4')
-    _anthropicTokenizer = (text: string) => enc.encode(text).length
-  }
-  return _anthropicTokenizer!
-}
-
-/**
- * Tokenize via the Python SentencePiece bridge.
- * Returns null if the bridge is unavailable (Python not installed, bridge error).
- */
-function tokenizeGeminiSentencePiece(text: string): number | null {
-  const result = spawnSync(PYTHON_CMD, [...PYTHON_ARGS_PREFIX, SP_BRIDGE], {
-    input: text,
-    encoding: 'utf-8',
-    maxBuffer: 64 * 1024 * 1024,
-  })
-  if (result.error || result.status !== 0) return null
-  const n = parseInt(result.stdout.trim(), 10)
-  return Number.isFinite(n) ? n : null
+async function getLenmlTokenizer(pkg: string): Promise<(text: string) => number> {
+  if (_lenmlCache[pkg]) return _lenmlCache[pkg]!
+  const m = await import(pkg)
+  const tk = m.fromPreTrained()
+  const fn = (text: string) => tk.encode(text).length
+  _lenmlCache[pkg] = fn
+  return fn
 }
 
 // ── Public API ────────────────────────────────────────────────────────────────
@@ -117,13 +102,20 @@ export async function tokenizeWith(text: string, id: TokenizerId): Promise<numbe
         return enc.encode(text).length
       }
 
-      case 'claude': {
-        const fn = await getClaudeTokenizer()
-        return fn(text)
-      }
+      case 'claude':
+        return (await getLenmlTokenizer('@lenml/tokenizer-claude'))(text)
 
       case 'gemini':
-        return tokenizeGeminiSentencePiece(text)
+        return (await getLenmlTokenizer('@lenml/tokenizer-gemini'))(text)
+
+      case 'llama3':
+        return (await getLenmlTokenizer('@lenml/tokenizer-llama3_2'))(text)
+
+      case 'qwen3':
+        return (await getLenmlTokenizer('@lenml/tokenizer-qwen3'))(text)
+
+      case 'gemma3':
+        return (await getLenmlTokenizer('@lenml/tokenizer-gemma3'))(text)
     }
   }
   catch {
@@ -135,7 +127,7 @@ export async function tokenizeWith(text: string, id: TokenizerId): Promise<numbe
  * Count tokens across all supported tokenizers in one pass.
  */
 export async function tokenizeAll(text: string): Promise<Record<TokenizerId, number | null>> {
-  const ids: TokenizerId[] = ['gpt', 'gpt4', 'claude', 'gemini']
+  const ids: TokenizerId[] = ['gpt', 'gpt4', 'claude', 'gemini', 'llama3', 'qwen3', 'gemma3']
   const entries = await Promise.all(ids.map(async id => [id, await tokenizeWith(text, id)] as const))
   return Object.fromEntries(entries) as Record<TokenizerId, number | null>
 }

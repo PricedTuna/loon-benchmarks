@@ -35,15 +35,6 @@
  */
 type LoonMode = 'compact' | 'full' | 'llm' | 'local' | 'compat' | 'adaptive' | 'micro' | 'json';
 /**
- * Adaptive-mode target.
- *
- * @deprecated Use `mode` directly instead:
- *   - `mode: 'full'`  replaces `mode: 'adaptive', target: 'transmission'`
- *   - `mode: 'llm'`   replaces `mode: 'adaptive', target: 'llm'`
- *   - `mode: 'local'` replaces `mode: 'adaptive', target: 'local'`
- */
-type LoonTarget = 'transmission' | 'llm' | 'local';
-/**
  * Options forwarded to the tree codec when calling `Loon.fromTree` /
  * `Loon.toTree`.  Matches `TreeCodecOptions` in `codecs/tree.ts`; re-exported
  * here so callers can import everything from one place.
@@ -65,15 +56,12 @@ interface TreeCodecOptions$1 {
  * Public encoder options.
  *
  * The encoder makes its own decisions about constants, sequences, RLE,
- * dictionaries, and so on. The two knobs exposed here are `mode` (force
- * compact or adaptive) and `target` (within adaptive, choose between
- * minimum-token transmission output and LLM-safe output).
+ * dictionaries, and so on. The user-facing knob is `mode` — pick one of
+ * `full | llm | local | compat | compact` based on the consumer.
  */
 interface LoonOptions {
     /** Force a specific encoding mode. Auto-selected when omitted. */
     mode?: LoonMode;
-    /** Adaptive-mode target. Defaults to `transmission`. */
-    target?: LoonTarget;
     /** Schema identifier used inside the encoded payload. Defaults to `T1`. */
     tableId?: string;
     /** XML codec only: override the auto-detected row element name. */
@@ -88,6 +76,27 @@ interface LoonOptions {
      * `true` = auto-detect all float columns. `string[]` = specific columns only.
      */
     norm?: boolean | string[];
+    /**
+     * Emit a schema checkpoint comment (`#CKP:col=full,...`) every N data rows.
+     * Helps LLMs re-anchor column names mid-payload, reducing drift and hallucinations.
+     * Has no effect on decoding — the checkpoint lines are skipped by the decoder.
+     * Recommended: 50 for large datasets sent to LLMs.
+     */
+    checkpointEvery?: number;
+    /**
+     * Emit a decoded row anchor (`#ANCHOR:rowN=[col:val,...]`) every N data rows.
+     * Mitigates the "lost-in-the-middle" attention bias — gives the LLM concrete
+     * decoded values to verify its decoding mid-payload. Costs ~1 row of tokens
+     * per anchor. The decoder skips these lines. Recommended: 100 for very long
+     * payloads sent to non-reasoning models.
+     */
+    anchorMidPayload?: number;
+    /**
+     * Columns that are semantically critical — moved to the front of each row
+     * and encoded with human-readable decimal (never Base36) for better LLM
+     * reasoning and less aggressive compression.
+     */
+    primaryCols?: string[];
     /**
      * File path to save the encoded output to. If provided, the encoded string
      * will be saved to this file before being returned. (Node.js environments only).
@@ -120,18 +129,27 @@ declare function repairHint(loonString: string, errors: ValidationError[]): stri
 /**
  * Session manager.
  *
- * Stateful encoding for multi-call LLM sessions. The schema headers are
- * encoded once and cached; subsequent batches send only the data rows,
- * which the LLM decodes using the schema already present in its context.
+ * Stateful encoding for multi-call LLM sessions. The decode spec and schema
+ * headers are encoded once and placed in the cacheable prompt prefix;
+ * subsequent batches send only the data rows, which the LLM decodes using the
+ * spec + schema already present in its context window.
+ *
+ * Why this works: an LLM call is stateless, but providers cache an identical
+ * prompt PREFIX (Anthropic/OpenAI/Google prompt caching) and bill it at a
+ * fraction of the normal rate. Structuring the prompt as
+ *   [ cacheable: spec + schema ]  +  [ variable: data rows ]
+ * means the decode rules are paid once and every later call costs only the
+ * dense data block. In a single multi-turn conversation the same holds:
+ * turn 1 carries spec + schema + data; turns 2+ carry data only.
  *
  * @example
  *   const s = new LoonSession();
- *   const init = s.init(firstBatch, { mode: 'adaptive', target: 'llm' });
- *   // Inject `init.schema` into the system prompt once; send `init.dataBlock`
- *   // with the first user message.
+ *   s.init(firstBatch, { mode: 'full' });
+ *   // System prompt (cache it): s.primer   ← getSpec() + schema headers
+ *   // User message 1:           s.dataBlock
  *   for (const batch of subsequentBatches) {
- *     const rows = s.encodeRows(batch);
- *     // Send only `rows.dataBlock`; the schema is already in the LLM context.
+ *     // User message N: just the rows — spec + schema already in context.
+ *     send(s.encodeRows(batch).dataBlock);
  *   }
  */
 
@@ -156,6 +174,15 @@ declare class LoonSession {
     get schema(): string;
     /** Number of bytes in the schema block. */
     get schemaBytes(): number;
+    /** Data rows of the batch passed to {@link init}. */
+    get dataBlock(): string;
+    /**
+     * The complete cacheable prompt prefix: the minimal decode spec
+     * (`getSpec()`) followed by the schema headers. Put this in the system
+     * prompt (and mark it for prompt caching); every subsequent call then only
+     * carries a {@link dataBlock}. Paid once, reused for the whole session.
+     */
+    get primer(): string;
     /**
      * Encodes a new batch. Returns ONLY the data rows block (no schema headers).
      * The LLM decodes them using the schema already in its context window.
@@ -230,6 +257,12 @@ interface TreeMeta {
     isArray: boolean;
     idCol: string;
     pidCol: string;
+    /**
+     * When true, the payload is a flat LOON record (no adjacency list). Used
+     * when the input is a single heterogeneous object whose union schema would
+     * be too sparse for the adjacency layout to amortize.
+     */
+    flat?: boolean;
 }
 /** Options for tree encoding. */
 interface TreeCodecOptions {
@@ -307,13 +340,19 @@ declare class TreeCodec {
  * LOON Core — public API.
  *
  * Encodes structured data (JSON arrays, CSV, XML, YAML) into the LOON
- * format and decodes it back. Five encoding modes:
+ * format and decodes it back. Three primary encoding modes:
  *
- *   - `full`    — maximum compression for APIs/services.
- *   - `llm`     — optimized for reasoning LLMs (GPT-4, Claude, Gemini).
- *   - `local`   — plain decimal for small/local models.
- *   - `compat`  — JSON-hybrid, works with any model.
- *   - `compact` — label-based, for small/non-uniform data.
+ *   - `full`    — maximum compression (Base36, sequences, dictionaries,
+ *                 suffixes). Pair with `getSpec()` for LLM use.
+ *   - `llm`     — readable: plain decimal, schema + literal rows + `AS:`
+ *                 tables. No Base36 / sequences / dictionaries / anchor, so
+ *                 it is self-evident to any model — cloud or local — without
+ *                 a spec. (The former `local` mode folds into this.)
+ *   - `compact` — label-based key:value / indent, for small / non-uniform
+ *                 data and single deep objects.
+ *
+ * `compat` (JSON-hybrid) remains as a maximum-compatibility escape hatch.
+ * `local` is accepted as a deprecated alias of `llm`.
  */
 
 declare class Loon {
@@ -337,9 +376,15 @@ declare class Loon {
      *
      * If `mode` is omitted, it is auto-selected from dataset shape.
      */
-    toJSON(json: any[], options?: LoonOptions): string;
+    toLOON(json: any[], options?: LoonOptions): string;
     /** Decodes a LOON string back into a JSON array. */
     fromLOON(loon: string): any[];
+    /** Alias for {@link toLOON}. */
+    encode(json: any[], options?: LoonOptions): string;
+    /** Alias for {@link fromLOON}. */
+    decode(loon: string): any[];
+    /** @deprecated Use {@link toLOON} instead. */
+    toJSON(json: any[], options?: LoonOptions): string;
     /** Parses a CSV string and encodes it as LOON. */
     fromCSV(csv: string, options?: LoonOptions): string;
     /** Decodes a LOON string and serializes it as CSV. */
@@ -369,7 +414,7 @@ declare class Loon {
      *
      * @example
      *   const l = new Loon();
-     *   const encoded = l.fromTree(domRoot, { target: 'llm' });
+     *   const encoded = l.fromTree(domRoot, { mode: 'llm' });
      *   const back = l.toTree(encoded);  // exact round-trip
      */
     fromTree(input: any | any[], opts?: TreeCodecOptions$1 & LoonOptions): string;
@@ -440,4 +485,4 @@ declare class Loon {
 /** Default singleton — convenient for one-off calls. */
 declare const loon: Loon;
 
-export { Loon, type LoonMode, type LoonOptions, LoonSession, type LoonSpecResult, type LoonTarget, TreeCodec, type TreeCodecOptions$1 as TreeCodecOptions, TreeDecodeError, TreeEncodeError, type TreeMeta, type ValidationError, type ValidationResult, getSpec, loon, repairHint, splitLoon, validateDecode };
+export { Loon, type LoonMode, type LoonOptions, LoonSession, type LoonSpecResult, TreeCodec, type TreeCodecOptions$1 as TreeCodecOptions, TreeDecodeError, TreeEncodeError, type TreeMeta, type ValidationError, type ValidationResult, getSpec, loon, repairHint, splitLoon, validateDecode };

@@ -60,10 +60,35 @@ export function calculateFormatResults(
     const totalCount = formatResults.length
     const accuracy = correctCount / totalCount
 
-    // Calculate average tokens across all datasets for this format
-    const formatTokenEntries = Object.entries(tokenCounts)
-      .filter(([key]) => key.startsWith(`${formatName}-`))
-    const avgTokens = formatTokenEntries.reduce((sum, [, tokens]) => sum + tokens, 0) / formatTokenEntries.length
+    // Token cost = the REAL billed tokens the model reported (input + output),
+    // averaged per question. This is what the provider actually charges.
+    //
+    // Earlier this used `tokenCounts` — a re-tokenization of just the encoded
+    // payload with gpt-tokenizer. That hid the dominant cost: a format the
+    // model struggles to parse burns thousands of *output* (reasoning) tokens.
+    // e.g. `loon-full` without a spec re-tokenizes small (~3.3k payload) but
+    // actually costs ~6.7k billed because the model reasons ~16× harder.
+    // `tokenCounts` is still passed for the per-dataset breakdown table.
+    let billedSum = 0
+    let billedN = 0
+    for (const r of formatResults) {
+      const inp = r.inputTokens ?? 0
+      const out = r.outputTokens ?? 0
+      if (inp > 0 || out > 0) { billedSum += inp + out; billedN++ }
+    }
+    // Fall back to the re-tokenized payload only if the model never reported
+    // usage (e.g. a dry static run with no API calls).
+    let avgTokens: number
+    if (billedN > 0) {
+      avgTokens = billedSum / billedN
+    }
+    else {
+      const formatTokenEntries = Object.entries(tokenCounts)
+        .filter(([key]) => key.startsWith(`${formatName}-`))
+      avgTokens = formatTokenEntries.length > 0
+        ? formatTokenEntries.reduce((sum, [, tokens]) => sum + tokens, 0) / formatTokenEntries.length
+        : 0
+    }
 
     const averageLatency = formatResults.reduce((sum, r) => sum + r.latencyMs, 0) / totalCount
 
@@ -152,14 +177,13 @@ function generateEfficiencyRankingReport(
   modelCount: number,
 ): string {
   const csv = formatResults.find(r => r.format === 'csv')
-  const tron = formatResults.find(r => r.format === 'tron')
 
   // Build efficiency ranking (accuracy per 1k tokens).
-  // CSV and TRON are excluded from the headline ranking because they cannot
-  // represent the deeply-nested config dataset and so are scored on a strict
-  // subset of the questions; this would not be an apples-to-apples comparison.
-  // Their per-dataset numbers are still reported in the breakdown tables.
-  const partialCoverageFormats = new Set(['csv', 'tron'])
+  // CSV is excluded from the headline ranking because it cannot represent nested
+  // datasets and so is scored on a strict subset of the questions; this would
+  // not be an apples-to-apples comparison. Per-dataset numbers are still
+  // reported in the breakdown tables.
+  const partialCoverageFormats = new Set(['csv'])
   const efficiencyRanking = formatResults
     .filter(fr => !partialCoverageFormats.has(fr.format))
     .map((fr) => {
@@ -177,15 +201,10 @@ function generateEfficiencyRankingReport(
     ? generateVerticalEfficiencyChart(efficiencyRanking)
     : generateHorizontalEfficiencyChart(efficiencyRanking)
 
-  // Coverage notes for excluded formats — symmetrical for CSV and TRON.
   const coverageNotes: string[] = []
   if (csv) {
     const csvQuestionCount = csv.totalCount / modelCount
     coverageNotes.push(`**Note on CSV:** Excluded from the headline ranking; CSV cannot represent nested data, so it answers ${csvQuestionCount} of ${totalQuestions} questions. Per-dataset accuracy is reported below.`)
-  }
-  if (tron) {
-    const tronQuestionCount = tron.totalCount / modelCount
-    coverageNotes.push(`**Note on TRON:** Excluded from the headline ranking; the row-oriented TRON format does not natively encode the deeply-nested config dataset, so it answers ${tronQuestionCount} of ${totalQuestions} questions. Per-dataset accuracy is reported below.`)
   }
 
   return `

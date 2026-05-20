@@ -8,9 +8,11 @@ import { BENCHMARKS_DIR, DEFAULT_CONCURRENCY, DRY_RUN, DRY_RUN_LIMITS, FORMATTER
 import { ACCURACY_DATASETS } from '../src/datasets.ts'
 import { evaluateQuestion, models } from '../src/evaluate.ts'
 import { contextSourcePath, countContextTokens, loadFormatContext } from '../src/format-context.ts'
-import { formatters, supportsCSV, supportsTRON } from '../src/formatters.ts'
+import { formatters, isLoonFormat, supportsCSV } from '../src/formatters.ts'
 import { generateQuestions } from '../src/questions/index.ts'
+import { saveContextModelResults } from '../src/storage.ts'
 import { ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
+import { getSpec } from '../../extra-formats/LOON/dist/index.mjs'
 
 /**
  * Retrieval-accuracy benchmark **with format context**.
@@ -19,7 +21,7 @@ import { ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
  * Same setup as `accuracy-benchmark.ts`, with one difference: each prompt is
  * preceded by the format's canonical LLM-facing documentation (markdown).
  *
- *   - TRON  → \`format-docs/tron.md\`  (≈ Tron-Core's LLM_INSTRUCTIONS.md)
+ *   - LOON  → \`format-docs/loon.md\`
  *   - TOON  → \`format-docs/toon.md\`  (≈ toon's docs/guide/llm-prompts.md)
  *   - JSON / YAML / XML / CSV → short paragraph-level primer.
  *
@@ -69,8 +71,6 @@ function generateEvaluationTasks(questions: Question[]): { question: Question, f
     for (const formatName of Object.keys(formatters)) {
       if (formatName === 'csv' && dataset && !supportsCSV(dataset))
         continue
-      if (formatName === 'tron' && dataset && !supportsTRON(dataset))
-        continue
       tasks.push({ question, formatName })
     }
   }
@@ -102,15 +102,26 @@ function createProgressUpdater(spinner: ReturnType<typeof prompts.spinner>, tota
 
 const modelChoices = models.map(({ modelId }) => ({ value: modelId, label: modelId }))
 
-const selectedModels = await prompts.multiselect({
-  message: 'Select models to benchmark (Space to select, Enter to confirm)',
-  options: modelChoices,
-  required: true,
-})
-
-if (prompts.isCancel(selectedModels)) {
-  prompts.cancel('Benchmark cancelled')
-  process.exit(0)
+// Non-interactive override via `BENCH_MODELS` (comma-separated ids, or "all")
+// so the benchmark runs in CI / scripted environments without a TTY.
+let selectedModels: string[]
+const envModels = (process.env.BENCH_MODELS ?? '').trim()
+if (envModels) {
+  selectedModels = envModels === 'all'
+    ? models.map(m => m.modelId)
+    : envModels.split(',').map(s => s.trim()).filter(Boolean)
+}
+else {
+  const picked = await prompts.multiselect({
+    message: 'Select models to benchmark (Space to select, Enter to confirm)',
+    options: modelChoices,
+    required: true,
+  })
+  if (prompts.isCancel(picked)) {
+    prompts.cancel('Benchmark cancelled')
+    process.exit(0)
+  }
+  selectedModels = picked as string[]
 }
 
 const activeModels = models.filter(m => selectedModels.includes(m.modelId))
@@ -128,6 +139,8 @@ interface RunRecord {
   questionId: string
   format: string
   model: string
+  expected: string
+  actual: string
   isCorrect: boolean
   inputTokens: number | undefined
   outputTokens: number | undefined
@@ -154,12 +167,22 @@ for (const model of activeModels) {
     const formattedData = formatter(dataset.data)
     const payloadTokens = tokenize(formattedData)
 
+    // LOON ships a per-payload decode spec via getSpec(): minimal (only the
+    // sections the payload actually uses) and always in sync with the encoder,
+    // unlike a hand-maintained static doc. Other formats keep their static doc.
+    let extraContext = contextByFormat[task.formatName]
+    let contextTokens = contextTokensByFormat[task.formatName] ?? 0
+    if (isLoonFormat(task.formatName) && formattedData) {
+      extraContext = getSpec(formattedData).text
+      contextTokens = tokenize(extraContext)
+    }
+
     const result = await evaluateQuestion({
       question: task.question,
       formatName: task.formatName,
       formattedData,
       model,
-      extraContext: contextByFormat[task.formatName],
+      extraContext,
     })
 
     updateProgress()
@@ -168,19 +191,38 @@ for (const model of activeModels) {
       questionId: result.questionId,
       format: result.format,
       model: result.model,
+      expected: result.expected,
+      actual: result.actual,
       isCorrect: result.isCorrect,
       inputTokens: result.inputTokens,
       outputTokens: result.outputTokens,
       latencyMs: result.latencyMs,
       payloadTokens,
-      contextTokens: contextTokensByFormat[task.formatName] ?? 0,
+      contextTokens,
     }
     return run
   }) as Promise<RunRecord | null>)
 
   const settled = await Promise.all(runPromises)
   spinner.stop(`Done for ${model.modelId}`)
-  for (const r of settled) if (r) allRuns.push(r)
+  const modelRuns: RunRecord[] = []
+  for (const r of settled) if (r) { allRuns.push(r); modelRuns.push(r) }
+
+  // Persist per-question records to a SEPARATE storage directory
+  // (`results/accuracy/models-with-context/`) so the with-spec run never
+  // clobbers the no-spec `accuracy-benchmark.ts` results and the no-spec
+  // report does not accidentally pick them up.
+  await saveContextModelResults(model.modelId, modelRuns.map(r => ({
+    questionId: r.questionId,
+    format: r.format,
+    model: r.model,
+    expected: r.expected,
+    actual: r.actual,
+    isCorrect: r.isCorrect,
+    inputTokens: r.inputTokens,
+    outputTokens: r.outputTokens,
+    latencyMs: r.latencyMs,
+  })))
 }
 
 // ── Report ──────────────────────────────────────────────────────────────────
@@ -212,9 +254,13 @@ function summarizeByFormat(): FormatSummary[] {
     const avgPayloadTokens = rs.reduce((s, r) => s + r.payloadTokens, 0) / total
     const avgInputTokens = rs.reduce((s, r) => s + (r.inputTokens ?? 0), 0) / total
     const avgLatencyMs = rs.reduce((s, r) => s + r.latencyMs, 0) / total
+    // Average the per-run context size. For most formats this is the constant
+    // static-doc size; for LOON it varies per payload (getSpec emits only the
+    // sections that payload uses), so a static lookup would be wrong.
+    const avgContextTokens = rs.reduce((s, r) => s + r.contextTokens, 0) / total
     out.push({
       format,
-      contextTokens: contextTokensByFormat[format] ?? 0,
+      contextTokens: Math.round(avgContextTokens),
       avgPayloadTokens: Math.round(avgPayloadTokens),
       avgInputTokens: Math.round(avgInputTokens),
       accuracy,

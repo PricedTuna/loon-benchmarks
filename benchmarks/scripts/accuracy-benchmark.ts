@@ -82,21 +82,32 @@ function createEvaluationQueue(modelId: string) {
   })
 }
 
-// Prompt user to select which models to benchmark
+// Model selection. Non-interactive override via `BENCH_MODELS` (comma-
+// separated model ids, or "all") so the benchmark can run in CI / scripted
+// environments where stdin is not a TTY.
 const modelChoices = models.map(({ modelId }) => ({
   value: modelId,
   label: modelId,
 }))
 
-const selectedModels = await prompts.multiselect({
-  message: 'Select models to benchmark (Space to select, Enter to confirm)',
-  options: modelChoices,
-  required: true,
-})
-
-if (prompts.isCancel(selectedModels)) {
-  prompts.cancel('Benchmark cancelled')
-  process.exit(0)
+let selectedModels: string[]
+const envModels = (process.env.BENCH_MODELS ?? '').trim()
+if (envModels) {
+  selectedModels = envModels === 'all'
+    ? models.map(m => m.modelId)
+    : envModels.split(',').map(s => s.trim()).filter(Boolean)
+}
+else {
+  const picked = await prompts.multiselect({
+    message: 'Select models to benchmark (Space to select, Enter to confirm)',
+    options: modelChoices,
+    required: true,
+  })
+  if (prompts.isCancel(picked)) {
+    prompts.cancel('Benchmark cancelled')
+    process.exit(0)
+  }
+  selectedModels = picked as string[]
 }
 
 const activeModels = models.filter(m => selectedModels.includes(m.modelId))

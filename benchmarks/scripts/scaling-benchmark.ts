@@ -3,8 +3,7 @@ import * as path from 'node:path'
 import * as prompts from '@clack/prompts'
 import { BENCHMARKS_DIR, FORMATTER_DISPLAY_NAMES, ROOT_DIR } from '../src/constants.ts'
 import { generateAnalyticsData, generateEmployees, generateEventLogs, generateOrders, generateProducts } from '../src/datasets.ts'
-import { formatters, supportsJTON, supportsTRON } from '../src/formatters.ts'
-import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
+import { formatters, resetLoonEncoder, supportsJTON } from '../src/formatters.ts'
 import { ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
 
 /**
@@ -13,7 +12,7 @@ import { ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
  * @remarks
  * Measures how each format's token count scales with the number of records.
  * The point is to expose asymptotic behaviour: some formats have constant
- * per-row overhead (CSV, TRON in row mode), others have a fixed header plus
+ * per-row overhead (CSV, JTON in row mode), others have a fixed header plus
  * per-row overhead (TOON), and JSON repeats keys per row, so its growth rate
  * is structurally higher.
  *
@@ -32,7 +31,7 @@ interface Generator {
   generate: (count: number) => Record<string, any>
   /**
    * Whether the generator outputs an object whose only meaningful payload
-   * is a single top-level array (so TRON / CSV are applicable).
+   * is a single top-level array (so JTON / CSV applicability checks apply).
    */
   isFlatTabular: boolean
 }
@@ -88,20 +87,17 @@ for (const gen of GENERATORS) {
     const tokensByFormat: Record<string, number | null> = {}
 
     for (const [formatName, formatter] of Object.entries(formatters)) {
-      // Skip CSV/TRON/JTON on shapes they cannot represent. Classify per-
-      // generator so the entire report row is honest.
-      if (!gen.isFlatTabular && (formatName === 'csv' || formatName === 'tron' || formatName === 'jton')) {
-        // For row-oriented formats (TRON/JTON) we still call the shape check:
-        // some generators (orders) wrap an array under a single key, which
-        // both can encode.
-        if (formatName === 'tron' || formatName === 'jton') {
+      // Skip CSV/JTON on shapes they cannot represent. LOON encodes any shape
+      // via tabular or TREE flattening and is always measured here.
+      if (!gen.isFlatTabular && (formatName === 'csv' || formatName === 'jton')) {
+        if (formatName === 'jton') {
           const fakeDataset = {
             name: gen.name as any,
             description: gen.description,
             data,
             metadata: { supportsCSV: false, structureClass: 'nested' as const, tabularEligibility: 0 },
           }
-          const supported = formatName === 'tron' ? supportsTRON(fakeDataset) : supportsJTON(fakeDataset)
+          const supported = supportsJTON(fakeDataset)
           if (!supported) {
             tokensByFormat[formatName] = null
             continue
@@ -122,9 +118,7 @@ for (const gen of GENERATORS) {
       }
     }
 
-    // Reset TRON state so each measurement is independent (no cross-
-    // measurement dictionary reuse).
-    tron.reset()
+    resetLoonEncoder()
 
     points.push({ generator: gen.name, size, tokensByFormat })
     prompts.log.step(`${gen.name} @ N=${size.toLocaleString('en-US')} measured`)
@@ -220,7 +214,7 @@ on the input shape is reported as \`n/a\` and not silently replaced.
 
 ${sections}
 
-> Methodology note: TRON state is reset between each (generator, size) pair
+> Methodology note: LOON encoder state is reset between each (generator, size) pair
 > so per-measurement compression dictionaries do not leak across rows.
 `
 

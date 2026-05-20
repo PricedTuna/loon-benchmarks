@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "price": 109.95,
+    "category": "men's clothing",
+    "rating_rate": 3.9,
+    "rating_count": 120
+  },
+  {
+    "id": 2,
+    "price": 22.3,
+    "category": "men's clothing",
+    "rating_rate": 4.1,
+    "rating_count": 259
+  },
+  {
+    "id": 3,
+    "price": 55.99,
+    "category": "men's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 500
+  },
+  {
+    "id": 4,
+    "price": 15.99,
+    "category": "men's clothing",
+    "rating_rate": 2.1,
+    "rating_count": 430
+  },
+  {
+    "id": 5,
+    "price": 695,
+    "category": "jewelery",
+    "rating_rate": 4.6,
+    "rating_count": 400
+  },
+  {
+    "id": 6,
+    "price": 168,
+    "category": "jewelery",
+    "rating_rate": 3.9,
+    "rating_count": 70
+  },
+  {
+    "id": 7,
+    "price": 9.99,
+    "category": "jewelery",
+    "rating_rate": 3,
+    "rating_count": 400
+  },
+  {
+    "id": 8,
+    "price": 10.99,
+    "category": "jewelery",
+    "rating_rate": 1.9,
+    "rating_count": 100
+  },
+  {
+    "id": 9,
+    "price": 64,
+    "category": "electronics",
+    "rating_rate": 3.3,
+    "rating_count": 203
+  },
+  {
+    "id": 10,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 470
+  },
+  {
+    "id": 11,
+    "price": 109,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 319
+  },
+  {
+    "id": 12,
+    "price": 114,
+    "category": "electronics",
+    "rating_rate": 4.8,
+    "rating_count": 400
+  },
+  {
+    "id": 13,
+    "price": 599,
+    "category": "electronics",
+    "rating_rate": 2.9,
+    "rating_count": 250
+  },
+  {
+    "id": 14,
+    "price": 999.99,
+    "category": "electronics",
+    "rating_rate": 2.2,
+    "rating_count": 140
+  },
+  {
+    "id": 15,
+    "price": 56.99,
+    "category": "women's clothing",
+    "rating_rate": 2.6,
+    "rating_count": 235
+  },
+  {
+    "id": 16,
+    "price": 29.95,
+    "category": "women's clothing",
+    "rating_rate": 2.9,
+    "rating_count": 340
+  },
+  {
+    "id": 17,
+    "price": 39.99,
+    "category": "women's clothing",
+    "rating_rate": 3.8,
+    "rating_count": 679
+  },
+  {
+    "id": 18,
+    "price": 9.85,
+    "category": "women's clothing",
+    "rating_rate": 4.7,
+    "rating_count": 130
+  },
+  {
+    "id": 19,
+    "price": 7.95,
+    "category": "women's clothing",
+    "rating_rate": 4.5,
+    "rating_count": 146
+  },
+  {
+    "id": 20,
+    "price": 12.99,
+    "category": "women's clothing",
+    "rating_rate": 3.6,
+    "rating_count": 145
+  }
+]

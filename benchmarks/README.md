@@ -1,6 +1,6 @@
-# TRON-Core Benchmarks
+# Comprehension benchmarks
 
-Neutral benchmarks comparing **JSON / JSON-compact / YAML / XML / CSV / TOON / TRON** across token efficiency, scaling behaviour, roundtrip fidelity, retrieval accuracy, and real LLM task performance.
+Neutral benchmarks comparing **JSON / JSON-compact / YAML / XML / CSV / TOON / LOON** across token efficiency, scaling behaviour, roundtrip fidelity, retrieval accuracy, and real LLM task performance.
 
 This suite is a fork of the upstream [`toon-format/toon`](https://github.com/toon-format/toon) `benchmarks/` workspace, with the design choices that biased the original suite toward TOON removed. Both the changes and the rationale for each are documented below so the methodology is auditable.
 
@@ -23,7 +23,7 @@ The four LLM scripts (`bench:accuracy`, `bench:accuracy:context`, `bench:llm-tas
 
 ### Context vs zero-context: why both exist
 
-Some formats (TRON, TOON) are not part of LLM pretraining — a model encountering them cold has to infer the syntax from the payload alone. In production a developer would typically include a short primer in the system prompt for such a format. The benchmark exposes both regimes:
+Some formats (LOON, TOON) are not part of LLM pretraining — a model encountering them cold has to infer the syntax from the payload alone. In production a developer would typically include a short primer in the system prompt for such a format. The benchmark exposes both regimes:
 
 | Script | What is sent to the model |
 | --- | --- |
@@ -34,25 +34,26 @@ The `format-docs/` directory contains:
 
 | Format | Document |
 | --- | --- |
-| TRON   | `format-docs/tron.md` (copy of `Tron-Core/LLM_INSTRUCTIONS.md`) |
+| LOON   | `format-docs/loon.md` — short LOON decoding primer for LLMs |
 | TOON   | `format-docs/toon.md` (copy of upstream `toon/docs/guide/llm-prompts.md`) |
 | JSON / YAML / XML / CSV | `format-docs/<name>.md` — short paragraph primer of comparable informational content. |
 
-Asymmetry note: TRON's document is longer than the others because TRON's encoding has more rules to learn. This is a real-world property of the format, not a bias — making TRON's document artificially short would understate the cost of adopting TRON. The "context tokens" column in the report makes the cost visible per call.
+Asymmetry note: some format guides (LOON, TOON) are longer than JSON/YAML primers because the wire format carries more decoding rules. The "context tokens" column in the report makes that trade-off visible per call.
 
 ### How to send the .md as context manually (for ad-hoc experiments)
 
-When wiring TRON / TOON into your own application, the same documents in `format-docs/` are the ones you'd attach to the system prompt. Two common patterns:
+When wiring LOON / TOON into your own application, the same documents in `format-docs/` are the ones you'd attach to the system prompt. Two common patterns:
 
 ```ts
 // Pattern A — single user message, doc + data inline
 import * as fs from 'node:fs/promises'
+import { loon } from './extra-formats/LOON/dist/index.mjs'
 
-const guide   = await fs.readFile('format-docs/tron.md', 'utf-8')
-const encoded = tron.toJSON(records)
+const guide   = await fs.readFile('format-docs/loon.md', 'utf-8')
+const encoded = loon.toLOON(records, { mode: 'llm' })
 
 const messages = [
-  { role: 'user', content: `${guide}\n\n---\n\n\`\`\`tron\n${encoded}\n\`\`\`\n\n${question}` },
+  { role: 'user', content: `${guide}\n\n---\n\n\`\`\`text\n${encoded}\n\`\`\`\n\n${question}` },
 ]
 ```
 
@@ -60,7 +61,7 @@ const messages = [
 // Pattern B — system prompt holds the format guide, user message holds data
 const messages = [
   { role: 'system', content: guide },
-  { role: 'user',   content: `\`\`\`tron\n${encoded}\n\`\`\`\n\n${question}` },
+  { role: 'user',   content: `\`\`\`text\n${encoded}\n\`\`\`\n\n${question}` },
 ]
 ```
 
@@ -93,35 +94,35 @@ The upstream documentation explicitly states these test "TOON's `[N]` and `{fiel
 
 **Before.** All deltas were reported "vs TOON" and TOON got a leading row in every dataset block. The flat-only track also added a "+X% vs CSV" footnote on TOON's row only.
 
-**After.** Baseline is `json-compact` — the incumbent serialization format. Every other format (TOON, TRON, YAML, XML, CSV) is reported as a delta against the same baseline, with the same row format. No format gets a privileged position in the chart.
+**After.** Baseline is `json-compact` — the incumbent serialization format. Every other format (TOON, LOON, YAML, XML, CSV) is reported as a delta against the same baseline, with the same row format. No format gets a privileged position in the chart.
 
 ### 4. Symmetrical exclusion rules (`src/formatters.ts`)
 
-**Before.** CSV was skipped on non-tabular datasets (correct), but TOON was always run on all six datasets — including the deeply-nested config — and TRON did not exist in the suite at all.
+**Before.** CSV was skipped on non-tabular datasets (correct), but TOON was always run on all six datasets — including the deeply-nested config.
 
-**After.** Two predicates: `supportsCSV(dataset)` and `supportsTRON(dataset)`. Either format is honestly reported as `n/a` on shapes it cannot represent, instead of being silently scored on a partial coverage that inflates its averages, or being scored on an output it cannot actually produce. The headline efficiency ranking explicitly excludes any partial-coverage format and says so.
+**After.** `supportsCSV(dataset)` skips CSV where it cannot represent the shape; JTON uses `supportsJTON(dataset)`. LOON is measured on every dataset via `extra-formats/LOON` (tabular or `TREE:` flattening). The headline efficiency ranking excludes partial-coverage formats (currently CSV only) and says so.
 
-### 5. Real TOON encoder, real TRON encoder (`src/formatters.ts`)
+### 5. Real TOON encoder, real LOON encoder (`src/formatters.ts`)
 
 **Before.** The suite shipped a custom in-tree TOON encoder. Reimplementations are an attack surface for accidental bias (separator choice, when to quote, length-marker presence). The JTON sibling repo's Python equivalent had a stricter version of the same problem.
 
-**After.** TOON encoding goes through `@toon-format/toon` (the upstream package). TRON encoding goes through `tron.toJSON` from this repo (`Tron-Core/src`). Neither is a benchmark-internal reimplementation; both are the same encoders downstream consumers would actually run.
+**After.** TOON encoding goes through `@toon-format/toon` (the upstream package). LOON encoding goes through `loon` from `extra-formats/LOON`. Neither is a benchmark-internal reimplementation.
 
 ### 6. No silent fallback to JSON
 
-**Before.** A precedent in the JTON benchmark sibling: if the TRON / TOON encoder threw, the formatter returned `JSON.stringify(data, …)`. The token count for the failing encoder then equalled JSON-compact, which makes "TRON beats JSON-compact" definitionally impossible to lose.
+**Before.** A precedent in the JTON benchmark sibling: if the LOON / TOON encoder threw, the formatter returned `JSON.stringify(data, …)`. The token count for the failing encoder then equalled JSON-compact, which makes "format beats JSON-compact" definitionally impossible to lose honestly.
 
 **After.** Encoder failure is a `null` cell rendered as `n/a` plus a verbatim error in the report. Nothing is replaced with a different encoder's output behind the reader's back.
 
 ### 7. Independent measurements
 
-**Before.** Stateful encoders (TRON has a session-level dictionary) were exercised across multiple datasets back-to-back, which lets dictionary state from dataset _N_ compress dataset _N+1_.
+**Before.** Stateful LOON encoder state was exercised across multiple datasets back-to-back, which lets schema state from dataset _N_ affect dataset _N+1_.
 
-**After.** `tron.reset()` is called between every measurement in the token, real-data, scaling, and fidelity benchmarks. Compression numbers are per-payload, the way a stateless API call would actually cost.
+**After.** `resetLoonEncoder()` is called between measurements in the token, real-data, scaling, and fidelity benchmarks. Compression numbers are per-payload, the way a stateless API call would actually cost.
 
 ### 8. Display order
 
-`FORMATTER_DISPLAY_NAMES` lists formats in input-pipeline order: JSON → JSON-compact → YAML → XML → CSV → TOON → TRON. There is no preferential placement.
+`FORMATTER_DISPLAY_NAMES` lists formats in input-pipeline order: JSON → JSON-compact → YAML → XML → CSV → TOON → LOON → JTON. There is no preferential placement.
 
 ---
 
@@ -188,7 +189,7 @@ benchmarks/
 ├── package.json
 ├── data/                             (real-world JSON inputs)
 ├── format-docs/                      (per-format canonical LLM-facing markdown)
-│   ├── tron.md                       (= Tron-Core/LLM_INSTRUCTIONS.md)
+│   ├── loon.md                       (LOON LLM primer)
 │   ├── toon.md                       (= toon/docs/guide/llm-prompts.md)
 │   ├── json.md
 │   ├── yaml.md
@@ -200,7 +201,7 @@ benchmarks/
     ├── datasets.ts                   (synthetic generators)
     ├── evaluate.ts                   (LLM call site, symmetrical primers, optional extraContext)
     ├── format-context.ts             (loader for format-docs/, used by accuracy-with-context)
-    ├── formatters.ts                 (JSON/YAML/XML/CSV/TOON/TRON encoders + supportsX gates)
+    ├── formatters.ts                 (JSON/YAML/XML/CSV/TOON/LOON encoders + supportsX gates)
     ├── normalize.ts                  (deterministic answer comparison)
     ├── report.ts                     (markdown report generation for accuracy)
     ├── storage.ts                    (per-model accuracy caching)

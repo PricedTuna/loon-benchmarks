@@ -49,7 +49,10 @@ export const FORMATTER_DISPLAY_NAMES: Record<string, string> = {
   'xml': 'XML',
   'csv': 'CSV',
   'toon': 'TOON',
-  'tron': 'TRON',
+  'loon-llm': 'LOON (llm)',
+  'loon-full': 'LOON (full)',
+  'loon-local': 'LOON (local)',
+  'loon-compact': 'LOON (compact)',
   'jton': 'JTON',
 } as const
 

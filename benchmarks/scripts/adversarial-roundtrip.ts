@@ -7,8 +7,9 @@ import { parse as parseCSV } from 'csv-parse/sync'
 import { stringify as stringifyYAML, parse as parseYAML } from 'yaml'
 import { encode as encodeToon, decode as decodeToon } from '@toon-format/toon'
 import { BENCHMARKS_DIR, ROOT_DIR } from '../src/constants.ts'
+import { formatters, resetLoonEncoder } from '../src/formatters.ts'
+import { loon } from '../../extra-formats/LOON/dist/index.mjs'
 import { ensureDir, getMachineInfo } from '../src/utils.ts'
-import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
 
 /**
  * Adversarial string roundtrip benchmark.
@@ -20,9 +21,9 @@ import { tron } from '../../extra-formats/Tron-Core/dist/index.mjs'
  * production use without documented escaping requirements.
  *
  * Test cases are chosen to stress-test the most common failure modes:
- *   - Pipe  |  : TRON field/row delimiter
+ *   - Pipe  |  : delimiter inside string cells for row-style formats
  *   - Comma ,  : CSV field delimiter
- *   - Newline  : TRON/CSV row separator, YAML scalar boundary
+ *   - Newline  : row separator in line-oriented payloads, YAML scalar boundary
  *   - XML special: <>&"' attribute injection
  *   - YAML special: leading -/:/# characters, bare booleans, null-like values
  *   - JSON special: embedded quotes, backslashes
@@ -43,10 +44,10 @@ interface AdversarialRow {
 }
 
 const ADVERSARIAL_CASES: Omit<AdversarialRow, 'id'>[] = [
-  { label: 'pipe-in-string', value: 'hello|world|foo|bar', description: 'TRON field delimiter inside string' },
-  { label: 'pipe-multirow', value: 'first|second\nthird|fourth', description: 'TRON delimiters + newline' },
+  { label: 'pipe-in-string', value: 'hello|world|foo|bar', description: 'Pipe delimiter inside string cell' },
+  { label: 'pipe-multirow', value: 'first|second\nthird|fourth', description: 'Pipe delimiters + newline' },
   { label: 'comma-in-string', value: 'one,two,three', description: 'CSV field delimiter inside string' },
-  { label: 'newline-in-value', value: 'line1\nline2\nline3', description: 'Embedded newlines (TRON row sep)' },
+  { label: 'newline-in-value', value: 'line1\nline2\nline3', description: 'Embedded newlines (row-oriented formats)' },
   { label: 'carriage-return', value: 'windows\r\nline\r\nendings', description: 'CRLF line endings' },
   { label: 'xml-injection', value: '<script>alert("xss")</script>', description: 'XML tag characters' },
   { label: 'xml-attr-inject', value: 'foo" onclick="evil()', description: 'XML attribute injection' },
@@ -74,7 +75,7 @@ const ADVERSARIAL_CASES: Omit<AdversarialRow, 'id'>[] = [
   { label: 'null-byte', value: 'before\x00after', description: 'Null byte embedded in string' },
   { label: 'long-string-1k', value: 'x'.repeat(1024), description: '1 KB repeated character' },
   { label: 'long-string-64k', value: 'ab'.repeat(32 * 1024), description: '64 KB string' },
-  { label: 'tron-header-mimic', value: 'id: 1\nname: Alice', description: 'String that looks like TRON header' },
+  { label: 'scheme-header-mimic', value: 'id: 1\nname: Alice', description: 'String that resembles a schema header line' },
   { label: 'toon-header-mimic', value: '[10]{id,name,age}:', description: 'String that looks like TOON header' },
   { label: 'mixed-delimiters', value: '|comma,tab\tnewline\npipe|end', description: 'Mix of all delimiter types' },
   { label: 'number-e-notation', value: '1.23e+10', description: 'Number-like scientific notation string' },
@@ -82,9 +83,11 @@ const ADVERSARIAL_CASES: Omit<AdversarialRow, 'id'>[] = [
   { label: 'control-chars', value: '\x01\x02\x03\x1F', description: 'C0 control characters' },
 ]
 
-const ROWS: AdversarialRow[] = ADVERSARIAL_CASES.map((c, i) => ({ id: i + 1, ...c }))
-
-// ── Format codecs ─────────────────────────────────────────────────────────────
+function decodeLoonAdv(text: string): unknown {
+  const t = text.trimStart()
+  if (t.startsWith('TREE:')) return loon.toTree(text)
+  return loon.fromLOON(text)
+}
 
 const xmlBuilder = new XMLBuilder({ format: false, suppressEmptyNode: true })
 const xmlParser = new XMLParser({ ignoreAttributes: false })
@@ -134,9 +137,12 @@ const CODECS: Record<string, Codec> = {
     encode: rows => encodeToon(rows),
     decode: text => decodeToon(text),
   },
-  'tron': {
-    encode: (rows) => { tron.reset(); return tron.toJSON(rows) },
-    decode: text => tron.fromTRON(text),
+  'loon': {
+    encode: (rows: AdversarialRow[]) => {
+      resetLoonEncoder()
+      return formatters['loon-llm'](rows)
+    },
+    decode: (text: string) => decodeLoonAdv(text),
   },
 }
 
