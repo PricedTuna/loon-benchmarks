@@ -18,6 +18,26 @@ export const DEFAULT_CONCURRENCY = 10
 export const DRY_RUN: boolean = process.env.DRY_RUN === 'true'
 
 /**
+ * Enable fast format mode to only test toon, loon, and jton formats
+ *
+ * @remarks
+ * Set via environment variable: `FAST_FORMAT=true`.
+ */
+export const FAST_FORMAT: boolean = process.env.FAST_FORMAT === 'true'
+
+/**
+ * Format names to test when FAST_FORMAT is enabled (toon, loon variants, jton)
+ */
+export const FAST_FORMAT_FORMATS = new Set([
+  'toon',
+  'loon-llm',
+  'loon-full',
+  'loon-local',
+  'loon-compact',
+  'jton',
+])
+
+/**
  * Limits applied during dry run mode
  */
 export const DRY_RUN_LIMITS = {

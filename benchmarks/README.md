@@ -21,6 +21,11 @@ pnpm fetch:github-repos          # update github-repos.json (top 100 by stars)
 
 The four LLM scripts (`bench:accuracy`, `bench:accuracy:context`, `bench:llm-task`) need `.env` with provider keys. Set `DRY_RUN=true` to limit calls when validating the setup.
 
+## To run the comprehension benchmark to replicate paper results
+```bash
+DRY_RUN=true FAST_FORMAT=true npm run bench:accuracy
+```
+
 ### Context vs zero-context: why both exist
 
 Some formats (LOON, TOON) are not part of LLM pretraining — a model encountering them cold has to infer the syntax from the payload alone. In production a developer would typically include a short primer in the system prompt for such a format. The benchmark exposes both regimes:

@@ -4,7 +4,7 @@ import * as path from 'node:path'
 import process from 'node:process'
 import * as prompts from '@clack/prompts'
 import PQueue from 'p-queue'
-import { BENCHMARKS_DIR, DEFAULT_CONCURRENCY, DRY_RUN, DRY_RUN_LIMITS, MODEL_RPM_LIMITS, ROOT_DIR } from '../src/constants.ts'
+import { BENCHMARKS_DIR, DEFAULT_CONCURRENCY, DRY_RUN, DRY_RUN_LIMITS, FAST_FORMAT, FAST_FORMAT_FORMATS, MODEL_RPM_LIMITS, ROOT_DIR } from '../src/constants.ts'
 import { ACCURACY_DATASETS } from '../src/datasets.ts'
 import { evaluateQuestion, models } from '../src/evaluate.ts'
 import { formatters, supportsCSV } from '../src/formatters.ts'
@@ -25,8 +25,12 @@ prompts.intro('Retrieval Accuracy Benchmark')
 function generateEvaluationTasks(questions: Question[]): { question: Question, formatName: string }[] {
   const tasks: { question: Question, formatName: string }[] = []
 
+  const formatEntries = FAST_FORMAT
+    ? Object.entries(formatters).filter(([name]) => FAST_FORMAT_FORMATS.has(name))
+    : Object.entries(formatters)
+
   for (const question of questions) {
-    for (const [formatName] of Object.entries(formatters)) {
+    for (const [formatName] of formatEntries) {
       // Skip CSV for datasets that don't support it
       const dataset = ACCURACY_DATASETS.find(d => d.name === question.dataset)
       if (formatName === 'csv' && dataset && !supportsCSV(dataset))
@@ -123,6 +127,10 @@ if (Object.keys(existingModelResults).length > 0) {
 
 if (DRY_RUN) {
   prompts.log.info('Limiting questions and models for dry run')
+}
+
+if (FAST_FORMAT) {
+  prompts.log.info('Fast format mode: testing only toon, loon, and jton formats')
 }
 
 let questions = generateQuestions()

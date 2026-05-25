@@ -4,7 +4,7 @@ import * as path from 'node:path'
 import process from 'node:process'
 import * as prompts from '@clack/prompts'
 import PQueue from 'p-queue'
-import { BENCHMARKS_DIR, DEFAULT_CONCURRENCY, DRY_RUN, DRY_RUN_LIMITS, FORMATTER_DISPLAY_NAMES, MODEL_RPM_LIMITS, ROOT_DIR } from '../src/constants.ts'
+import { BENCHMARKS_DIR, DEFAULT_CONCURRENCY, DRY_RUN, DRY_RUN_LIMITS, FAST_FORMAT, FAST_FORMAT_FORMATS, FORMATTER_DISPLAY_NAMES, MODEL_RPM_LIMITS, ROOT_DIR } from '../src/constants.ts'
 import { ACCURACY_DATASETS } from '../src/datasets.ts'
 import { evaluateQuestion, models } from '../src/evaluate.ts'
 import { contextSourcePath, countContextTokens, loadFormatContext } from '../src/format-context.ts'
@@ -53,7 +53,11 @@ prompts.intro('Retrieval Accuracy Benchmark — with format context')
 const contextByFormat: Record<string, string> = {}
 const contextTokensByFormat: Record<string, number> = {}
 
-for (const formatName of Object.keys(formatters)) {
+const formatNames = FAST_FORMAT
+  ? Object.keys(formatters).filter(name => FAST_FORMAT_FORMATS.has(name))
+  : Object.keys(formatters)
+
+for (const formatName of formatNames) {
   const doc = await loadFormatContext(formatName)
   contextByFormat[formatName] = doc
   contextTokensByFormat[formatName] = countContextTokens(doc)
@@ -66,9 +70,13 @@ for (const formatName of Object.keys(formatters)) {
 function generateEvaluationTasks(questions: Question[]): { question: Question, formatName: string }[] {
   const tasks: { question: Question, formatName: string }[] = []
 
+  const formatKeys = FAST_FORMAT
+    ? Object.keys(formatters).filter(name => FAST_FORMAT_FORMATS.has(name))
+    : Object.keys(formatters)
+
   for (const question of questions) {
     const dataset = ACCURACY_DATASETS.find(d => d.name === question.dataset)
-    for (const formatName of Object.keys(formatters)) {
+    for (const formatName of formatKeys) {
       if (formatName === 'csv' && dataset && !supportsCSV(dataset))
         continue
       tasks.push({ question, formatName })
@@ -138,6 +146,10 @@ if (DRY_RUN) {
     }
     return false
   })
+}
+
+if (FAST_FORMAT) {
+  prompts.log.info('Fast format mode: testing only toon, loon, and jton formats')
 }
 
 prompts.log.info(`Evaluating ${questions.length} questions (${DRY_RUN ? 'DRY_RUN' : 'full'})`)
