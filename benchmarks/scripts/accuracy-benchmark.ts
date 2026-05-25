@@ -128,8 +128,16 @@ if (DRY_RUN) {
 let questions = generateQuestions()
 
 // Apply dry run limits if enabled
-if (DRY_RUN && DRY_RUN_LIMITS.maxQuestions) {
-  questions = questions.slice(0, DRY_RUN_LIMITS.maxQuestions)
+if (DRY_RUN) {
+  const byDataset = new Map<string, number>()
+  questions = questions.filter(q => {
+    const count = byDataset.get(q.dataset) || 0
+    if (count < 2) {
+      byDataset.set(q.dataset, count + 1)
+      return true
+    }
+    return false
+  })
 }
 
 prompts.log.info(`Evaluating ${questions.length} questions`)
