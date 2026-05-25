@@ -27,8 +27,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2
       loon-core:
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.0.2
+        version: 1.0.2
     devDependencies:
       '@ai-sdk/anthropic':
         specifier: ^3.0.58
@@ -428,8 +428,8 @@ packages:
   json-schema@0.4.0:
     resolution: {integrity: sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==}
 
-  loon-core@1.0.1:
-    resolution: {integrity: sha512-8Da1EpZIf891bsBtOKnwNt5TmUWGMdTFOKRt4ci/tROyPDtGCyJLp8o81ES4/vDfPiVIvZ8ImQB7m37LBrVq7g==}
+  loon-core@1.0.2:
+    resolution: {integrity: sha512-6XRvwHG5ulJt3wCKVtmTpgKzs7DLqQdhjaooxIQJ3aS5PEu4yYvI8ub68BzzKeEU3hLlGXcW2xTNvcrcAhnOTQ==}
     engines: {node: '>=16'}
 
   lru-cache@11.5.0:
@@ -865,7 +865,7 @@ snapshots:
 
   json-schema@0.4.0: {}
 
-  loon-core@1.0.1:
+  loon-core@1.0.2:
     dependencies:
       fast-xml-parser: 5.8.0
       gpt-tokenizer: 3.4.0
