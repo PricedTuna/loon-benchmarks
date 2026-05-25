@@ -17,6 +17,7 @@ const ALL_MODELS: { model: LanguageModelV3; envKey: string }[] = [
   { model: anthropic('claude-haiku-4-5-20251001'), envKey: 'ANTHROPIC_API_KEY' },
   { model: google('gemini-3-flash-preview'), envKey: 'GOOGLE_GENERATIVE_AI_API_KEY' },
   { model: openai('gpt-5-nano'), envKey: 'OPENAI_API_KEY' },
+  { model: openai('o3-mini'), envKey: 'OPENAI_API_KEY' },
   { model: xai('grok-4-1-fast-non-reasoning'), envKey: 'XAI_API_KEY' },
 ]
 
