@@ -9,7 +9,7 @@ import { encode as encodeToon, decode as decodeToon } from '@toon-format/toon'
 import { BENCHMARKS_DIR, FORMATTER_DISPLAY_NAMES, ROOT_DIR } from '../src/constants.ts'
 import { generateEmployees, generateOrders, generateAnalyticsData } from '../src/datasets.ts'
 import { formatters, LOON_MODES, resetLoonEncoder } from '../src/formatters.ts'
-import { loon } from '../../extra-formats/LOON/dist/index.mjs'
+import { loon } from 'loon-core'
 import { ensureDir, getMachineInfo } from '../src/utils.ts'
 
 /**

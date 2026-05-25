@@ -42,8 +42,18 @@ export interface EvaluationResult {
   expected: string
   actual: string
   isCorrect: boolean
-  inputTokens?: number
-  outputTokens?: number
+  inputTokens?: number;
+  outputTokens?: number;
+  inputTokensDetails?: {
+    noCacheTokens: number | undefined;
+    cacheReadTokens: number | undefined;
+    cacheWriteTokens: number | undefined;
+  };
+  outputTokensDetails?: {
+    textTokens: number | undefined;
+    reasoningTokens: number | undefined;
+  };
+  totalTokens?: number;
   latencyMs: number
 }
 

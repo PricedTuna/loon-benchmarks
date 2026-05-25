@@ -8,7 +8,7 @@ import { decode as decodeToon } from '@toon-format/toon'
 import { BENCHMARKS_DIR, FORMATTER_DISPLAY_NAMES, ROOT_DIR } from '../src/constants.ts'
 import { ACCURACY_DATASETS, generateEmployees } from '../src/datasets.ts'
 import { formatters, isLoonFormat, LOON_MODES, resetLoonEncoder, supportsCSV, supportsJTON } from '../src/formatters.ts'
-import { loon } from '../../extra-formats/LOON/dist/index.mjs'
+import { loon } from 'loon-core'
 import { ensureDir, getMachineInfo } from '../src/utils.ts'
 
 /**

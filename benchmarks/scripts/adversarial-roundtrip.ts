@@ -8,7 +8,7 @@ import { stringify as stringifyYAML, parse as parseYAML } from 'yaml'
 import { encode as encodeToon, decode as decodeToon } from '@toon-format/toon'
 import { BENCHMARKS_DIR, ROOT_DIR } from '../src/constants.ts'
 import { formatters, resetLoonEncoder } from '../src/formatters.ts'
-import { loon } from '../../extra-formats/LOON/dist/index.mjs'
+import { loon } from 'loon-core'
 import { ensureDir, getMachineInfo } from '../src/utils.ts'
 
 /**

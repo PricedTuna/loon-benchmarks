@@ -3,17 +3,18 @@ import { stringify as stringifyCSV } from 'csv-stringify/sync'
 import { XMLBuilder } from 'fast-xml-parser'
 import { stringify as stringifyYAML } from 'yaml'
 import { encode as encodeToon } from '@toon-format/toon'
-import { loon } from '../../extra-formats/LOON/dist/index.mjs'
+import { loon } from 'loon-core'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const _dir = dirname(fileURLToPath(import.meta.url))
 const JTON_BRIDGE = join(_dir, '../../extra-formats/', 'jton-bridge.py')
+const JTON_VENV_PYTHON = join(_dir, '../../extra-formats/JTON/.venv/bin/python3')
 
-// On Windows use the Python Launcher (`py -3.13`) so we hit the install
-// that has jton. On POSIX fall back to `python3`.
-const PYTHON_CMD = process.platform === 'win32' ? 'py' : 'python3'
+// Use the JTON virtual environment's Python so `jton` is available.
+// On Windows fall back to the Python Launcher (`py -3.13`).
+const PYTHON_CMD = process.platform === 'win32' ? 'py' : JTON_VENV_PYTHON
 const PYTHON_ARGS_PREFIX = process.platform === 'win32' ? ['-3.13'] : []
 
 /**
@@ -22,7 +23,7 @@ const PYTHON_ARGS_PREFIX = process.platform === 'win32' ? ['-3.13'] : []
  * @remarks
  * All formatters use upstream/spec-correct encoders. No reimplementations:
  *   - TOON: official `@toon-format/toon` package (real spec, length markers, comma rows)
- *   - LOON: in-repo `loon` from `extra-formats/LOON`, exercised across all of its
+ *   - LOON: official `loon` from `loon-core`
  *     encoding modes (`loon-llm`, `loon-full`, `loon-local`, `loon-compact`) so
  *     each mode's token / fidelity / throughput characteristics are visible
  *     side-by-side instead of judging LOON on a single mode.
@@ -114,7 +115,7 @@ function toXML(data: unknown): string {
 }
 
 /**
- * Encode via in-repo LOON (`extra-formats/LOON`) in a given mode.
+ * Encode via library LOON (`loon-core`) in a given mode.
  *
  * @remarks
  * `Loon.toLOON` expects an array of records. Root objects with a single

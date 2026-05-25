@@ -47,7 +47,7 @@ When wiring LOON / TOON into your own application, the same documents in `format
 ```ts
 // Pattern A — single user message, doc + data inline
 import * as fs from 'node:fs/promises'
-import { loon } from './extra-formats/LOON/dist/index.mjs'
+import { loon } from 'loon-core'
 
 const guide   = await fs.readFile('format-docs/loon.md', 'utf-8')
 const encoded = loon.toLOON(records, { mode: 'llm' })
@@ -100,13 +100,13 @@ The upstream documentation explicitly states these test "TOON's `[N]` and `{fiel
 
 **Before.** CSV was skipped on non-tabular datasets (correct), but TOON was always run on all six datasets — including the deeply-nested config.
 
-**After.** `supportsCSV(dataset)` skips CSV where it cannot represent the shape; JTON uses `supportsJTON(dataset)`. LOON is measured on every dataset via `extra-formats/LOON` (tabular or `TREE:` flattening). The headline efficiency ranking excludes partial-coverage formats (currently CSV only) and says so.
+**After.** `supportsCSV(dataset)` skips CSV where it cannot represent the shape; JTON uses `supportsJTON(dataset)`. LOON is measured on every dataset via `loon-core` (tabular or `TREE:` flattening). The headline efficiency ranking excludes partial-coverage formats (currently CSV only) and says so.
 
 ### 5. Real TOON encoder, real LOON encoder (`src/formatters.ts`)
 
 **Before.** The suite shipped a custom in-tree TOON encoder. Reimplementations are an attack surface for accidental bias (separator choice, when to quote, length-marker presence). The JTON sibling repo's Python equivalent had a stricter version of the same problem.
 
-**After.** TOON encoding goes through `@toon-format/toon` (the upstream package). LOON encoding goes through `loon` from `extra-formats/LOON`. Neither is a benchmark-internal reimplementation.
+**After.** TOON encoding goes through `@toon-format/toon` (the upstream package). LOON encoding goes through `loon` from `loon-core`. Neither is a benchmark-internal reimplementation.
 
 ### 6. No silent fallback to JSON
 

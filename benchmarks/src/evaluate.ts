@@ -138,6 +138,9 @@ Answer:
     isCorrect,
     inputTokens: usage.inputTokens,
     outputTokens: usage.outputTokens,
+    inputTokensDetails: usage.inputTokenDetails,
+    outputTokensDetails: usage.outputTokenDetails,
+    totalTokens: usage.totalTokens,
     latencyMs,
   }
 }

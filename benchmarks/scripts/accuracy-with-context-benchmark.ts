@@ -12,7 +12,7 @@ import { formatters, isLoonFormat, supportsCSV } from '../src/formatters.ts'
 import { generateQuestions } from '../src/questions/index.ts'
 import { saveContextModelResults } from '../src/storage.ts'
 import { ensureDir, getMachineInfo, tokenize } from '../src/utils.ts'
-import { getSpec } from '../../extra-formats/LOON/dist/index.mjs'
+import { getSpec } from 'loon-core'
 
 /**
  * Retrieval-accuracy benchmark **with format context**.
